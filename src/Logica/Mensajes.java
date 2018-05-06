@@ -27,6 +27,7 @@ public class Mensajes {
     public static final String A_REPORTESORTEOS = "Generación del historial de los sorteos.";
     public static final String A_SESION = "Inicio de sesión.";
     public static final String A_RACTUALES = "Reporte de los números actuales de los asociados.";
+    public static final String A_HNS = "Generación del historial de los números asignados a cada asociado";
     public static final String A_HOPERACIONES = "Generación del historial de las operaciones realizadas por el administrador.";
     public static final String I_SORTEO = "Para realizar los sorteos, se hace necesario ingresar el número total a realizar";
     public static final String C_VALIDA = "Favor ingresar una cantidad válida.";

@@ -15,6 +15,7 @@ import static Imagenes.ControlImagenes.SEIS;
 import static Imagenes.ControlImagenes.SIETE;
 import static Imagenes.ControlImagenes.TRES;
 import static Imagenes.ControlImagenes.UNO;
+import Logica.BonoSolidario;
 import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.numerodeSorteos;
 import static Logica.Mensajes.A_RIFA;
@@ -27,6 +28,8 @@ import static Logica.Mensajes.SORTEOS_FINAL;
 import Logica.Sorteo;
 import java.io.File;
 import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -83,15 +86,14 @@ public class MainControl extends javax.swing.JFrame {
         JLBalota4 = new javax.swing.JLabel();
         JLBalota5 = new javax.swing.JLabel();
         JLBalota6 = new javax.swing.JLabel();
-        JLGanador1 = new javax.swing.JLabel();
         JLCuanto = new javax.swing.JLabel();
+        JLGanador1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         JMSorteos = new javax.swing.JMenu();
         JMCantidadSorteos = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         JMIAsociadosActivos = new javax.swing.JMenuItem();
         JMIEx = new javax.swing.JMenuItem();
-        JMIGanadoresHoy = new javax.swing.JMenuItem();
         JMIHAsociados = new javax.swing.JMenuItem();
         JMIHSorteos = new javax.swing.JMenuItem();
         JMIHModificaciones = new javax.swing.JMenuItem();
@@ -133,12 +135,6 @@ public class MainControl extends javax.swing.JFrame {
         JLBalota6.setAutoscrolls(true);
         JLBalota6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        JLGanador1.setBackground(new java.awt.Color(153, 255, 153));
-        JLGanador1.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 36)); // NOI18N
-        JLGanador1.setForeground(new java.awt.Color(51, 51, 51));
-        JLGanador1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        JLGanador1.setText("GANADOR");
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -156,10 +152,6 @@ public class MainControl extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                         .addComponent(JLBalota6, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(63, 63, 63))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(JLGanador1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,15 +163,19 @@ public class MainControl extends javax.swing.JFrame {
                     .addComponent(JLBalota5, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
                     .addComponent(JLBalota4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(JLBalota6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
-                .addComponent(JLGanador1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(106, 106, 106))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         JLCuanto.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         JLCuanto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         JLCuanto.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         JLCuanto.setOpaque(true);
+
+        JLGanador1.setBackground(new java.awt.Color(153, 255, 153));
+        JLGanador1.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 36)); // NOI18N
+        JLGanador1.setForeground(new java.awt.Color(51, 51, 51));
+        JLGanador1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        JLGanador1.setText("GANADOR");
 
         JMSorteos.setText("Sorteos");
         JMSorteos.addActionListener(new java.awt.event.ActionListener() {
@@ -208,7 +204,7 @@ public class MainControl extends javax.swing.JFrame {
         });
         jMenu1.add(JMIAsociadosActivos);
 
-        JMIEx.setText("Ex-Asociados");
+        JMIEx.setText("Ex-Asociados hábiles para sorteos");
         JMIEx.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIExActionPerformed(evt);
@@ -216,15 +212,12 @@ public class MainControl extends javax.swing.JFrame {
         });
         jMenu1.add(JMIEx);
 
-        JMIGanadoresHoy.setText("Ganadores de hoy");
-        JMIGanadoresHoy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JMIGanadoresHoyActionPerformed(evt);
+        JMIHAsociados.setText("Historial de números asignados a asociados");
+        JMIHAsociados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                JMIHAsociadosMousePressed(evt);
             }
         });
-        jMenu1.add(JMIGanadoresHoy);
-
-        JMIHAsociados.setText("Historial de asociados");
         JMIHAsociados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIHAsociadosActionPerformed(evt);
@@ -232,7 +225,7 @@ public class MainControl extends javax.swing.JFrame {
         });
         jMenu1.add(JMIHAsociados);
 
-        JMIHSorteos.setText("Historial de sorteos");
+        JMIHSorteos.setText("Historial de los sorteos");
         JMIHSorteos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JMIHSorteosMouseClicked(evt);
@@ -253,7 +246,7 @@ public class MainControl extends javax.swing.JFrame {
         });
         jMenu1.add(JMIHSorteos);
 
-        JMIHModificaciones.setText("Historial de operaciones");
+        JMIHModificaciones.setText("Historial de operaciones y movimientos");
         JMIHModificaciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIHModificacionesActionPerformed(evt);
@@ -261,7 +254,7 @@ public class MainControl extends javax.swing.JFrame {
         });
         jMenu1.add(JMIHModificaciones);
 
-        JMIActuales.setText("Número actuales de los asociados");
+        JMIActuales.setText("Informe del número actual de los asociados activos");
         JMIActuales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIActualesActionPerformed(evt);
@@ -327,6 +320,10 @@ public class MainControl extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(40, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(JLGanador1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -335,7 +332,9 @@ public class MainControl extends javax.swing.JFrame {
                 .addComponent(JLCuanto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addGap(65, 65, 65)
+                .addComponent(JLGanador1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(75, 75, 75))
         );
 
         pack();
@@ -389,21 +388,17 @@ public class MainControl extends javax.swing.JFrame {
     }//GEN-LAST:event_JMIHModificacionesActionPerformed
 
     private void JMIHAsociadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIHAsociadosActionPerformed
-        historial.setTitle("Información del historial de los asociados");
-        historial.getJBSubir().setEnabled(false);
-        historial.setVisible(true);
-    }//GEN-LAST:event_JMIHAsociadosActionPerformed
 
-    private void JMIGanadoresHoyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIGanadoresHoyActionPerformed
-//        if (sorteosRealizados != BonoSolidario.numerodeSorteos) {
-//            JOptionPane.showMessageDialog(this, "Espere a que se realicen todos los sorteos del día");
-//        } else {
-//            historial.setTitle("Ganadores del día de hoy");
-//            historial.getJBSubir().setEnabled(false);
-//            historial.setVisible(true);
-//        }
-        JOptionPane.showMessageDialog(this, "Aún no se encuentra disponible esta parte");
-    }//GEN-LAST:event_JMIGanadoresHoyActionPerformed
+        try {
+            historial.setTitle("Información del historial de los números asignados a cada asociado");
+            historial.getJBSubir().setEnabled(false);
+            historial.setTipoAccion(false);
+            historial.historialNumeros(accesoBD.historialNumeros());
+            historial.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_JMIHAsociadosActionPerformed
 
     private void JMAAsociadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMAAsociadosActionPerformed
         try {
@@ -465,7 +460,7 @@ public class MainControl extends javax.swing.JFrame {
                     premio = (float) datosSorteo[0];
                     tipoPremio = (int) datosSorteo[1];
                     animacion(sorteo.generarSorteo());
-                    // accesoBD.guardarOperacion(A_RIFA);
+                    accesoBD.guardarOperacion(A_RIFA);
                 }
             }
         }
@@ -494,6 +489,10 @@ public class MainControl extends javax.swing.JFrame {
     private void JMIModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIModificarActionPerformed
         JOptionPane.showMessageDialog(this, "Aún no se encuentra disponible esta parte");
     }//GEN-LAST:event_JMIModificarActionPerformed
+
+    private void JMIHAsociadosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMIHAsociadosMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JMIHAsociadosMousePressed
     public void animacion(int numero) {
         int cent = numero / 100;
         int dec = (numero % 100) / 10;
@@ -515,8 +514,9 @@ public class MainControl extends javax.swing.JFrame {
             }
         }
         String ganador = sorteo.ganador(numero, premio, tipoPremio);
-
-        JLGanador1.setText(ganador);
+        Locale locale = new Locale("es", "CO");
+        NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
+        JLGanador1.setText("Felicitaciones " + ganador + ", usted ha ganado " + nf.format(premio) + " Pesos");
         if (ganador.equals(INACTIVO)) {
             JOptionPane.showMessageDialog(this, SORTEO, G_INHA, JOptionPane.INFORMATION_MESSAGE);
             sorteosRealizados--;
@@ -565,7 +565,6 @@ public class MainControl extends javax.swing.JFrame {
     private javax.swing.JMenuItem JMIAsignarAso;
     private javax.swing.JMenuItem JMIAsociadosActivos;
     private javax.swing.JMenuItem JMIEx;
-    private javax.swing.JMenuItem JMIGanadoresHoy;
     private javax.swing.JMenuItem JMIHAsociados;
     private javax.swing.JMenuItem JMIHModificaciones;
     private javax.swing.JMenuItem JMIHSorteos;

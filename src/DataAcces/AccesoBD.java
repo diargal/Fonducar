@@ -86,19 +86,12 @@ public class AccesoBD {
         return false;
     }
 
-    public void historialRifa() {
-        /*
-        select asociados.nombre,historial_rifa.fecha, historial_rifa.cedulaG, historial_rifa.numeroG, 
-        historial_rifa.premio from asociados,historial_rifa where asociados.cedula=historial_rifa.cedul
-         */
-    }
-
     public void listadeAsociados() { //carga todos los asociados para la asignación de los nuevos números.
 
         Asociado asociado;
 
         try {
-            ResultSet resultado = resultadoConexion("SELECT * FROM asociados");
+            ResultSet resultado = resultadoConexion("SELECT * FROM asociado");
             if (resultado.next()) {
                 asociado = new Asociado();
                 asociado.setCedula(resultado.getLong(1));
@@ -113,18 +106,21 @@ public class AccesoBD {
 
     }
 
-    private void guardarGanador(long cedula, float premio, int numero, int tipo) {
+    private void guardarGanador(long idNumAso, float premio, int tipo) {
+        conexion();
         Date date = new Date();
         DateFormat fecha = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        String fecha2 = fecha.format(date);
         System.out.println("Fecha: " + fecha.format(date));
-        String ComandoSQL = "INSERT INTO `historial_rifa` (id,fecha,cedulaG,numeroG,premio,tipo_premio) values (" + null + ",'" + fecha.format(date) + "'," + cedula + "," + numero + "," + premio + "," + tipo + ")";
+        String ComandoSQL;
+        PreparedStatement prepar;
 
         try {
 
-            conexion = getConnect();
-            PreparedStatement prepar = conexion.prepareStatement(ComandoSQL);
+            ComandoSQL = "INSERT INTO `sorteo`(`idSorteo`, `Fecha`, `idNumeroAsociado`, `Premio`, `TipoSorteo`) VALUES (" + null + ",'" + fecha2 + "'," + idNumAso + "," + premio + "," + tipo + ")";
+            prepar = conexion.prepareStatement(ComandoSQL);
             prepar.executeUpdate();
-            System.out.println("Se guardó el registro exitosamente.");
+
             desconectar();
         } catch (java.sql.SQLException er) {
             JOptionPane.showMessageDialog(null, "No se pudo guardar el historial. " + er, "Failed!", JOptionPane.ERROR_MESSAGE);
@@ -133,14 +129,13 @@ public class AccesoBD {
     }
 
     public boolean guardarOperacion(String tipo) {
-
+        conexion();
+        Date date = new Date();
+        DateFormat fecha = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        String comandoSQL;
         try {
-            Date date = new Date();
-            DateFormat fecha = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
-            accesoBD.conexion();
 
-            String comandoSQL = "Insert into movimiento (idMovimiento, Fecha, Detalle, idAdministrador) values (" + null + ",?,?,?)";
-            conexion = getConnect();
+            comandoSQL = "Insert into movimiento (idMovimiento, Fecha, Detalle, idAdministrador) values (" + null + ",?,?,?)";
             PreparedStatement prepar = conexion.prepareStatement(comandoSQL);
             prepar.setString(1, fecha.format(date));
             prepar.setString(2, tipo);
@@ -180,19 +175,29 @@ public class AccesoBD {
     }
 
     public ResultSet historialSorteos() throws SQLException {
-        return resultadoConexion("SELECT historial_rifa.fecha, asociados.nombre, historial_rifa.cedulaG,"
-                + "historial_rifa.numeroG, historial_rifa.premio, historial_rifa.tipo_premio FROM historial_rifa, "
-                + "asociados WHERE asociados.cedula=historial_rifa.cedulaG");
+        return resultadoConexion("SELECT P.Nombre, P.Cedula, S.Fecha, NA.idNumero, S.Premio, S.TipoSorteo "
+                + "FROM `sorteo` as S, asociado as A, persona as P, numeroasociado as NA "
+                + "WHERE S.idNumeroAsociado = NA.idNumeroAsociado and NA.idAsociado = A.idAsociado and A.idPersona = P.idPersona");
     }
 
     public ResultSet historialModificaciones() throws SQLException {
-        return resultadoConexion("SELECT historial_modificaciones.fecha, historial_modificaciones.cedula_admin, administrador.nombre,"
-                + " historial_modificaciones.detalle FROM `historial_modificaciones`, administrador "
-                + "WHERE administrador.cedula=historial_modificaciones.cedula_admin");
+        return resultadoConexion("SELECT P.Nombre, P.Cedula, M.Fecha, M.Detalle FROM movimiento as M, persona as P, administrador as A "
+                + "WHERE M.idAdministrador = A.idAdministrador and A.idPersona = P.idPersona");
+    }
+
+    public ResultSet historialNumeros() throws SQLException {
+        return resultadoConexion("SELECT P.Nombre, P.Cedula, NA.idNumero, NA.Fecha "
+                + "FROM `numeroasociado` as NA, asociado as A, persona as P "
+                + "WHERE NA.idAsociado = A.idAsociado and A.idPersona = P.idPersona");
     }
 
     public ResultSet numerosActuales() throws SQLException {
-        return resultadoConexion("SELECT `nombre`,`cedula`,`numero_rifa` FROM `asociados` WHERE 1 ORDER BY nombre ASC");
+        return resultadoConexion("SELECT P.Nombre, P.Cedula, ("
+                + "select NA.idNumero "
+                + "from numeroasociado as NA, asociado as A2 "
+                + "where NA.idAsociado = A2.idAsociado and A.idAsociado = A2.idAsociado order by NA.idNumero desc limit 1) as Numero "
+                + "FROM `asociado` as A, persona as P "
+                + "WHERE P.idPersona = A.idPersona and A.Estado = 0 order by P.Nombre asc");
     }
 
     private ResultSet resultadoConexion(String comando) throws SQLException {
@@ -205,12 +210,15 @@ public class AccesoBD {
     public String ganador(int numero, float premio, int tipo) {
 
         try {
-            ResultSet resultado = resultadoConexion("SELECT * FROM asociado where numero_rifa= '" + numero + "' and estado=0");
+            ResultSet resultado = resultadoConexion("SELECT P.Nombre, NA.* FROM `numeroasociado` as NA, asociado as A, "
+                    + "numero as N, persona as P WHERE NA.idNumero ='" + numero + "' and NA.idAsociado = A.idAsociado "
+                    + "and A.Estado = 0 and NA.idNumero = N.idNumero and N.Estado = 0 and A.idPersona = P.idPersona "
+                    + "order by `idNumero` desc limit 1");
             if (resultado.next()) {
                 System.out.println("Ganador: " + resultado.getString(1) + " ganó " + (long) premio);
-                guardarGanador(resultado.getLong(1), premio, numero, tipo);
+                guardarGanador(resultado.getInt(2), premio, tipo);
                 desconectar();
-                return resultado.getString(2) + " ganó " + premio;
+                return resultado.getString(1);
             } else {
                 return INACTIVO;
             }

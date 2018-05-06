@@ -21,7 +21,7 @@ public class ValorSorteo extends javax.swing.JDialog {
      * Creates new form ValorSorteo
      */
     private double valor, tipo;
-
+    
     public ValorSorteo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -227,6 +227,7 @@ public class ValorSorteo extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, C_VALIDA, "Monto de premio no válido", JOptionPane.ERROR_MESSAGE);
             } else {
                 if (!JTxFValor.getText().equals(JTxFConfirmacion.getText())) {
+                    JOptionPane.showMessageDialog(this, "Las cantidades ingresadas no concuerdan.", "Cantidades deiferentes", JOptionPane.ERROR_MESSAGE);
                 } else {
                     valor = Double.parseDouble(JTxFValor.getText());
                     if (JRBMenor.isSelected()) {
@@ -298,15 +299,16 @@ public class ValorSorteo extends javax.swing.JDialog {
             evt.consume();
         }
     }//GEN-LAST:event_JTxFConfirmacionKeyTyped
-
+    
     public void visible(int numero) {
         JLValores.setText("Valores para el sorteo número " + numero);
         this.setVisible(true);
         JTxFValor.setText("");
+        JTxFConfirmacion.setText("");
         JRBMayor.setSelected(false);
         JRBMenor.setSelected(false);
     }
-
+    
     public double[] valoresSorteo() {
         double[] valores = new double[2];
         valores[0] = valor;
