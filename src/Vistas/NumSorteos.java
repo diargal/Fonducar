@@ -206,7 +206,10 @@ public class NumSorteos extends javax.swing.JDialog {
     }//GEN-LAST:event_JTxFConfirmacionKeyPressed
 
     private void JTxFConfirmacionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFConfirmacionKeyTyped
-        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if ((c < '0' || c > '9')) {
+            evt.consume();
+        }
     }//GEN-LAST:event_JTxFConfirmacionKeyTyped
 
 

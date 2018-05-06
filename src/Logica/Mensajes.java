@@ -31,4 +31,5 @@ public class Mensajes {
     public static final String I_SORTEO = "Para realizar los sorteos, se hace necesario ingresar el número total a realizar";
     public static final String C_VALIDA = "Favor ingresar una cantidad válida.";
     public static final String COINCIDENCIA = "Los valores no coinciden, verifiquelos.";
+    public static final String MENSAJE = "Recuerde que el formato del archivo para cargar nuevos asociados es: NOMBRE, CEDULA y NUMERO respectivamente.";
 }

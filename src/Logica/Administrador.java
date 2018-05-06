@@ -11,21 +11,49 @@ package Logica;
  */
 public class Administrador extends Persona {
 
-    private String pass;
+    private String pass, usuario;
+    private int idAdmin;
 
     public Administrador() {
         super();
         pass = "";
+        usuario = "";
+        idAdmin = 0;
     }
 
-    public Administrador(long cedula, String pass) {
+    public Administrador(long cedula, String pass, String usuario) {
         this.cedula = cedula;
         this.pass = pass;
+        this.usuario = usuario;
     }
 
     @Override
     public String getNombre() {
         return nombre;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public int getIdAdmin() {
+        return idAdmin;
+    }
+
+    public void setIdPersona(int idPersona) {
+        this.idPersona = idPersona;
+    }
+
+    public int getIdPersona() {
+        return idPersona;
+    }
+
+    public void setIdAdmin(int idAdmin) {
+        this.idAdmin = idAdmin;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public long getCedula() {
@@ -46,6 +74,12 @@ public class Administrador extends Persona {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    @Override
+    public String toString() {
+        return "Administrador{" + "pass=" + pass + ", usuario=" + usuario + ", idAdmin=" + idAdmin + '}'
+                + super.toString();
     }
 
 }

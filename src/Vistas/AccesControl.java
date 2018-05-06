@@ -50,8 +50,8 @@ public class AccesControl extends javax.swing.JDialog {
     private void initComponents() {
 
         JPanelPrincipal = new javax.swing.JPanel();
-        JLCedula = new javax.swing.JLabel();
-        JTxfCedula = new javax.swing.JTextField();
+        JLUsuario = new javax.swing.JLabel();
+        JTxFUsuario = new javax.swing.JTextField();
         JLPass = new javax.swing.JLabel();
         JTxfPass = new javax.swing.JPasswordField();
         JBLogin = new javax.swing.JButton();
@@ -63,26 +63,26 @@ public class AccesControl extends javax.swing.JDialog {
 
         JPanelPrincipal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        JLCedula.setText("Número de Cédula: ");
+        JLUsuario.setText("Usuario:");
 
-        JTxfCedula.setText("1104873074");
-        JTxfCedula.addActionListener(new java.awt.event.ActionListener() {
+        JTxFUsuario.setText("diegogarcia");
+        JTxFUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JTxfCedulaActionPerformed(evt);
+                JTxFUsuarioActionPerformed(evt);
             }
         });
-        JTxfCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+        JTxFUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                JTxfCedulaKeyPressed(evt);
+                JTxFUsuarioKeyPressed(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTxfCedulaKeyTyped(evt);
+                JTxFUsuarioKeyTyped(evt);
             }
         });
 
         JLPass.setText("Contraseña:");
 
-        JTxfPass.setText("diego");
+        JTxfPass.setText("0221310044");
         JTxfPass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 JTxfPassKeyPressed(evt);
@@ -104,9 +104,9 @@ public class AccesControl extends javax.swing.JDialog {
                 .addGroup(JPanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(JPanelPrincipalLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(JLCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(JLUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(JTxfCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(JTxFUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(JLPass, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -123,10 +123,10 @@ public class AccesControl extends javax.swing.JDialog {
             .addGroup(JPanelPrincipalLayout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addGroup(JPanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JLCedula)
+                    .addComponent(JLUsuario)
                     .addComponent(JLPass)
                     .addComponent(JTxfPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JTxfCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(JTxFUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(JPanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JBLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -160,17 +160,16 @@ public class AccesControl extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void JTxfCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JTxfCedulaActionPerformed
+    private void JTxFUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JTxFUsuarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_JTxfCedulaActionPerformed
+    }//GEN-LAST:event_JTxFUsuarioActionPerformed
 
     private void JBLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBLoginActionPerformed
         boolean error = true;
-        if (JTxfPass.getText().isEmpty() || JTxfCedula.getText().isEmpty()) { //Si dejan los campos en blanco.
+        if (JTxfPass.getText().isEmpty() || JTxFUsuario.getText().isEmpty()) { //Si dejan los campos en blanco.
             ManagerError(); //método para mostrar errores.
         } else {
-            cedula = Long.parseLong(JTxfCedula.getText());
-            if (BonoSolidario.accesoBD.consultaAdmin(JTxfPass.getText(), cedula)) { //inmediatamente hago la consulta
+            if (BonoSolidario.accesoBD.consultaAdmin(JTxFUsuario.getText(), JTxfPass.getText())) { //inmediatamente hago la consulta
                 this.setVisible(false);
                 sorteo.actividad(A_SESION);
                 controlPrincipal.setVisible(true);
@@ -184,7 +183,7 @@ public class AccesControl extends javax.swing.JDialog {
         //JOptionPane.showMessageDialog(this, DigestUtils.md5Hex(pass));
         return DigestUtils.md5Hex(pass);
     }
-    private void JTxfCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxfCedulaKeyPressed
+    private void JTxFUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFUsuarioKeyPressed
         ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             this.JBLoginActionPerformed(jd);
@@ -193,7 +192,7 @@ public class AccesControl extends javax.swing.JDialog {
             System.exit(0);
         }
 
-    }//GEN-LAST:event_JTxfCedulaKeyPressed
+    }//GEN-LAST:event_JTxFUsuarioKeyPressed
     private void ManagerError() {
         JOptionPane.showMessageDialog(this, LOGIN_VER, ERROR_LOGIN, JOptionPane.ERROR_MESSAGE);
     }
@@ -209,13 +208,13 @@ public class AccesControl extends javax.swing.JDialog {
 
     }//GEN-LAST:event_JTxfPassKeyPressed
 
-    private void JTxfCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxfCedulaKeyTyped
+    private void JTxFUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFUsuarioKeyTyped
 //Este evento sirve para validar que solo ingresen números.
         char c = evt.getKeyChar();
         if ((c < '0' || c > '9')) {
             evt.consume();
         }
-    }//GEN-LAST:event_JTxfCedulaKeyTyped
+    }//GEN-LAST:event_JTxFUsuarioKeyTyped
 
     /**
      * @param args the command line arguments
@@ -261,10 +260,10 @@ public class AccesControl extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBLogin;
-    private javax.swing.JLabel JLCedula;
     private javax.swing.JLabel JLPass;
+    private javax.swing.JLabel JLUsuario;
     private javax.swing.JPanel JPanelPrincipal;
-    private javax.swing.JTextField JTxfCedula;
+    private javax.swing.JTextField JTxFUsuario;
     private javax.swing.JPasswordField JTxfPass;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel otro;

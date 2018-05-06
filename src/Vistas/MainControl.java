@@ -15,12 +15,12 @@ import static Imagenes.ControlImagenes.SEIS;
 import static Imagenes.ControlImagenes.SIETE;
 import static Imagenes.ControlImagenes.TRES;
 import static Imagenes.ControlImagenes.UNO;
-import Logica.BonoSolidario;
 import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.numerodeSorteos;
 import static Logica.Mensajes.A_RIFA;
 import static Logica.Mensajes.G_INHA;
 import static Logica.Mensajes.INACTIVO;
+import static Logica.Mensajes.MENSAJE;
 import static Logica.Mensajes.MSG_SORTEO;
 import static Logica.Mensajes.SORTEO;
 import static Logica.Mensajes.SORTEOS_FINAL;
@@ -407,6 +407,8 @@ public class MainControl extends javax.swing.JFrame {
 
     private void JMAAsociadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMAAsociadosActionPerformed
         try {
+
+            JOptionPane.showMessageDialog(null, MENSAJE, "Información importante", JOptionPane.INFORMATION_MESSAGE);
             JFileChooser selecArchivo = new JFileChooser();
             selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xls)", "xls"));
             selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xlsx)", "xlsx"));

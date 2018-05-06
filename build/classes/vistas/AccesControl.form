@@ -63,9 +63,9 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="JLCedula" min="-2" pref="106" max="-2" attributes="0"/>
+                          <Component id="JLUsuario" min="-2" pref="106" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="JTxfCedula" min="-2" pref="155" max="-2" attributes="0"/>
+                          <Component id="JTxFUsuario" min="-2" pref="155" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           <Component id="JLPass" min="-2" pref="93" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -87,10 +87,10 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="JLCedula" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="JLUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="JLPass" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="JTxfPass" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="JTxfCedula" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="JTxFUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -103,19 +103,19 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="JLCedula">
+        <Component class="javax.swing.JLabel" name="JLUsuario">
           <Properties>
-            <Property name="text" type="java.lang.String" value="N&#xfa;mero de C&#xe9;dula: "/>
+            <Property name="text" type="java.lang.String" value="Usuario:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="JTxfCedula">
+        <Component class="javax.swing.JTextField" name="JTxFUsuario">
           <Properties>
-            <Property name="text" type="java.lang.String" value="1104873074"/>
+            <Property name="text" type="java.lang.String" value="diegogarcia"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JTxfCedulaActionPerformed"/>
-            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTxfCedulaKeyPressed"/>
-            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTxfCedulaKeyTyped"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JTxFUsuarioActionPerformed"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTxFUsuarioKeyPressed"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTxFUsuarioKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="JLPass">
@@ -125,7 +125,7 @@
         </Component>
         <Component class="javax.swing.JPasswordField" name="JTxfPass">
           <Properties>
-            <Property name="text" type="java.lang.String" value="diego"/>
+            <Property name="text" type="java.lang.String" value="0221310044"/>
           </Properties>
           <Events>
             <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTxfPassKeyPressed"/>

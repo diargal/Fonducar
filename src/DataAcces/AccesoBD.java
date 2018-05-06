@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package DataAcces;
 
 import Logica.Asociado;
@@ -12,9 +7,6 @@ import static Logica.BonoSolidario.asociados;
 import static Logica.Mensajes.A_AGREGARASOCIADOS;
 import static Logica.Mensajes.INACTIVO;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -24,8 +16,6 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.poi.ss.usermodel.Row;
@@ -39,7 +29,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class AccesoBD {
 
     private static final String driver = "com.mysql.jdbc.Driver";
-    private static final String url = "jdbc:mysql://localhost/bono_solidario";
+    private static final String url = "jdbc:mysql://localhost/fonducar";
     private static final String login = "root";
     private static final String password = "";
     private static Connection conexion = null;
@@ -52,7 +42,7 @@ public class AccesoBD {
         try {
             Class.forName(driver).newInstance();
             conexion = DriverManager.getConnection(url, login, password);
-            System.out.println("Conexión con Base de datos Ok....");
+            System.out.println("Se acaba de acceder a la BD de fonducar!");
         } catch (Exception exc) {
             System.out.println("Error al tratar de abrir la base de datos");
         }
@@ -69,21 +59,27 @@ public class AccesoBD {
         }
     }
 
-    public boolean consultaAdmin(String pass, long cedula) {
+    public boolean consultaAdmin(String usuario, String pass) {
 
         try {
             String password = DigestUtils.md5Hex(pass);
             System.out.println(password);
-            ResultSet resultado = resultadoConexion("SELECT * FROM administrador where cedula= '" + cedula + "' and pass = '" + password + "'");
+            ResultSet resultado = resultadoConexion("SELECT A.*, P.nombre, P.cedula FROM `administrador` as A, persona as P WHERE P.idPersona = A.idPersona and A.Password='" + password + "' and A.Usuario='" + usuario + "'");
             if (resultado.next()) {
-                administrador.setCedula(resultado.getLong(2));
+                administrador.setIdAdmin(resultado.getInt(1));
+                administrador.setUsuario(resultado.getString(2));
                 administrador.setPass(resultado.getString(3));
-                administrador.setNombre(resultado.getString(4));
+                administrador.setIdPersona(resultado.getInt(4));
+                administrador.setNombre(resultado.getString(5));
+                administrador.setCedula(resultado.getLong(6));
+
+                System.out.println("Datos del admin: " + administrador.toString());
                 desconectar();
                 return true;
             }
 
         } catch (java.sql.SQLException er) {
+            System.out.println(er);
             JOptionPane.showMessageDialog(null, "No se pudo realizar la consulta de Administrador", "Failed!", JOptionPane.ERROR_MESSAGE);
         }
         desconectar();
@@ -143,12 +139,12 @@ public class AccesoBD {
             DateFormat fecha = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
             accesoBD.conexion();
 
-            String comandoSQL = "Insert into historial_modificaciones (id, cedula_admin, fecha, detalle) values (" + null + ",?,?,?)";
+            String comandoSQL = "Insert into movimiento (idMovimiento, Fecha, Detalle, idAdministrador) values (" + null + ",?,?,?)";
             conexion = getConnect();
             PreparedStatement prepar = conexion.prepareStatement(comandoSQL);
-            prepar.setLong(1, administrador.getCedula());
-            prepar.setString(2, fecha.format(date));
-            prepar.setString(3, tipo);
+            prepar.setString(1, fecha.format(date));
+            prepar.setString(2, tipo);
+            prepar.setLong(3, administrador.getIdAdmin());
             prepar.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -166,13 +162,12 @@ public class AccesoBD {
     public int numerodeAsociados() {
 
         try {
-            ResultSet resultado = resultadoConexion("SELECT count(*) FROM asociados");
+            ResultSet resultado = resultadoConexion("SELECT count(*) FROM asociado");
 
             if (resultado.next()) {
                 System.out.println("Cantida de asociados: " + resultado.getInt(1));
                 desconectar();
                 return resultado.getInt(1);
-
             }
 
         } catch (java.sql.SQLException er) {
@@ -210,7 +205,7 @@ public class AccesoBD {
     public String ganador(int numero, float premio, int tipo) {
 
         try {
-            ResultSet resultado = resultadoConexion("SELECT * FROM asociados where numero_rifa= '" + numero + "' and estado=0");
+            ResultSet resultado = resultadoConexion("SELECT * FROM asociado where numero_rifa= '" + numero + "' and estado=0");
             if (resultado.next()) {
                 System.out.println("Ganador: " + resultado.getString(1) + " ganó " + (long) premio);
                 guardarGanador(resultado.getLong(1), premio, numero, tipo);
@@ -230,6 +225,12 @@ public class AccesoBD {
     public boolean guardarAsociados(File file) {
         conexion();
         PreparedStatement ps;
+        ResultSet resultado;
+        int id = 0;
+        Date date = new Date();
+        DateFormat fecha = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        long cedula = 0, numero = 0;
+        String nombre = "";
 
         try {
 
@@ -241,10 +242,40 @@ public class AccesoBD {
             for (int a = 1; a <= numFilas; a++) {
                 Row fila = sheet.getRow(a);
 
-                ps = conexion.prepareStatement("INSERT INTO asociados (cedula, nombre, numero_rifa, estado) VALUES(?,?,?," + 0 + ")");
-                ps.setDouble(1, fila.getCell(0).getNumericCellValue());
-                ps.setString(2, fila.getCell(1).getStringCellValue());
-                ps.setDouble(3, fila.getCell(2).getNumericCellValue());
+                ps = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, cedula) VALUES(" + null + ",?,?)");
+                nombre = fila.getCell(0).getStringCellValue();
+                ps.setString(1, nombre);
+                cedula = Long.parseLong(String.valueOf((int) fila.getCell(1).getNumericCellValue()));
+                ps.setDouble(2, cedula);
+                ps.execute();
+
+                System.out.println("Cédula => " + cedula);
+
+                resultado = resultadoConexion("SELECT P.idPersona FROM persona as P WHERE P.Cedula = '" + cedula + "'");
+                if (resultado.next()) {
+                    System.out.println("Resultado => " + resultado.getInt(1));
+                    id = resultado.getInt(1);
+                }
+
+                ps = conexion.prepareStatement("Insert into asociado (idAsociado, Estado, idPersona) values (" + null + ",0,?)");
+                ps.setDouble(1, id);
+                ps.execute();
+
+                resultado = resultadoConexion("select A.idAsociado from asociado as A where A.idPersona = '" + id + "'");
+                if (resultado.next()) {
+                    id = resultado.getInt(1);
+                    System.out.println("Id asociado: " + id);
+                }
+
+                ps = conexion.prepareStatement("Insert into numero (idNumero, Estado) values (?," + 0 + ")");
+                numero = (long) fila.getCell(2).getNumericCellValue();
+                ps.setDouble(1, numero);
+                ps.execute();
+
+                ps = conexion.prepareStatement("Insert into numeroasociado (idNumeroAsociado, Fecha, idAsociado, idNumero) values (" + null + ",?,?,?)");
+                ps.setString(1, fecha.format(date) + "");
+                ps.setDouble(2, id);
+                ps.setDouble(3, numero);
                 ps.execute();
             }
 
@@ -253,7 +284,7 @@ public class AccesoBD {
             conexion.close();
             return true;
         } catch (Exception ex) {
-            System.out.println("Ocurre un error: " + ex);
+            JOptionPane.showMessageDialog(null, nombre + " de cédula " + cedula + " ya se encuentra en la BD", "Campos existentes en la BD", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 

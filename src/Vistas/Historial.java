@@ -40,10 +40,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @author Diego García
  */
 public class Historial extends javax.swing.JDialog {
-
+    
     private File archivo;
     public boolean tipoAccion;
-
+    
     public void setTipoAccion(boolean tipoAccion) {
         this.tipoAccion = tipoAccion;
     }
@@ -54,7 +54,7 @@ public class Historial extends javax.swing.JDialog {
     public void setArchivo(File archivo) {
         this.archivo = archivo;
     }
-
+    
     public Historial(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -62,15 +62,15 @@ public class Historial extends javax.swing.JDialog {
         this.setResizable(true);
         tipoAccion = true;
     }
-
+    
     public JButton getJBSubir() {
         return JBSubir;
     }
-
+    
     public JTable getJTHistorial() {
         return JTHistorial;
     }
-
+    
     public String Importar() {
         JBSubir.setText("Subir a la BD");
         Workbook wb;
@@ -83,7 +83,7 @@ public class Historial extends javax.swing.JDialog {
         };
         JTHistorial.setModel(modeloT);
         JTHistorial.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
+        
         try {
             wb = WorkbookFactory.create(new FileInputStream(archivo));
             Sheet hoja = wb.getSheetAt(0);
@@ -130,7 +130,7 @@ public class Historial extends javax.swing.JDialog {
         }
         return respuesta;
     }
-
+    
     public void historialSorteos(ResultSet resul) {
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
@@ -169,12 +169,12 @@ public class Historial extends javax.swing.JDialog {
             accesoBD.guardarOperacion(A_REPORTESORTEOS);
             JBSubir.setText("Descargar archivo");
             JBSubir.setEnabled(true);
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public void historialModificaciones(ResultSet resul) {
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
@@ -199,12 +199,12 @@ public class Historial extends javax.swing.JDialog {
             accesoBD.guardarOperacion(A_HOPERACIONES);
             JBSubir.setText("Descargar archivo");
             JBSubir.setEnabled(true);
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public void numerosActuales(ResultSet resul) {
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
@@ -233,12 +233,12 @@ public class Historial extends javax.swing.JDialog {
             accesoBD.guardarOperacion(A_RACTUALES);
             JBSubir.setText("Descargar archivo");
             JBSubir.setEnabled(true);
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -316,10 +316,11 @@ public class Historial extends javax.swing.JDialog {
         if (tipoAccion) {
             if (accesoBD.guardarAsociados(archivo)) {
                 JOptionPane.showMessageDialog(this, "Se cargaron todos los datos a la BD", "Proceso exitoso", JOptionPane.OK_CANCEL_OPTION);
-                this.setEnabled(false);
-            } else {
-                JOptionPane.showMessageDialog(this, "Verifique si alguno de los datos ingresados ya existe en la base de datos.", "Algo salió mal", JOptionPane.ERROR_MESSAGE);
-            }
+                this.setVisible(false);
+            } 
+//            else {
+//                JOptionPane.showMessageDialog(this, "Verifique si alguno de los datos ingresados ya existe en la base de datos.", "Algo salió mal", JOptionPane.ERROR_MESSAGE);
+//            }
         } else {
             if (generarArchivo()) {
                 JOptionPane.showMessageDialog(this, "Archivo generado con éxito.");
@@ -330,16 +331,16 @@ public class Historial extends javax.swing.JDialog {
             System.out.println("Otra acción de historiales");
         }
     }//GEN-LAST:event_JBSubirActionPerformed
-
+    
     public boolean generarArchivo() {
         Workbook wb;
-
+        
         JFileChooser selecArchivo = new JFileChooser();
         selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xls)", "xls"));
         selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xlsx)", "xlsx"));
         selecArchivo.showDialog(null, "Seleccionar archivo");
         archivo = selecArchivo.getSelectedFile();
-
+        
         if (archivo.getName().endsWith("xls") || archivo.getName().endsWith("xlsx")) {
             String respuesta = "No se realizo con exito la exportación.";
             int numFila = JTHistorial.getRowCount(), numColumna = JTHistorial.getColumnCount();
@@ -349,7 +350,7 @@ public class Historial extends javax.swing.JDialog {
                 wb = new XSSFWorkbook();
             }
             Sheet hoja = wb.createSheet("Reporte");
-
+            
             try {
                 for (int i = -1; i < numFila; i++) {
                     Row fila = hoja.createRow(i + 1);
@@ -366,10 +367,10 @@ public class Historial extends javax.swing.JDialog {
                 return true;
             } catch (Exception e) {
                 System.err.println(e.getMessage());
-
+                
             }
         } else {
-
+            
             JOptionPane.showMessageDialog(null, "Elija un formato valido.");
             return false;
         }
