@@ -9,24 +9,6 @@
     </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="JMSorteos">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Sorteos"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMSorteosActionPerformed"/>
-          </Events>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="JMCantidadSorteos">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Ingresar cantidad de sorteos"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMCantidadSorteosActionPerformed"/>
-              </Events>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu1">
           <Properties>
             <Property name="text" type="java.lang.String" value="Informes"/>
@@ -39,6 +21,11 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIAsociadosActivosActionPerformed"/>
               </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="JMIinhabilitados">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Asociados inhabilitados"/>
+              </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="JMIEx">
               <Properties>
@@ -154,21 +141,20 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace pref="40" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="JLCuanto" min="-2" pref="274" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
+                  <Component id="JLGanador1" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="0" pref="30" max="32767" attributes="0"/>
                       <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="40" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="30" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="JLActivos" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="356" max="-2" attributes="0"/>
+                      <Component id="JLCuanto" min="-2" pref="274" max="-2" attributes="0"/>
                   </Group>
               </Group>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="JLGanador1" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -177,7 +163,10 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-              <Component id="JLCuanto" min="-2" pref="35" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="JLCuanto" pref="35" max="32767" attributes="0"/>
+                  <Component id="JLActivos" max="32767" attributes="0"/>
+              </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
@@ -319,6 +308,13 @@
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="GANADOR"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="JLActivos">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="18" style="1"/>
+        </Property>
       </Properties>
     </Component>
   </SubComponents>

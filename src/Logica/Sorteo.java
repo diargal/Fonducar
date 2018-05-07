@@ -6,6 +6,7 @@
 package Logica;
 
 import DataAcces.AccesoBD;
+import java.util.ArrayList;
 
 /**
  *
@@ -57,6 +58,16 @@ public class Sorteo {
 
     public boolean actividad(String tipo) {
         return acceso.guardarOperacion(tipo);
+    }
+
+    public boolean asociarNumeros() {
+        ArrayList<Integer> array = acceso.idsAsociados();
+        ArrayList<Integer> aux = array;
+        int tamanio = array.size();
+        for (int i = 0; i < tamanio; i++) {
+        }
+        System.out.println("Tamaño array: " + array.size());
+        return false;
     }
 
 }

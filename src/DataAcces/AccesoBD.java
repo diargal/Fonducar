@@ -21,6 +21,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.util.ArrayList;
 
 /**
  *
@@ -174,6 +175,26 @@ public class AccesoBD {
         return 0;
     }
 
+    public int numeroAsociadosActivos() {
+
+        try {
+            ResultSet resultado = resultadoConexion("SELECT count(*) FROM asociado as A where A.Estado=0");
+
+            if (resultado.next()) {
+                System.out.println("Cantida de asociados: " + resultado.getInt(1));
+                desconectar();
+                return resultado.getInt(1);
+            }
+
+        } catch (java.sql.SQLException er) {
+            JOptionPane.showMessageDialog(null, er, "Failed!", JOptionPane.ERROR_MESSAGE);
+
+        }
+
+        desconectar();
+        return 0;
+    }
+
     public ResultSet historialSorteos() throws SQLException {
         return resultadoConexion("SELECT P.Nombre, P.Cedula, S.Fecha, NA.idNumero, S.Premio, S.TipoSorteo "
                 + "FROM `sorteo` as S, asociado as A, persona as P, numeroasociado as NA "
@@ -228,6 +249,18 @@ public class AccesoBD {
         }
         desconectar();
         return "";
+    }
+
+    public ArrayList<Integer> idsAsociados() {
+        ArrayList<Integer> array = new ArrayList<>();
+        try {
+            ResultSet resultado = resultadoConexion("SELECT A.idAsociado, P.Nombre FROM `asociado` as A, persona as P WHERE A.Estado = 0 and P.idPersona = A.idPersona order by P.Nombre asc");
+            while (resultado.next()) {
+                array.add(resultado.getInt(1));
+            }
+        } catch (Exception e) {
+        }
+        return array;
     }
 
     public boolean guardarAsociados(File file) {

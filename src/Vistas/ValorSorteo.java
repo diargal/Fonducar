@@ -21,7 +21,7 @@ public class ValorSorteo extends javax.swing.JDialog {
      * Creates new form ValorSorteo
      */
     private double valor, tipo;
-    
+
     public ValorSorteo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -299,7 +299,7 @@ public class ValorSorteo extends javax.swing.JDialog {
             evt.consume();
         }
     }//GEN-LAST:event_JTxFConfirmacionKeyTyped
-    
+
     public void visible(int numero) {
         JLValores.setText("Valores para el sorteo número " + numero);
         this.setVisible(true);
@@ -308,7 +308,7 @@ public class ValorSorteo extends javax.swing.JDialog {
         JRBMayor.setSelected(false);
         JRBMenor.setSelected(false);
     }
-    
+
     public double[] valoresSorteo() {
         double[] valores = new double[2];
         valores[0] = valor;

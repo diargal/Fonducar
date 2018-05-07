@@ -15,7 +15,6 @@ import static Imagenes.ControlImagenes.SEIS;
 import static Imagenes.ControlImagenes.SIETE;
 import static Imagenes.ControlImagenes.TRES;
 import static Imagenes.ControlImagenes.UNO;
-import Logica.BonoSolidario;
 import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.numerodeSorteos;
 import static Logica.Mensajes.A_RIFA;
@@ -65,6 +64,7 @@ public class MainControl extends javax.swing.JFrame {
         numeroSorteos = new NumSorteos(this, true);
         sorteo = new Sorteo();
         historial = new Historial(this, true);
+        JLActivos.setText("Número de participantes para los sorteo: " + accesoBD.numeroAsociadosActivos());
     }
 
     public void setJLCuanto(JLabel JLCuanto) {
@@ -88,11 +88,11 @@ public class MainControl extends javax.swing.JFrame {
         JLBalota6 = new javax.swing.JLabel();
         JLCuanto = new javax.swing.JLabel();
         JLGanador1 = new javax.swing.JLabel();
+        JLActivos = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        JMSorteos = new javax.swing.JMenu();
-        JMCantidadSorteos = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         JMIAsociadosActivos = new javax.swing.JMenuItem();
+        JMIinhabilitados = new javax.swing.JMenuItem();
         JMIEx = new javax.swing.JMenuItem();
         JMIHAsociados = new javax.swing.JMenuItem();
         JMIHSorteos = new javax.swing.JMenuItem();
@@ -177,22 +177,7 @@ public class MainControl extends javax.swing.JFrame {
         JLGanador1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         JLGanador1.setText("GANADOR");
 
-        JMSorteos.setText("Sorteos");
-        JMSorteos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JMSorteosActionPerformed(evt);
-            }
-        });
-
-        JMCantidadSorteos.setText("Ingresar cantidad de sorteos");
-        JMCantidadSorteos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JMCantidadSorteosActionPerformed(evt);
-            }
-        });
-        JMSorteos.add(JMCantidadSorteos);
-
-        jMenuBar1.add(JMSorteos);
+        JLActivos.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
 
         jMenu1.setText("Informes");
 
@@ -203,6 +188,9 @@ public class MainControl extends javax.swing.JFrame {
             }
         });
         jMenu1.add(JMIAsociadosActivos);
+
+        JMIinhabilitados.setText("Asociados inhabilitados");
+        jMenu1.add(JMIinhabilitados);
 
         JMIEx.setText("Ex-Asociados hábiles para sorteos");
         JMIEx.addActionListener(new java.awt.event.ActionListener() {
@@ -312,24 +300,26 @@ public class MainControl extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(40, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(JLCuanto, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(40, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(JLGanador1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JLGanador1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 30, Short.MAX_VALUE)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 30, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(JLActivos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(356, 356, 356)
+                        .addComponent(JLCuanto, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(4, 4, 4)
-                .addComponent(JLCuanto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(JLCuanto, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(JLActivos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(65, 65, 65)
@@ -421,12 +411,12 @@ public class MainControl extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Elija un formato válido");
             }
         } catch (Exception e) {
-            System.out.println("Mira el error: " + e);
+            JOptionPane.showMessageDialog(null, "El formato requerido no es correcto. Recuerde que es: NOMBRE, CEDULA, NUMERO", "Error de lectura", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_JMAAsociadosActionPerformed
 
     private void JMIAsignarAsoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIAsignarAsoActionPerformed
-        JOptionPane.showMessageDialog(this, "Aún no se puede generar nuevos números para los asociados", "Información de procedimiento", JOptionPane.INFORMATION_MESSAGE);
+        sorteo.asociarNumeros();
     }//GEN-LAST:event_JMIAsignarAsoActionPerformed
 
     private void JMIActualesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIActualesActionPerformed
@@ -444,7 +434,10 @@ public class MainControl extends javax.swing.JFrame {
 
     private void JBSorteoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSorteoActionPerformed
         if (numerodeSorteos == 0) {
-            JOptionPane.showMessageDialog(this, "Debe primero ingresar la cantidad de sorteos a realizar.", "Ingresar número de sorteos.", JOptionPane.ERROR_MESSAGE);
+            numeroSorteos.setVisible(true);
+            if (numerodeSorteos != 0) {
+                JLCuanto.setText("Número de sorteos: " + numerodeSorteos);
+            }
         } else {
             if (sorteosRealizados == numerodeSorteos) {
                 JOptionPane.showMessageDialog(this, SORTEOS_FINAL, MSG_SORTEO, JOptionPane.ERROR_MESSAGE);
@@ -465,18 +458,6 @@ public class MainControl extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_JBSorteoActionPerformed
-
-    private void JMSorteosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMSorteosActionPerformed
-
-    }//GEN-LAST:event_JMSorteosActionPerformed
-
-    private void JMCantidadSorteosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMCantidadSorteosActionPerformed
-        numeroSorteos.setVisible(true);
-        if (numerodeSorteos != 0) {
-            JMCantidadSorteos.setEnabled(false);
-            JLCuanto.setText("Número de sorteos: " + numerodeSorteos);
-        }
-    }//GEN-LAST:event_JMCantidadSorteosActionPerformed
 
     private void JMIAsociadosActivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIAsociadosActivosActionPerformed
         JOptionPane.showMessageDialog(this, "Aún no se encuentra disponible esta parte");
@@ -554,13 +535,13 @@ public class MainControl extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBSorteo1;
+    private javax.swing.JLabel JLActivos;
     private javax.swing.JLabel JLBalota4;
     private javax.swing.JLabel JLBalota5;
     private javax.swing.JLabel JLBalota6;
     private javax.swing.JLabel JLCuanto;
     private javax.swing.JLabel JLGanador1;
     private javax.swing.JMenuItem JMAAsociados;
-    private javax.swing.JMenuItem JMCantidadSorteos;
     private javax.swing.JMenuItem JMIActuales;
     private javax.swing.JMenuItem JMIAsignarAso;
     private javax.swing.JMenuItem JMIAsociadosActivos;
@@ -569,8 +550,8 @@ public class MainControl extends javax.swing.JFrame {
     private javax.swing.JMenuItem JMIHModificaciones;
     private javax.swing.JMenuItem JMIHSorteos;
     private javax.swing.JMenuItem JMIModificar;
+    private javax.swing.JMenuItem JMIinhabilitados;
     private javax.swing.JMenu JMSalir;
-    private javax.swing.JMenu JMSorteos;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
