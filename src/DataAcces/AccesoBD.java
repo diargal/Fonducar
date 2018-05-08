@@ -110,7 +110,7 @@ public class AccesoBD {
     private void guardarGanador(long idNumAso, float premio, int tipo) {
         conexion();
         Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String fecha2 = fecha.format(date);
         System.out.println("Fecha: " + fecha.format(date));
         String ComandoSQL;
@@ -132,7 +132,7 @@ public class AccesoBD {
     public boolean guardarOperacion(String tipo) {
         conexion();
         Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String comandoSQL;
         try {
 
@@ -147,12 +147,6 @@ public class AccesoBD {
             System.out.println("No se guardò la operaciòn");
             return false;
         }
-    }
-
-    public void guardarAsignacion() { //este método se encargará de guardar los asociados con sus nuevos números
-        //y esta será llamada desde la clase ControlAsignacion.
-        accesoBD = new AccesoBD();
-        desconectar();
     }
 
     public int numerodeAsociados() {
@@ -216,7 +210,7 @@ public class AccesoBD {
         return resultadoConexion("SELECT P.Nombre, P.Cedula, ("
                 + "select NA.idNumero "
                 + "from numeroasociado as NA, asociado as A2 "
-                + "where NA.idAsociado = A2.idAsociado and A.idAsociado = A2.idAsociado order by NA.idNumero desc limit 1) as Numero "
+                + "where NA.idAsociado = A2.idAsociado and A.idAsociado = A2.idAsociado order by NA.Fecha desc limit 1) as Numero "
                 + "FROM `asociado` as A, persona as P "
                 + "WHERE P.idPersona = A.idPersona and A.Estado = 0 order by P.Nombre asc");
     }
@@ -234,7 +228,7 @@ public class AccesoBD {
             ResultSet resultado = resultadoConexion("SELECT P.Nombre, NA.* FROM `numeroasociado` as NA, asociado as A, "
                     + "numero as N, persona as P WHERE NA.idNumero ='" + numero + "' and NA.idAsociado = A.idAsociado "
                     + "and A.Estado = 0 and NA.idNumero = N.idNumero and N.Estado = 0 and A.idPersona = P.idPersona "
-                    + "order by `idNumero` desc limit 1");
+                    + "order by NA.Fecha desc limit 1");
             if (resultado.next()) {
                 System.out.println("Ganador: " + resultado.getString(1) + " ganó " + (long) premio);
                 guardarGanador(resultado.getInt(2), premio, tipo);
@@ -251,6 +245,27 @@ public class AccesoBD {
         return "";
     }
 
+    public boolean asociarNumeros(int idAsociado, int idNumero) {
+        conexion();
+        PreparedStatement ps;
+        Date date = new Date();
+        DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+        try {
+            ps = conexion.prepareStatement("INSERT INTO `numeroasociado`(`idNumeroAsociado`, `Fecha`, `idAsociado`, `idNumero`) VALUES(" + null + ",?,?,?)");
+            ps.setString(1, fecha.format(date));
+            ps.setDouble(2, idAsociado);
+            ps.setDouble(3, idNumero);
+            ps.execute();
+
+            desconectar();
+
+            return true;
+        } catch (java.sql.SQLException er) {
+            return false;
+        }
+    }
+
     public ArrayList<Integer> idsAsociados() {
         ArrayList<Integer> array = new ArrayList<>();
         try {
@@ -258,8 +273,11 @@ public class AccesoBD {
             while (resultado.next()) {
                 array.add(resultado.getInt(1));
             }
+//            return array;
         } catch (Exception e) {
+            System.out.println("Error: " + e);
         }
+
         return array;
     }
 
@@ -269,7 +287,7 @@ public class AccesoBD {
         ResultSet resultado;
         int id = 0;
         Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         long cedula = 0, numero = 0;
         String nombre = "";
 
