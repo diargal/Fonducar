@@ -153,7 +153,7 @@ public class Historial extends javax.swing.JDialog {
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
-                object[1] = resul.getString(2);
+                object[1] = resul.getLong(2);
                 object[2] = resul.getString(3);
                 if ((resul.getInt(4) < 100) && (resul.getInt(4) >= 10)) {
                     object[3] = "0" + resul.getInt(4);
@@ -259,7 +259,7 @@ public class Historial extends javax.swing.JDialog {
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
-                object[1] = resul.getLong(2);
+                object[1] = resul.getInt(2);
                 if ((resul.getInt(3) < 100) && (resul.getInt(3) >= 10)) {
                     object[2] = "0" + resul.getInt(3);
                 } else {

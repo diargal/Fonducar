@@ -76,9 +76,9 @@ public class Sorteo {
 
         for (int i = 0; i < tamanio; i++) {
             do {
-//                random = (int) Math.floor(Math.random() * tamanio);
-                r = new Random(System.currentTimeMillis());
-                random = r.nextInt(tamanio);
+                random = (int) Math.floor(Math.random() * tamanio);
+//                r = new Random(System.currentTimeMillis());
+//                random = r.nextInt(tamanio);
                 //System.out.println("Puesto: " + puesto);
 //                System.out.println("Puesto generado: " + puesto);
             } while (aux.get(random) != 0);
@@ -95,9 +95,9 @@ public class Sorteo {
             } while (aux2.get(random) != 0);
             aux2.set(random, array.get(i));
         }
-        System.out.println("Id Persona ---> Número");
+        // System.out.println("Id Persona ---> Número");
         for (int i = 0; i < tamanio; i++) {
-            System.out.println(aux.get(i) + " ---> " + aux2.get(i));
+            // System.out.println(aux.get(i) + " ---> " + aux2.get(i));
             if (!acceso.asociarNumeros(aux.get(i), aux2.get(i))) {
                 return false;
             }

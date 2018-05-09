@@ -18,8 +18,9 @@ public class Mensajes {
     public static final String ERROR_LOGIN = "Error de inicio de sesión.";
     public static final String PREMIO = "Ingrese valor del premio.";
     public static final String INACTIVO = "El ganador actualmente se encuentra inactivo.";
-    public static final String SORTEO = "Este sorteo se realizará nuevamente.";
+    public static final String SORTEO = "Este sorteo se realizará nuevamente, debido a que el número ganador pertenece a un ex-asociado no oarticipativo.";
     public static final String G_INHA = "No hay ganador habilitado";
+    public static final String G_Anterior = "El número ganador, ya ha salido favorecido en un torneo anterior. por tanto, se realizará un nuevo sorteo";
     public static final String A_RIFA = "Realización de sorteo";
     public static final String A_MODIASOCIADO = "Modificación de estado del asociado";
     public static final String A_AGREGARASOCIADOS = "Adición de nuevos asociados.";

@@ -203,7 +203,7 @@ public class AccesoBD {
     public ResultSet historialNumeros() throws SQLException {
         return resultadoConexion("SELECT P.Nombre, P.Cedula, NA.idNumero, NA.Fecha "
                 + "FROM `numeroasociado` as NA, asociado as A, persona as P "
-                + "WHERE NA.idAsociado = A.idAsociado and A.idPersona = P.idPersona");
+                + "WHERE NA.idAsociado = A.idAsociado and A.idPersona = P.idPersona order by P.Nombre, NA.idNumero, NA.Fecha");
     }
 
     public ResultSet numerosActuales() throws SQLException {
@@ -223,21 +223,43 @@ public class AccesoBD {
     }
 
     public String ganador(int numero, float premio, int tipo) {
+        ResultSet resultado;
+        Date date = new Date();
+        DateFormat fecha = new SimpleDateFormat("yyyy");
 
         try {
-            ResultSet resultado = resultadoConexion("SELECT P.Nombre, NA.* FROM `numeroasociado` as NA, asociado as A, "
-                    + "numero as N, persona as P WHERE NA.idNumero ='" + numero + "' and NA.idAsociado = A.idAsociado "
-                    + "and A.Estado = 0 and NA.idNumero = N.idNumero and N.Estado = 0 and A.idPersona = P.idPersona "
-                    + "order by NA.Fecha desc limit 1");
+            resultado = resultadoConexion("select aso.idnumero "
+                    + "from numeroasociado as aso "
+                    + "where aso.idnumeroasociado in "
+                    + "( select idnumeroasociado from sorteo as st where '" + fecha.format(date)
+                    + "'= substring( st.fecha, length(st.fecha)-12 , length(st.fecha)-15 ) )");
+            while (resultado.next()) {
+                System.out.println("Resultado op: " + resultado.getString(1));
+                if (resultado.getInt(1) == numero) {
+                    return "anterior";
+                }
+            }
+//
+            resultado = resultadoConexion("SELECT p.nombre, nm.idnumeroasociado, a.idAsociado "
+                    + "FROM `numeroasociado` as nm, asociado as a, persona as p, numero as n "
+                    + "WHERE nm.idAsociado = a.idAsociado and nm.idNumero ='" + numero + "'and p.idPersona = a.idPersona "
+                    + "and n.Estado = 0 and a.estado = 0 order by nm.fecha desc limit 1");
             if (resultado.next()) {
-                System.out.println("Ganador: " + resultado.getString(1) + " ganó " + (long) premio);
                 guardarGanador(resultado.getInt(2), premio, tipo);
-                desconectar();
                 return resultado.getString(1);
             } else {
-                return INACTIVO;
-            }
 
+                resultado = resultadoConexion("SELECT p.nombre, nm.idnumeroasociado, a.idAsociado "
+                        + "FROM `numeroasociado` as nm, asociado as a, persona as p, numero as n, inhabilitacion as i "
+                        + "WHERE nm.idAsociado = a.idAsociado and nm.idNumero = '" + numero + "' and p.idPersona = a.idPersona and n.Estado = 1 "
+                        + "and a.idAsociado = i.idAsociado and i.estado = 0 order by nm.fecha desc limit 1");
+                if (resultado.next()) {
+                    guardarGanador(resultado.getInt(2), premio, tipo);
+                    return resultado.getString(1);
+                } else {
+                    return "false";
+                }
+            }
         } catch (java.sql.SQLException er) {
             JOptionPane.showMessageDialog(null, "Error al saber el ganador" + er, "Failed!", JOptionPane.ERROR_MESSAGE);
         }
@@ -304,7 +326,7 @@ public class AccesoBD {
                 ps = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, cedula) VALUES(" + null + ",?,?)");
                 nombre = fila.getCell(0).getStringCellValue();
                 ps.setString(1, nombre);
-                cedula = Long.parseLong(String.valueOf((int) fila.getCell(1).getNumericCellValue()));
+                cedula = Long.parseLong(String.valueOf( fila.getCell(1).getStringCellValue()));
                 ps.setDouble(2, cedula);
                 ps.execute();
 
@@ -343,6 +365,7 @@ public class AccesoBD {
             conexion.close();
             return true;
         } catch (Exception ex) {
+            System.out.println(ex);
             JOptionPane.showMessageDialog(null, nombre + " de cédula " + cedula + " ya se encuentra en la BD", "Campos existentes en la BD", JOptionPane.ERROR_MESSAGE);
             return false;
         }

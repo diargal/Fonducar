@@ -19,6 +19,7 @@ import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.numerodeSorteos;
 import static Logica.Mensajes.A_NUMEROS;
 import static Logica.Mensajes.A_RIFA;
+import static Logica.Mensajes.G_Anterior;
 import static Logica.Mensajes.G_INHA;
 import static Logica.Mensajes.INACTIVO;
 import static Logica.Mensajes.MENSAJE;
@@ -69,7 +70,7 @@ public class MainControl extends javax.swing.JFrame {
         sorteo = new Sorteo();
         historial = new Historial(this, true);
         JLActivos.setText("Número de participantes para los sorteo: " + accesoBD.numeroAsociadosActivos());
-         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     public void setJLCuanto(JLabel JLCuanto) {
@@ -91,9 +92,11 @@ public class MainControl extends javax.swing.JFrame {
         JLActivos = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        JMIAsociadosActivos = new javax.swing.JMenuItem();
-        JMIinhabilitados = new javax.swing.JMenuItem();
-        JMIEx = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         JMIHAsociados = new javax.swing.JMenuItem();
         JMIHSorteos = new javax.swing.JMenuItem();
         JMIHModificaciones = new javax.swing.JMenuItem();
@@ -180,24 +183,21 @@ public class MainControl extends javax.swing.JFrame {
 
         jMenu1.setText("Informes");
 
-        JMIAsociadosActivos.setText("Asociados activos");
-        JMIAsociadosActivos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JMIAsociadosActivosActionPerformed(evt);
-            }
-        });
-        jMenu1.add(JMIAsociadosActivos);
+        jMenu3.setText("Ex-Asociados");
 
-        JMIinhabilitados.setText("Asociados inhabilitados");
-        jMenu1.add(JMIinhabilitados);
+        jMenuItem2.setText("Inhabilitados para los sorteos de este año");
+        jMenu3.add(jMenuItem2);
 
-        JMIEx.setText("Ex-Asociados hábiles para sorteos");
-        JMIEx.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JMIExActionPerformed(evt);
-            }
-        });
-        jMenu1.add(JMIEx);
+        jMenuItem3.setText("Habilitados para los sorteos de este año");
+        jMenu3.add(jMenuItem3);
+
+        jMenuItem4.setText("Historial ex-asociados que participaron en sorteos");
+        jMenu3.add(jMenuItem4);
+
+        jMenuItem5.setText("Historial de los ex-asociados que NO participaron en sorteos");
+        jMenu3.add(jMenuItem5);
+
+        jMenu1.add(jMenu3);
 
         JMIHAsociados.setText("Historial de números asignados a asociados");
         JMIHAsociados.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -338,57 +338,6 @@ public class MainControl extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_JMSalirMouseClicked
 
-    private void JMIHSorteosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JMIHSorteosKeyPressed
-
-    }//GEN-LAST:event_JMIHSorteosKeyPressed
-
-    private void JMIHSorteosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIHSorteosActionPerformed
-
-    }//GEN-LAST:event_JMIHSorteosActionPerformed
-
-    private void JMIHSorteosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMIHSorteosMouseClicked
-
-    }//GEN-LAST:event_JMIHSorteosMouseClicked
-
-    private void JMIHSorteosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMIHSorteosMousePressed
-
-        try {
-            historial.setTitle("Historial de los sorteos");
-            historial.getJBSubir().setEnabled(false);
-            historial.setTipoAccion(false);
-            historial.historialSorteos(accesoBD.historialSorteos());
-            historial.setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_JMIHSorteosMousePressed
-
-    private void JMIHModificacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIHModificacionesActionPerformed
-
-        try {
-            historial.setTitle("Historial de moficaciones");
-            historial.getJBSubir().setEnabled(false);
-            historial.setTipoAccion(false);
-            historial.historialModificaciones(accesoBD.historialModificaciones());
-            historial.setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_JMIHModificacionesActionPerformed
-
-    private void JMIHAsociadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIHAsociadosActionPerformed
-
-        try {
-            historial.setTitle("Información del historial de los números asignados a cada asociado");
-            historial.getJBSubir().setEnabled(false);
-            historial.setTipoAccion(false);
-            historial.historialNumeros(accesoBD.historialNumeros());
-            historial.setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_JMIHAsociadosActionPerformed
-
     private void JMAAsociadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMAAsociadosActionPerformed
         try {
 
@@ -432,19 +381,6 @@ public class MainControl extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_JMIAsignarAsoActionPerformed
 
-    private void JMIActualesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIActualesActionPerformed
-
-        try {
-            historial.setTitle("Lista de los números actuales de cada asociado");
-            historial.getJBSubir().setEnabled(false);
-            historial.setTipoAccion(false);
-            historial.numerosActuales(accesoBD.numerosActuales());
-            historial.setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_JMIActualesActionPerformed
-
     private void JBSorteoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSorteoActionPerformed
         if (numerodeSorteos == 0) {
             numeroSorteos.setVisible(true);
@@ -472,18 +408,74 @@ public class MainControl extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_JBSorteoActionPerformed
 
-    private void JMIAsociadosActivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIAsociadosActivosActionPerformed
-        JOptionPane.showMessageDialog(this, "Aún no se encuentra disponible esta parte");
-    }//GEN-LAST:event_JMIAsociadosActivosActionPerformed
-
-    private void JMIExActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIExActionPerformed
-        JOptionPane.showMessageDialog(this, "Aún no se encuentra disponible esta parte");
-    }//GEN-LAST:event_JMIExActionPerformed
-
     private void JMIModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIModificarActionPerformed
-       CambiarEstado cambiar = new CambiarEstado(this, true);
-       cambiar.setVisible(rootPaneCheckingEnabled);
+        CambiarEstado cambiar = new CambiarEstado(this, true);
+        cambiar.setVisible(rootPaneCheckingEnabled);
     }//GEN-LAST:event_JMIModificarActionPerformed
+
+    private void JMIActualesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIActualesActionPerformed
+
+        try {
+            historial.setTitle("Lista de los números actuales de cada asociado");
+            historial.getJBSubir().setEnabled(false);
+            historial.setTipoAccion(false);
+            historial.numerosActuales(accesoBD.numerosActuales());
+            historial.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_JMIActualesActionPerformed
+
+    private void JMIHModificacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIHModificacionesActionPerformed
+
+        try {
+            historial.setTitle("Historial de moficaciones");
+            historial.getJBSubir().setEnabled(false);
+            historial.setTipoAccion(false);
+            historial.historialModificaciones(accesoBD.historialModificaciones());
+            historial.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_JMIHModificacionesActionPerformed
+
+    private void JMIHSorteosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JMIHSorteosKeyPressed
+
+    }//GEN-LAST:event_JMIHSorteosKeyPressed
+
+    private void JMIHSorteosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIHSorteosActionPerformed
+
+    }//GEN-LAST:event_JMIHSorteosActionPerformed
+
+    private void JMIHSorteosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMIHSorteosMousePressed
+
+        try {
+            historial.setTitle("Historial de los sorteos");
+            historial.getJBSubir().setEnabled(false);
+            historial.setTipoAccion(false);
+            historial.historialSorteos(accesoBD.historialSorteos());
+            historial.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_JMIHSorteosMousePressed
+
+    private void JMIHSorteosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMIHSorteosMouseClicked
+
+    }//GEN-LAST:event_JMIHSorteosMouseClicked
+
+    private void JMIHAsociadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIHAsociadosActionPerformed
+
+        try {
+            historial.setTitle("Información del historial de los números asignados a cada asociado");
+            historial.getJBSubir().setEnabled(false);
+            historial.setTipoAccion(false);
+            historial.historialNumeros(accesoBD.historialNumeros());
+            historial.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_JMIHAsociadosActionPerformed
 
     private void JMIHAsociadosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMIHAsociadosMousePressed
         // TODO add your handling code here:
@@ -511,12 +503,16 @@ public class MainControl extends javax.swing.JFrame {
         String ganador = sorteo.ganador(numero, premio, tipoPremio);
         Locale locale = new Locale("es", "CO");
         NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
-        JLGanador1.setText("Felicitaciones " + ganador + ", usted ha ganado " + nf.format(premio) + " Pesos");
-        if (ganador.equals(INACTIVO)) {
-            JOptionPane.showMessageDialog(this, SORTEO, G_INHA, JOptionPane.INFORMATION_MESSAGE);
+        if (ganador.equals("false")) {
+            JOptionPane.showMessageDialog(this, G_Anterior, G_INHA, JOptionPane.INFORMATION_MESSAGE);
             sorteosRealizados--;
         } else {
-            sorteo.actividad(A_RIFA);
+            if (ganador.equals("anterior")) {
+                JOptionPane.showMessageDialog(this, SORTEO, G_INHA, JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JLGanador1.setText("Felicitaciones " + ganador + ", usted ha ganado " + nf.format(premio) + " Pesos");
+                sorteo.actividad(A_RIFA);
+            }
         }
     }
 
@@ -558,18 +554,20 @@ public class MainControl extends javax.swing.JFrame {
     private javax.swing.JMenuItem JMAAsociados;
     private javax.swing.JMenuItem JMIActuales;
     private javax.swing.JMenuItem JMIAsignarAso;
-    private javax.swing.JMenuItem JMIAsociadosActivos;
-    private javax.swing.JMenuItem JMIEx;
     private javax.swing.JMenuItem JMIHAsociados;
     private javax.swing.JMenuItem JMIHModificaciones;
     private javax.swing.JMenuItem JMIHSorteos;
     private javax.swing.JMenuItem JMIModificar;
-    private javax.swing.JMenuItem JMIinhabilitados;
     private javax.swing.JMenu JMSalir;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel4;
     // End of variables declaration//GEN-END:variables
 }
