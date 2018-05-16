@@ -112,4 +112,8 @@ public class Sorteo {
         return acceso.estadoAsociado(cedula);
     }
 
+    public boolean cambiarEstado(long cedula, int tipo, String texto) {
+        return acceso.cambiarEstado(cedula, tipo, texto);
+    }
+
 }

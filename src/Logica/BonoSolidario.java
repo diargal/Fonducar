@@ -9,7 +9,6 @@ import DataAcces.AccesoBD;
 import Vistas.ErrorBD;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JFrame;
 import vistas.AccesControl;
 
 /**
@@ -21,7 +20,7 @@ public class BonoSolidario {
     public static Administrador administrador = new Administrador();
     public static int numerodeSorteos = 0;
     public static AccesoBD accesoBD = new AccesoBD();
-    public static final List<Asociado> asociados = new ArrayList<Asociado>();
+//    public static final List<Asociado> asociados = new ArrayList<Asociado>();
 
     public static void main(String[] args) {
 

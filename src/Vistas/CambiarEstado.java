@@ -4,13 +4,15 @@
  */
 package Vistas;
 
+import static Logica.Mensajes.MSG;
+import static Logica.Mensajes.RERROR;
 import Logica.Sorteo;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 public class CambiarEstado extends javax.swing.JDialog {
 
-    Sorteo sorteo;
+    private final Sorteo sorteo;
 
     public CambiarEstado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -149,6 +151,24 @@ public class CambiarEstado extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAceptarActionPerformed
+        int opcion = 0;
+        if (JCBAccion.getSelectedItem().equals("Ex-Asociado SIN participación")) {
+            opcion = 3;
+        } else {
+            if (JCBAccion.getSelectedItem().equals("Ex-Asociado CON participación")) {
+                opcion = 2;
+            } else {
+                if (JCBAccion.getSelectedItem().equals("Asociado activo")) {
+                    opcion = 1;
+                }
+            }
+        }
+
+        if (sorteo.cambiarEstado(Long.parseLong(JTxFCedula.getText()), opcion, JTxAObservacion.getText())) {
+            JOptionPane.showMessageDialog(null, MSG, "Operación exitosa!", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, RERROR, "Operación fallida!", JOptionPane.INFORMATION_MESSAGE);
+        }
         this.setVisible(false);
     }//GEN-LAST:event_JBAceptarActionPerformed
 

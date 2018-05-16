@@ -21,9 +21,9 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class AccesControl extends javax.swing.JDialog {
 
-    private String pass;
-    private long cedula;
-    private Vistas.MainControl controlPrincipal;
+    private final String pass;
+    private final long cedula;
+    private final Vistas.MainControl controlPrincipal;
     Sorteo sorteo;
 
     /**

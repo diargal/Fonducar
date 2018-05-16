@@ -37,4 +37,5 @@ public class Mensajes {
     public static final String REXITOSO = "Todos los números fueron asignados a todos los empleados habilitados.";
     public static final String RERROR = "Ocurrió un error durante el proceso. Inténtelo nuevamente.";
     public static final String EXISTE = "Ya existe una persona registrada con la cédula ";
+    public static final String MSG = "Se realizó el cambio efectivamente.";
 }

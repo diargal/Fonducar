@@ -1,12 +1,10 @@
 package DataAcces;
 
-import Logica.Asociado;
 import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.administrador;
-import static Logica.BonoSolidario.asociados;
+//import static Logica.BonoSolidario.asociados;
 import static Logica.Mensajes.A_AGREGARASOCIADOS;
 import static Logica.Mensajes.EXISTE;
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -37,9 +35,15 @@ public class AccesoBD {
     private static final String login = "root";
     private static final String password = "";
     private static Connection conexion = null;
+    private ResultSet resultado;
+    private String comandoSQL;
+    private PreparedStatement prepar;
 
     public AccesoBD() {
         this.conexion();
+        resultado = null;
+        comandoSQL = "";
+        prepar = null;
     }
 
     public void conexion() {
@@ -67,8 +71,7 @@ public class AccesoBD {
 
         try {
             String password = DigestUtils.md5Hex(pass);
-            System.out.println(password);
-            ResultSet resultado = resultadoConexion("SELECT A.*, P.nombre, P.cedula FROM `administrador` as A, persona as P WHERE P.idPersona = A.idPersona and A.Password='" + password + "' and A.Usuario='" + usuario + "'");
+            resultado = resultadoConexion("SELECT A.*, P.nombre, P.cedula FROM `administrador` as A, persona as P WHERE P.idPersona = A.idPersona and A.Password='" + password + "' and A.Usuario='" + usuario + "'");
             if (resultado.next()) {
                 administrador.setIdAdmin(resultado.getInt(1));
                 administrador.setUsuario(resultado.getString(2));
@@ -77,52 +80,46 @@ public class AccesoBD {
                 administrador.setNombre(resultado.getString(5));
                 administrador.setCedula(resultado.getLong(6));
 
-                System.out.println("Datos del admin: " + administrador.toString());
                 desconectar();
                 return true;
             }
 
         } catch (java.sql.SQLException er) {
-            System.out.println(er);
             JOptionPane.showMessageDialog(null, "No se pudo realizar la consulta de Administrador", "Failed!", JOptionPane.ERROR_MESSAGE);
         }
         desconectar();
         return false;
     }
 
-    public void listadeAsociados() { //carga todos los asociados para la asignación de los nuevos números.
-
-        Asociado asociado;
-
-        try {
-            ResultSet resultado = resultadoConexion("SELECT * FROM asociado");
-            if (resultado.next()) {
-                asociado = new Asociado();
-                asociado.setCedula(resultado.getLong(1));
-                asociado.setNombre(resultado.getString(2));
-                asociados.add(asociado);
-            }
-
-        } catch (java.sql.SQLException er) {
-            JOptionPane.showMessageDialog(null, "No se pudieron cargar los asociados", "Failed!", JOptionPane.ERROR_MESSAGE);
-        }
-        desconectar();
-
-    }
-
+//    public void listadeAsociados() { //carga todos los asociados para la asignación de los nuevos números.
+//
+//        Asociado asociado;
+//
+//        try {
+//            resultado = resultadoConexion("SELECT * FROM asociado");
+//            if (resultado.next()) {
+//                asociado = new Asociado();
+//                asociado.setCedula(resultado.getLong(1));
+//                asociado.setNombre(resultado.getString(2));
+//                asociados.add(asociado);
+//            }
+//
+//        } catch (java.sql.SQLException er) {
+//            JOptionPane.showMessageDialog(null, "No se pudieron cargar los asociados", "Failed!", JOptionPane.ERROR_MESSAGE);
+//        }
+//        desconectar();
+//
+//    }
     private void guardarGanador(long idNumAso, float premio, int tipo) {
         conexion();
         Date date = new Date();
         DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String fecha2 = fecha.format(date);
-        System.out.println("Fecha: " + fecha.format(date));
-        String ComandoSQL;
-        PreparedStatement prepar;
 
         try {
 
-            ComandoSQL = "INSERT INTO `sorteo`(`idSorteo`, `Fecha`, `idNumeroAsociado`, `Premio`, `TipoSorteo`) VALUES (" + null + ",'" + fecha2 + "'," + idNumAso + "," + premio + "," + tipo + ")";
-            prepar = conexion.prepareStatement(ComandoSQL);
+            comandoSQL = "INSERT INTO `sorteo`(`idSorteo`, `Fecha`, `idNumeroAsociado`, `Premio`, `TipoSorteo`) VALUES (" + null + ",'" + fecha2 + "'," + idNumAso + "," + premio + "," + tipo + ")";
+            prepar = conexion.prepareStatement(comandoSQL);
             prepar.executeUpdate();
 
             desconectar();
@@ -136,18 +133,16 @@ public class AccesoBD {
         conexion();
         Date date = new Date();
         DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        String comandoSQL;
         try {
 
             comandoSQL = "Insert into movimiento (idMovimiento, Fecha, Detalle, idAdministrador) values (" + null + ",?,?,?)";
-            PreparedStatement prepar = conexion.prepareStatement(comandoSQL);
+            prepar = conexion.prepareStatement(comandoSQL);
             prepar.setString(1, fecha.format(date));
             prepar.setString(2, tipo);
             prepar.setLong(3, administrador.getIdAdmin());
             prepar.executeUpdate();
             return true;
         } catch (Exception e) {
-            System.out.println("No se guardò la operaciòn");
             return false;
         }
     }
@@ -155,10 +150,9 @@ public class AccesoBD {
     public int numerodeAsociados() {
 
         try {
-            ResultSet resultado = resultadoConexion("SELECT count(*) FROM asociado");
+            resultado = resultadoConexion("SELECT count(*) FROM asociado");
 
             if (resultado.next()) {
-                System.out.println("Cantida de asociados: " + resultado.getInt(1));
                 desconectar();
                 return resultado.getInt(1);
             }
@@ -175,10 +169,9 @@ public class AccesoBD {
     public int numeroAsociadosActivos() {
 
         try {
-            ResultSet resultado = resultadoConexion("SELECT count(*) FROM asociado as A where A.Estado=0");
+            resultado = resultadoConexion("SELECT count(*) FROM asociado as A where A.Estado=0");
 
             if (resultado.next()) {
-                System.out.println("Cantida de asociados: " + resultado.getInt(1));
                 desconectar();
                 return resultado.getInt(1);
             }
@@ -226,7 +219,6 @@ public class AccesoBD {
     }
 
     public String ganador(int numero, float premio, int tipo) {
-        ResultSet resultado;
         Date date = new Date();
         DateFormat fecha = new SimpleDateFormat("yyyy");
 
@@ -237,18 +229,16 @@ public class AccesoBD {
                     + "( select idnumeroasociado from sorteo as st where '" + fecha.format(date)
                     + "'= substring( st.fecha, length(st.fecha)-12 , length(st.fecha)-15 ) )");
             while (resultado.next()) {
-                // System.out.println("Resultado op: " + resultado.getString(1));
                 if (resultado.getInt(1) == numero) {
                     return "anterior";
                 }
             }
-//
+
             resultado = resultadoConexion("SELECT p.nombre, nm.idnumeroasociado, a.idAsociado "
                     + "FROM `numeroasociado` as nm, asociado as a, persona as p, numero as n "
                     + "WHERE nm.idAsociado = a.idAsociado and nm.idNumero ='" + numero + "'and p.idPersona = a.idPersona "
                     + "and n.Estado = 0 and a.estado = 0 order by nm.fecha desc limit 1");
             if (resultado.next()) {
-                System.out.println("Opciòn 2");
                 guardarGanador(resultado.getInt(2), premio, tipo);
                 return resultado.getString(1);
             } else {
@@ -258,8 +248,6 @@ public class AccesoBD {
                         + "WHERE nm.idAsociado = a.idAsociado and nm.idNumero = '" + numero + "' and p.idPersona = a.idPersona and n.Estado = 0 "
                         + "and a.estado=1 and a.idAsociado = i.idAsociado and i.estado = 0 order by nm.fecha desc limit 1");
                 if (resultado.next()) {
-                    System.out.println("Opciòn 3");
-                    System.out.println("Mira el error: " + resultado.getInt(2));
                     guardarGanador(resultado.getInt(2), premio, tipo);
                     return resultado.getString(1);
                 } else {
@@ -275,16 +263,15 @@ public class AccesoBD {
 
     public boolean asociarNumeros(int idAsociado, int idNumero) {
         conexion();
-        PreparedStatement ps;
         Date date = new Date();
         DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
         try {
-            ps = conexion.prepareStatement("INSERT INTO `numeroasociado`(`idNumeroAsociado`, `Fecha`, `idAsociado`, `idNumero`) VALUES(" + null + ",?,?,?)");
-            ps.setString(1, fecha.format(date));
-            ps.setDouble(2, idAsociado);
-            ps.setDouble(3, idNumero);
-            ps.execute();
+            prepar = conexion.prepareStatement("INSERT INTO `numeroasociado`(`idNumeroAsociado`, `Fecha`, `idAsociado`, `idNumero`) VALUES(" + null + ",?,?,?)");
+            prepar.setString(1, fecha.format(date));
+            prepar.setDouble(2, idAsociado);
+            prepar.setDouble(3, idNumero);
+            prepar.execute();
 
             desconectar();
 
@@ -297,13 +284,12 @@ public class AccesoBD {
     public ArrayList<Integer> idsAsociados() {
         ArrayList<Integer> array = new ArrayList<>();
         try {
-            ResultSet resultado = resultadoConexion("SELECT A.idAsociado, P.Nombre FROM `asociado` as A, persona as P WHERE A.Estado = 0 and P.idPersona = A.idPersona order by P.Nombre asc");
+            resultado = resultadoConexion("SELECT A.idAsociado, P.Nombre FROM `asociado` as A, persona as P WHERE A.Estado = 0 and P.idPersona = A.idPersona order by P.Nombre asc");
             while (resultado.next()) {
                 array.add(resultado.getInt(1));
             }
 //            return array;
         } catch (Exception e) {
-            System.out.println("Error: " + e);
         }
 
         return array;
@@ -311,8 +297,6 @@ public class AccesoBD {
 
     public boolean guardarAsociados(File file) {
         conexion();
-        PreparedStatement ps;
-        ResultSet resultado;
         int id = 0;
         Date date = new Date();
         DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -329,66 +313,58 @@ public class AccesoBD {
             for (int a = 1; a <= numFilas; a++) {
                 Row fila = sheet.getRow(a);
 
-                ps = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, cedula) VALUES(" + null + ",?,?)");
+                prepar = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, cedula) VALUES(" + null + ",?,?)");
                 nombre = fila.getCell(0).getStringCellValue();
-                ps.setString(1, nombre);
+                prepar.setString(1, nombre);
                 cedula = (long) fila.getCell(1).getNumericCellValue();
-                System.out.println("Cedula: " + cedula);
-                ps.setLong(2, cedula);
-                ps.execute();
-
-                System.out.println("Cédula => " + cedula);
+                prepar.setLong(2, cedula);
+                prepar.execute();
 
                 resultado = resultadoConexion("SELECT P.idPersona FROM persona as P WHERE P.Cedula = '" + cedula + "'");
                 if (resultado.next()) {
-                    System.out.println("Resultado => " + resultado.getInt(1));
                     id = resultado.getInt(1);
                 }
 
-                ps = conexion.prepareStatement("Insert into asociado (idAsociado, Estado, idPersona) values (" + null + ",0,?)");
-                ps.setDouble(1, id);
-                ps.execute();
+                prepar = conexion.prepareStatement("Insert into asociado (idAsociado, Estado, idPersona) values (" + null + ",0,?)");
+                prepar.setDouble(1, id);
+                prepar.execute();
 
                 resultado = resultadoConexion("select A.idAsociado from asociado as A where A.idPersona = '" + id + "'");
                 if (resultado.next()) {
                     id = resultado.getInt(1);
-                    System.out.println("Id asociado: " + id);
                 }
 
-                ps = conexion.prepareStatement("Insert into numero (idNumero, Estado) values (?," + 0 + ")");
+                prepar = conexion.prepareStatement("Insert into numero (idNumero, Estado) values (?," + 0 + ")");
                 numero = (long) fila.getCell(2).getNumericCellValue();
-                ps.setDouble(1, numero);
-                ps.execute();
+                prepar.setDouble(1, numero);
+                prepar.execute();
 
-                ps = conexion.prepareStatement("Insert into numeroasociado (idNumeroAsociado, Fecha, idAsociado, idNumero) values (" + null + ",?,?,?)");
-                ps.setString(1, fecha.format(date) + "");
-                ps.setDouble(2, id);
-                ps.setDouble(3, numero);
-                ps.execute();
+                prepar = conexion.prepareStatement("Insert into numeroasociado (idNumeroAsociado, Fecha, idAsociado, idNumero) values (" + null + ",?,?,?)");
+                prepar.setString(1, fecha.format(date) + "");
+                prepar.setDouble(2, id);
+                prepar.setDouble(3, numero);
+                prepar.execute();
             }
 
             guardarOperacion(A_AGREGARASOCIADOS);
 
-            conexion.close();
+            //conexion.close();
+            desconectar();
+
             return true;
         } catch (IOException ex) {
-            System.out.println("Error 1: " + ex);
         } catch (SQLException es) {
-            System.out.println("Error 2: " + es);
             JOptionPane.showMessageDialog(null, EXISTE + cedula, "Coincidencia en registro.", JOptionPane.ERROR_MESSAGE);
         } catch (InvalidFormatException er) {
-            System.out.println("Error 3: " + er);
         }
         return false;
     }
 
     public int estadoAsociado(long cedula) {
-        ResultSet resultado;
         try {
             resultado = resultadoConexion("SELECT p.Nombre, a.idAsociado FROM `asociado` as a, persona as p "
                     + "WHERE a.estado = 0 and a.idPersona = p.idPersona and p.Cedula = '" + cedula + "'");
             if (resultado.next()) {
-                System.out.println("opcion 1");
                 desconectar();
                 return 1;
             }
@@ -396,7 +372,6 @@ public class AccesoBD {
             resultado = resultadoConexion("SELECT p.Nombre, p.cedula FROM `asociado` as a, persona as p, inhabilitacion as i "
                     + "WHERE a.estado = 1 and a.idPersona = p.idPersona and p.Cedula = '" + cedula + "' and i.idAsociado = i.idAsociado and i.estado=0");
             if (resultado.next()) {
-                System.out.println("Opcion 2");
                 desconectar();
                 return 2;
             }
@@ -404,14 +379,81 @@ public class AccesoBD {
             resultado = resultadoConexion("SELECT p.Nombre, p.cedula FROM `asociado` as a, persona as p, inhabilitacion as i "
                     + "WHERE a.estado = 1 and a.idPersona = p.idPersona and p.Cedula = '" + cedula + "' and i.idAsociado = i.idAsociado and i.estado=1");
             if (resultado.next()) {
-                System.out.println("Opción 3");
                 desconectar();
                 return 3;
             }
 
         } catch (SQLException ex) {
-            System.out.println(ex);
         }
         return 0;
+    }
+
+    public boolean cambiarEstado(long cedula, int tipo, String razon) {
+        Date date = new Date();
+        DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//        String fecha2 = fecha.format(date);
+
+        try {
+            conexion();
+
+            if (tipo == 2 || tipo == 3) {
+                prepar = conexion.prepareStatement("UPDATE `asociado`, persona SET asociado.Estado = 1 "
+                        + "WHERE persona.cedula = ? and persona.idPersona = asociado.idPersona");
+                prepar.setDouble(1, cedula);
+
+                if (prepar.executeUpdate() == 0) {
+                    desconectar();
+                    return false;
+                } else {
+                    resultado = resultadoConexion("SELECT a.idAsociado FROM `asociado` as a, persona as p "
+                            + "WHERE a.idPersona = p.idPersona and p.Cedula ='" + cedula + "'");
+                    if (resultado.next()) {
+                        prepar = conexion.prepareStatement("INSERT INTO `inhabilitacion`(`idInhabilitacion`, `Razon`, `Fecha`, `Estado`, `idAsociado`) "
+                                + "VALUES (" + null + ",?,?,?,?)");
+                        prepar.setString(1, razon);
+                        prepar.setString(2, fecha.format(date));
+                        prepar.setInt(4, resultado.getInt(1));
+
+                        switch (tipo) {
+                            case 2:
+                                prepar.setInt(3, 0);
+                                prepar.execute();
+                                desconectar();
+                                return true;
+                            case 3:
+                                prepar.setInt(3, 1);
+                                prepar.execute();
+                                desconectar();
+                                return modificarEstadoNumero(cedula, 1);
+                        }
+                    }
+                }
+            } else {
+                modificarEstadoNumero(cedula, 0);
+
+                prepar = conexion.prepareStatement("UPDATE `asociado`, persona SET asociado.Estado = 0 "
+                        + "WHERE persona.cedula = ? and persona.idPersona = asociado.idPersona");
+                prepar.setDouble(1, cedula);
+                desconectar();
+                return prepar.executeUpdate() != 0;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+        return false;
+    }
+
+    public boolean modificarEstadoNumero(long cedula, int estado) throws SQLException {
+        resultado = resultadoConexion("SELECT na.idNumeroAsociado, na.idAsociado, na.idNumero, na.fecha "
+                + "FROM `numeroasociado` as na, asociado as a, persona as p "
+                + "WHERE na.idAsociado = a.idAsociado and p.idPersona = a.idPersona and p.cedula = '" + cedula + "' order by na.fecha desc limit 1");
+        if (resultado.next()) {
+            prepar = conexion.prepareStatement("UPDATE `numero` as n SET n.Estado = ? WHERE n.idNumero = ?");
+            prepar.setInt(1, estado);
+            prepar.setInt(2, resultado.getInt(3));
+            return prepar.executeUpdate() != 0;
+        }
+        return false;
     }
 }
