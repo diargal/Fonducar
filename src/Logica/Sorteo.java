@@ -8,6 +8,7 @@ package Logica;
 import DataAcces.AccesoBD;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -50,7 +51,8 @@ public class Sorteo {
         Random r1 = new Random(System.currentTimeMillis());
         cantidadAsociados = acceso.numerodeAsociados();
         random = r1.nextInt(cantidadAsociados);
-        System.out.println("Random: " + random);
+        random = Integer.parseInt(JOptionPane.showInputDialog(this, "Ingrese nùmero: "));
+        System.out.println("Número ganador generado: " + random);
         return random;
     }
 
@@ -65,7 +67,7 @@ public class Sorteo {
     public boolean asociarNumeros() {
         ArrayList<Integer> array = new ArrayList<>(acceso.idsAsociados());
         ArrayList<Integer> aux = new ArrayList<>(array);
-        ArrayList<Integer> aux2 = new ArrayList<>(array);;
+        ArrayList<Integer> aux2 = new ArrayList<>(array);
         Random r;
         int tamanio = array.size();
 
@@ -104,6 +106,10 @@ public class Sorteo {
         }
 
         return true;
+    }
+
+    public int estadoAsociado(long cedula) {
+        return acceso.estadoAsociado(cedula);
     }
 
 }

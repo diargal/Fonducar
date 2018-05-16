@@ -5,8 +5,10 @@ import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.administrador;
 import static Logica.BonoSolidario.asociados;
 import static Logica.Mensajes.A_AGREGARASOCIADOS;
-import static Logica.Mensajes.INACTIVO;
+import static Logica.Mensajes.EXISTE;
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -22,6 +24,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.util.ArrayList;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 /**
  *
@@ -192,12 +195,12 @@ public class AccesoBD {
     public ResultSet historialSorteos() throws SQLException {
         return resultadoConexion("SELECT P.Nombre, P.Cedula, S.Fecha, NA.idNumero, S.Premio, S.TipoSorteo "
                 + "FROM `sorteo` as S, asociado as A, persona as P, numeroasociado as NA "
-                + "WHERE S.idNumeroAsociado = NA.idNumeroAsociado and NA.idAsociado = A.idAsociado and A.idPersona = P.idPersona");
+                + "WHERE S.idNumeroAsociado = NA.idNumeroAsociado and NA.idAsociado = A.idAsociado and A.idPersona = P.idPersona order by S.Fecha desc");
     }
 
     public ResultSet historialModificaciones() throws SQLException {
         return resultadoConexion("SELECT P.Nombre, P.Cedula, M.Fecha, M.Detalle FROM movimiento as M, persona as P, administrador as A "
-                + "WHERE M.idAdministrador = A.idAdministrador and A.idPersona = P.idPersona");
+                + "WHERE M.idAdministrador = A.idAdministrador and A.idPersona = P.idPersona order by M.Fecha desc");
     }
 
     public ResultSet historialNumeros() throws SQLException {
@@ -234,7 +237,7 @@ public class AccesoBD {
                     + "( select idnumeroasociado from sorteo as st where '" + fecha.format(date)
                     + "'= substring( st.fecha, length(st.fecha)-12 , length(st.fecha)-15 ) )");
             while (resultado.next()) {
-                System.out.println("Resultado op: " + resultado.getString(1));
+                // System.out.println("Resultado op: " + resultado.getString(1));
                 if (resultado.getInt(1) == numero) {
                     return "anterior";
                 }
@@ -245,15 +248,18 @@ public class AccesoBD {
                     + "WHERE nm.idAsociado = a.idAsociado and nm.idNumero ='" + numero + "'and p.idPersona = a.idPersona "
                     + "and n.Estado = 0 and a.estado = 0 order by nm.fecha desc limit 1");
             if (resultado.next()) {
+                System.out.println("Opciòn 2");
                 guardarGanador(resultado.getInt(2), premio, tipo);
                 return resultado.getString(1);
             } else {
 
                 resultado = resultadoConexion("SELECT p.nombre, nm.idnumeroasociado, a.idAsociado "
                         + "FROM `numeroasociado` as nm, asociado as a, persona as p, numero as n, inhabilitacion as i "
-                        + "WHERE nm.idAsociado = a.idAsociado and nm.idNumero = '" + numero + "' and p.idPersona = a.idPersona and n.Estado = 1 "
-                        + "and a.idAsociado = i.idAsociado and i.estado = 0 order by nm.fecha desc limit 1");
+                        + "WHERE nm.idAsociado = a.idAsociado and nm.idNumero = '" + numero + "' and p.idPersona = a.idPersona and n.Estado = 0 "
+                        + "and a.estado=1 and a.idAsociado = i.idAsociado and i.estado = 0 order by nm.fecha desc limit 1");
                 if (resultado.next()) {
+                    System.out.println("Opciòn 3");
+                    System.out.println("Mira el error: " + resultado.getInt(2));
                     guardarGanador(resultado.getInt(2), premio, tipo);
                     return resultado.getString(1);
                 } else {
@@ -326,8 +332,9 @@ public class AccesoBD {
                 ps = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, cedula) VALUES(" + null + ",?,?)");
                 nombre = fila.getCell(0).getStringCellValue();
                 ps.setString(1, nombre);
-                cedula = Long.parseLong(String.valueOf( fila.getCell(1).getStringCellValue()));
-                ps.setDouble(2, cedula);
+                cedula = (long) fila.getCell(1).getNumericCellValue();
+                System.out.println("Cedula: " + cedula);
+                ps.setLong(2, cedula);
                 ps.execute();
 
                 System.out.println("Cédula => " + cedula);
@@ -364,12 +371,47 @@ public class AccesoBD {
 
             conexion.close();
             return true;
-        } catch (Exception ex) {
-            System.out.println(ex);
-            JOptionPane.showMessageDialog(null, nombre + " de cédula " + cedula + " ya se encuentra en la BD", "Campos existentes en la BD", JOptionPane.ERROR_MESSAGE);
-            return false;
+        } catch (IOException ex) {
+            System.out.println("Error 1: " + ex);
+        } catch (SQLException es) {
+            System.out.println("Error 2: " + es);
+            JOptionPane.showMessageDialog(null, EXISTE + cedula, "Coincidencia en registro.", JOptionPane.ERROR_MESSAGE);
+        } catch (InvalidFormatException er) {
+            System.out.println("Error 3: " + er);
         }
-
+        return false;
     }
 
+    public int estadoAsociado(long cedula) {
+        ResultSet resultado;
+        try {
+            resultado = resultadoConexion("SELECT p.Nombre, a.idAsociado FROM `asociado` as a, persona as p "
+                    + "WHERE a.estado = 0 and a.idPersona = p.idPersona and p.Cedula = '" + cedula + "'");
+            if (resultado.next()) {
+                System.out.println("opcion 1");
+                desconectar();
+                return 1;
+            }
+
+            resultado = resultadoConexion("SELECT p.Nombre, p.cedula FROM `asociado` as a, persona as p, inhabilitacion as i "
+                    + "WHERE a.estado = 1 and a.idPersona = p.idPersona and p.Cedula = '" + cedula + "' and i.idAsociado = i.idAsociado and i.estado=0");
+            if (resultado.next()) {
+                System.out.println("Opcion 2");
+                desconectar();
+                return 2;
+            }
+
+            resultado = resultadoConexion("SELECT p.Nombre, p.cedula FROM `asociado` as a, persona as p, inhabilitacion as i "
+                    + "WHERE a.estado = 1 and a.idPersona = p.idPersona and p.Cedula = '" + cedula + "' and i.idAsociado = i.idAsociado and i.estado=1");
+            if (resultado.next()) {
+                System.out.println("Opción 3");
+                desconectar();
+                return 3;
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return 0;
+    }
 }

@@ -19,9 +19,8 @@ import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.numerodeSorteos;
 import static Logica.Mensajes.A_NUMEROS;
 import static Logica.Mensajes.A_RIFA;
-import static Logica.Mensajes.G_Anterior;
+import static Logica.Mensajes.G_ANTERIOR;
 import static Logica.Mensajes.G_INHA;
-import static Logica.Mensajes.INACTIVO;
 import static Logica.Mensajes.MENSAJE;
 import static Logica.Mensajes.MSG_SORTEO;
 import static Logica.Mensajes.RERROR;
@@ -397,7 +396,7 @@ public class MainControl extends javax.swing.JFrame {
                 datosSorteo = valorSorteo.valoresSorteo();
 
                 if (datosSorteo[0] != 0) {
-                    sorteosRealizados++;
+                    // sorteosRealizados++;
                     JLCuanto.setText("Sorteo " + sorteosRealizados + " de " + numerodeSorteos);
                     premio = (float) datosSorteo[0];
                     tipoPremio = (int) datosSorteo[1];
@@ -481,36 +480,40 @@ public class MainControl extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_JMIHAsociadosMousePressed
     public void animacion(int numero) {
-        int cent = numero / 100;
-        int dec = (numero % 100) / 10;
-        int uni = numero % 10;
 
-        if (numero < 10) {
-            JLBalota4.setIcon(CERO);
-            JLBalota5.setIcon(CERO);
-            JLBalota6.setIcon(seleccionNumero(numero));
-        } else {
-            if (numero < 100) {
-                JLBalota4.setIcon(CERO);
-                JLBalota5.setIcon(seleccionNumero(dec));
-                JLBalota6.setIcon(seleccionNumero(uni));
-            } else {
-                JLBalota4.setIcon(seleccionNumero(cent));
-                JLBalota5.setIcon(seleccionNumero(dec));
-                JLBalota6.setIcon(seleccionNumero(uni));
-            }
-        }
         String ganador = sorteo.ganador(numero, premio, tipoPremio);
         Locale locale = new Locale("es", "CO");
         NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
+
         if (ganador.equals("false")) {
-            JOptionPane.showMessageDialog(this, G_Anterior, G_INHA, JOptionPane.INFORMATION_MESSAGE);
-            sorteosRealizados--;
+            JOptionPane.showMessageDialog(this, SORTEO, G_INHA, JOptionPane.INFORMATION_MESSAGE);
+            // sorteosRealizados--;
         } else {
             if (ganador.equals("anterior")) {
-                JOptionPane.showMessageDialog(this, SORTEO, G_INHA, JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, G_ANTERIOR, G_INHA, JOptionPane.INFORMATION_MESSAGE);
+                //  sorteosRealizados--;
             } else {
+                int cent = numero / 100;
+                int dec = (numero % 100) / 10;
+                int uni = numero % 10;
+
+                if (numero < 10) {
+                    JLBalota4.setIcon(CERO);
+                    JLBalota5.setIcon(CERO);
+                    JLBalota6.setIcon(seleccionNumero(numero));
+                } else {
+                    if (numero < 100) {
+                        JLBalota4.setIcon(CERO);
+                        JLBalota5.setIcon(seleccionNumero(dec));
+                        JLBalota6.setIcon(seleccionNumero(uni));
+                    } else {
+                        JLBalota4.setIcon(seleccionNumero(cent));
+                        JLBalota5.setIcon(seleccionNumero(dec));
+                        JLBalota6.setIcon(seleccionNumero(uni));
+                    }
+                }
                 JLGanador1.setText("Felicitaciones " + ganador + ", usted ha ganado " + nf.format(premio) + " Pesos");
+                sorteosRealizados++;
                 sorteo.actividad(A_RIFA);
             }
         }
