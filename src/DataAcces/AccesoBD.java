@@ -4,6 +4,7 @@ import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.administrador;
 //import static Logica.BonoSolidario.asociados;
 import static Logica.Mensajes.A_AGREGARASOCIADOS;
+import static Logica.Mensajes.ERRORBDC;
 import static Logica.Mensajes.EXISTE;
 import java.io.File;
 import java.io.IOException;
@@ -141,8 +142,10 @@ public class AccesoBD {
             prepar.setString(2, tipo);
             prepar.setLong(3, administrador.getIdAdmin());
             prepar.executeUpdate();
+            desconectar();
             return true;
         } catch (Exception e) {
+            desconectar();
             return false;
         }
     }
@@ -375,10 +378,11 @@ public class AccesoBD {
             desconectar();
 
             return true;
-        } catch (IOException ex) {
+        } catch (IOException | InvalidFormatException ex) {
         } catch (SQLException es) {
             JOptionPane.showMessageDialog(null, EXISTE + cedula, "Coincidencia en registro.", JOptionPane.ERROR_MESSAGE);
-        } catch (InvalidFormatException er) {
+        } catch (IllegalStateException de) {
+            JOptionPane.showMessageDialog(null, ERRORBDC, "Error de lectura", JOptionPane.ERROR_MESSAGE);
         }
         return false;
     }

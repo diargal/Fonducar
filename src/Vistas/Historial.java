@@ -12,6 +12,7 @@ import static Logica.Mensajes.A_HNS;
 import static Logica.Mensajes.A_HOPERACIONES;
 import static Logica.Mensajes.A_RACTUALES;
 import static Logica.Mensajes.A_REPORTESORTEOS;
+import Vistas.Controlador.ControlArchivos;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,6 +27,8 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -77,244 +80,28 @@ public class Historial extends javax.swing.JDialog {
         return JTHistorial;
     }
 
-    public String Importar() {
-        JBSubir.setText("Subir a la BD");
-        Workbook wb;
-        String respuesta = "No se pudo realizar la importación.";
-        DefaultTableModel modeloT = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        JTHistorial.setModel(modeloT);
-        JTHistorial.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-        try {
-            wb = WorkbookFactory.create(new FileInputStream(archivo));
-            Sheet hoja = wb.getSheetAt(0);
-            Iterator filaIterator = hoja.rowIterator();
-            int indiceFila = -1;
-            while (filaIterator.hasNext()) {
-                indiceFila++;
-                Row fila = (Row) filaIterator.next();
-                Iterator columnaIterator = fila.cellIterator();
-                Object[] listaColumna = new Object[3000];
-                int indiceColumna = -1;
-                while (columnaIterator.hasNext()) {
-                    indiceColumna++;
-                    Cell celda = (Cell) columnaIterator.next();
-                    if (indiceFila == 0) {
-                        modeloT.addColumn(celda.getStringCellValue());
-                    } else {
-                        if (celda != null) {
-                            switch (celda.getCellType()) {
-                                case Cell.CELL_TYPE_NUMERIC:
-                                    listaColumna[indiceColumna] = (int) Math.round(celda.getNumericCellValue());
-                                    break;
-                                case Cell.CELL_TYPE_STRING:
-                                    listaColumna[indiceColumna] = celda.getStringCellValue();
-                                    break;
-                                case Cell.CELL_TYPE_BOOLEAN:
-                                    listaColumna[indiceColumna] = celda.getBooleanCellValue();
-                                    break;
-                                default:
-                                    listaColumna[indiceColumna] = celda.getDateCellValue();
-                                    break;
-                            }
-                            System.out.println("col" + indiceColumna + " valor: true - " + celda + ".");
-                        }
-                    }
-                }
-                if (indiceFila != 0) {
-                    modeloT.addRow(listaColumna);
-                }
-            }
-            respuesta = "Importación exitosa";
-        } catch (IOException | InvalidFormatException | EncryptedDocumentException e) {
-            System.err.println(e.getMessage());
-        }
-        return respuesta;
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 
-    public void historialSorteos(ResultSet resul) {
-        DefaultTableModel tabla = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        JTHistorial.setModel(tabla);
-        tabla.addColumn("Nombre Ganador");
-        tabla.addColumn("Cédula Ganador");
-        tabla.addColumn("Hora y Fecha Sorteo");
-        tabla.addColumn("Número Ganador");
-        tabla.addColumn("Premio (Pesos)");
-        tabla.addColumn("Tipo de Sorteo");
-        Object[] object = new Object[6];
-        try {
-            while (resul.next()) {
-                object[0] = resul.getString(1);
-                object[1] = resul.getLong(2);
-                object[2] = resul.getString(3);
-                if ((resul.getInt(4) < 100) && (resul.getInt(4) >= 10)) {
-                    object[3] = "0" + resul.getInt(4);
-                } else {
-                    if (resul.getInt(4) < 10) {
-                        object[3] = "00" + resul.getInt(4);
-                    }
-                }
-
-                object[4] = nf.format(resul.getLong(5));
-                if (resul.getInt(6) == 0) {
-                    object[5] = "Premio menor";
-                } else if (resul.getInt(6) == 1) {
-                    object[5] = "Premio mayor";
-                }
-                tabla.addRow(object);
-            }
-            accesoBD.guardarOperacion(A_REPORTESORTEOS);
-            JBSubir.setText("Descargar archivo");
-            JBSubir.setEnabled(true);
-            accesoBD.desconectar();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void setNf(NumberFormat nf) {
+        this.nf = nf;
     }
 
-    public void historialNumeros(ResultSet resul) {
-        DefaultTableModel tabla = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        System.out.println("Si entra");
-        JTHistorial.setModel(tabla);
-        tabla.addColumn("Nombre Asociado");
-        tabla.addColumn("Cédula Asociado");
-        tabla.addColumn("Número Asignado");
-        tabla.addColumn("Fecha de Asignación");
-        Object[] object = new Object[4];
-
-        try {
-            while (resul.next()) {
-                object[0] = resul.getString(1);
-                object[1] = resul.getLong(2);
-                object[2] = resul.getLong(3);
-                object[3] = resul.getString(4);
-                tabla.addRow(object);
-            }
-            accesoBD.guardarOperacion(A_HNS);
-            JBSubir.setText("Descargar archivo");
-            JBSubir.setEnabled(true);
-            accesoBD.desconectar();
-        } catch (SQLException ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void setJBSubir(JButton JBSubir) {
+        this.JBSubir = JBSubir;
     }
 
-    public void historialExA(ResultSet resul, boolean tipo) {
-        DefaultTableModel tabla = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        System.out.println("Si entra");
-        JTHistorial.setModel(tabla);
-        tabla.addColumn("Nombre Asociado");
-        tabla.addColumn("Cédula Asociado");
-        tabla.addColumn("Fecha inhabilitación");
-        tabla.addColumn("Razón");
-        Object[] object = new Object[4];
-
-        try {
-            while (resul.next()) {
-                object[0] = resul.getString(1);
-                object[1] = resul.getLong(2);
-                object[2] = resul.getString(3);
-                object[3] = resul.getString(4);
-                tabla.addRow(object);
-            }
-            if (tipo) {
-                accesoBD.guardarOperacion(A_HACON);
-            } else {
-                accesoBD.guardarOperacion(A_HASIN);
-            }
-            JBSubir.setText("Descargar archivo");
-            JBSubir.setEnabled(true);
-            accesoBD.desconectar();
-        } catch (SQLException ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void setJTHistorial(JTable JTHistorial) {
+        this.JTHistorial = JTHistorial;
     }
 
-    public void historialModificaciones(ResultSet resul) {
-        DefaultTableModel tabla = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        JTHistorial.setModel(tabla);
-        tabla.addColumn("Hora y Fecha Realización");
-        tabla.addColumn("Cédula Administrador");
-        tabla.addColumn("Nombre Administrador");
-        tabla.addColumn("Detalle Operación");
-        Object[] object = new Object[4];
-        try {
-            while (resul.next()) {
-                object[0] = resul.getString(3);
-                object[1] = resul.getLong(2);
-                object[2] = resul.getString(1);
-                object[3] = resul.getString(4);
-                tabla.addRow(object);
-            }
-            accesoBD.guardarOperacion(A_HOPERACIONES);
-            JBSubir.setText("Descargar archivo");
-            JBSubir.setEnabled(true);
-            accesoBD.desconectar();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void setjPanel1(JPanel jPanel1) {
+        this.jPanel1 = jPanel1;
     }
 
-    public void numerosActuales(ResultSet resul) {
-        DefaultTableModel tabla = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        JTHistorial.setModel(tabla);
-        tabla.addColumn("Nombre");
-        tabla.addColumn("Cédula");
-        tabla.addColumn("Número");
-        Object[] object = new Object[3];
-        try {
-            while (resul.next()) {
-                object[0] = resul.getString(1);
-                object[1] = resul.getInt(2);
-                if ((resul.getInt(3) < 100) && (resul.getInt(3) >= 10)) {
-                    object[2] = "0" + resul.getInt(3);
-                } else {
-                    if (resul.getInt(3) < 10) {
-                        object[2] = "00" + resul.getInt(3);
-                    }
-                }
-                tabla.addRow(object);
-            }
-            accesoBD.guardarOperacion(A_RACTUALES);
-            JBSubir.setText("Descargar archivo");
-            JBSubir.setEnabled(true);
-            accesoBD.desconectar();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void setjScrollPane1(JScrollPane jScrollPane1) {
+        this.jScrollPane1 = jScrollPane1;
     }
 
     @SuppressWarnings("unchecked")
@@ -396,9 +183,6 @@ public class Historial extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Se cargaron todos los datos a la BD", "Proceso exitoso", JOptionPane.OK_CANCEL_OPTION);
                 this.setVisible(false);
             }
-//            else {
-//                JOptionPane.showMessageDialog(this, "Verifique si alguno de los datos ingresados ya existe en la base de datos.", "Algo salió mal", JOptionPane.ERROR_MESSAGE);
-//            }
         } else {
             if (generarArchivo()) {
                 JOptionPane.showMessageDialog(this, "Archivo generado con éxito.");
@@ -411,48 +195,53 @@ public class Historial extends javax.swing.JDialog {
     }//GEN-LAST:event_JBSubirActionPerformed
 
     public boolean generarArchivo() {
-        Workbook wb;
 
-        JFileChooser selecArchivo = new JFileChooser();
-        selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xls)", "xls"));
-        selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xlsx)", "xlsx"));
-        selecArchivo.showDialog(null, "Seleccionar archivo");
-        archivo = selecArchivo.getSelectedFile();
+        ControlArchivos control = new ControlArchivos();
+        return control.generarArchivo(JTHistorial);
 
-        if (archivo.getName().endsWith("xls") || archivo.getName().endsWith("xlsx")) {
-            String respuesta = "No se realizo con exito la exportación.";
-            int numFila = JTHistorial.getRowCount(), numColumna = JTHistorial.getColumnCount();
-            if (archivo.getName().endsWith("xls")) {
-                wb = new HSSFWorkbook();
-            } else {
-                wb = new XSSFWorkbook();
-            }
-            Sheet hoja = wb.createSheet("Reporte");
-
-            try {
-                for (int i = -1; i < numFila; i++) {
-                    Row fila = hoja.createRow(i + 1);
-                    for (int j = 0; j < numColumna; j++) {
-                        Cell celda = fila.createCell(j);
-                        if (i == -1) {
-                            celda.setCellValue(String.valueOf(JTHistorial.getColumnName(j)));
-                        } else {
-                            celda.setCellValue(String.valueOf(JTHistorial.getValueAt(i, j)));
-                        }
-                        wb.write(new FileOutputStream(archivo));
-                    }
-                }
-                return true;
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-
-            }
-        } else {
-
-            JOptionPane.showMessageDialog(null, "Elija un formato valido.");
-            return false;
-        }
-        return false;
+//        Workbook wb;
+//
+//        JFileChooser selecArchivo = new JFileChooser();
+//        selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xls)", "xls"));
+//        selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xlsx)", "xlsx"));
+//        selecArchivo.showDialog(null, "Seleccionar archivo");
+//        archivo = selecArchivo.getSelectedFile();
+//
+//
+//        if (archivo.getName().endsWith("xls") || archivo.getName().endsWith("xlsx")) {
+//            String respuesta = "No se realizo con exito la exportación.";
+//            int numFila = JTHistorial.getRowCount(), numColumna = JTHistorial.getColumnCount();
+//            if (archivo.getName().endsWith("xls")) {
+//                wb = new HSSFWorkbook();
+//            } else {
+//                wb = new XSSFWorkbook();
+//            }
+//            Sheet hoja = wb.createSheet("Reporte");
+//
+//            try {
+//                for (int i = -1; i < numFila; i++) {
+//                    Row fila = hoja.createRow(i + 1);
+//                    for (int j = 0; j < numColumna; j++) {
+//                        Cell celda = fila.createCell(j);
+//                        if (i == -1) {
+//                            celda.setCellValue(String.valueOf(JTHistorial.getColumnName(j)));
+//                        } else {
+//                            celda.setCellValue(String.valueOf(JTHistorial.getValueAt(i, j)));
+//                        }
+//                        wb.write(new FileOutputStream(archivo));
+//                    }
+//                }
+//                return true;
+//            } catch (Exception e) {
+//                System.err.println(e.getMessage());
+//
+//            }
+//        } else {
+//
+//            JOptionPane.showMessageDialog(null, "Elija un formato valido.");
+//            return false;
+//        }
+//        return false;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -41,4 +41,5 @@ public class Mensajes {
     public static final String EXISTE = "Ya existe una persona registrada con la cédula ";
     public static final String MSG = "Se realizó el cambio efectivamente.";
     public static final String YGENERADOS = "Ya este año han sido generados los números.";
+     public static final String ERRORBDC ="El formato requerido no es correcto. Recuerde que es: NOMBRE, CEDULA, NUMERO respectivamente y con su tipo de dato correspondiente.";
 }

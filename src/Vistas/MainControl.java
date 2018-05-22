@@ -19,6 +19,7 @@ import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.numerodeSorteos;
 import static Logica.Mensajes.A_NUMEROS;
 import static Logica.Mensajes.A_RIFA;
+import static Logica.Mensajes.ERRORBDC;
 import static Logica.Mensajes.G_ANTERIOR;
 import static Logica.Mensajes.G_INHA;
 import static Logica.Mensajes.MENSAJE;
@@ -29,6 +30,8 @@ import static Logica.Mensajes.SORTEO;
 import static Logica.Mensajes.SORTEOS_FINAL;
 import static Logica.Mensajes.YGENERADOS;
 import Logica.Sorteo;
+import Vistas.Controlador.ControlArchivos;
+import Vistas.Controlador.ControlHistorial;
 import java.io.File;
 import java.sql.SQLException;
 import java.text.NumberFormat;
@@ -36,11 +39,9 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -57,6 +58,9 @@ public class MainControl extends javax.swing.JFrame {
     private NumSorteos numeroSorteos;
     private ValorSorteo valorSorteo;
 
+    private ControlHistorial control;
+    private ControlArchivos cntrlArchivos;
+
     public MainControl() {
         initComponents();
         this.setResizable(true);
@@ -65,6 +69,8 @@ public class MainControl extends javax.swing.JFrame {
         sorteosRealizados = 0;
         premio = 0;
         tipoPremio = 0;
+        control = new ControlHistorial();
+        cntrlArchivos = new ControlArchivos();
         valorSorteo = new ValorSorteo(this, true);
         numeroSorteos = new NumSorteos(this, true);
         sorteo = new Sorteo();
@@ -349,28 +355,7 @@ public class MainControl extends javax.swing.JFrame {
     }//GEN-LAST:event_JMSalirMouseClicked
 
     private void JMAAsociadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMAAsociadosActionPerformed
-        try {
-
-            JOptionPane.showMessageDialog(null, MENSAJE, "Información importante", JOptionPane.INFORMATION_MESSAGE);
-            JFileChooser selecArchivo = new JFileChooser();
-            selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xls)", "xls"));
-            selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xlsx)", "xlsx"));
-            selecArchivo.showDialog(null, "Seleccionar archivo");
-            archivo = selecArchivo.getSelectedFile();
-            if (archivo.getName().endsWith("xls") || archivo.getName().endsWith("xlsx")) {
-                JOptionPane.showMessageDialog(this, "Importación exitosa");
-                historial.setArchivo(archivo);
-                historial.setTipoAccion(true);
-                historial.getJBSubir().setEnabled(true);
-                historial.setTitle("Carga de los asociados");
-                historial.Importar();
-                historial.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(this, "Elija un formato válido");
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "El formato requerido no es correcto. Recuerde que es: NOMBRE, CEDULA, NUMERO", "Error de lectura", JOptionPane.ERROR_MESSAGE);
-        }
+        cntrlArchivos.cargarArchivo(control);
     }//GEN-LAST:event_JMAAsociadosActionPerformed
 
     private void JMIAsignarAsoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIAsignarAsoActionPerformed
@@ -381,11 +366,7 @@ public class MainControl extends javax.swing.JFrame {
             if (sorteo.asociarNumeros()) {
                 JOptionPane.showMessageDialog(this, REXITOSO, "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
                 try {
-                    historial.setTitle("Lista de los números actuales de cada asociado");
-                    historial.getJBSubir().setEnabled(false);
-                    historial.setTipoAccion(false);
-                    historial.numerosActuales(accesoBD.numerosActuales());
-                    historial.setVisible(true);
+                    control.numerosActuales(accesoBD.numerosActuales());
                     accesoBD.guardarOperacion(A_NUMEROS);
                 } catch (SQLException ex) {
                     Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
@@ -429,26 +410,16 @@ public class MainControl extends javax.swing.JFrame {
     }//GEN-LAST:event_JMIModificarActionPerformed
 
     private void JMIActualesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIActualesActionPerformed
-
         try {
-            historial.setTitle("Lista de los números actuales de cada asociado");
-            historial.getJBSubir().setEnabled(false);
-            historial.setTipoAccion(false);
-            historial.numerosActuales(accesoBD.numerosActuales());
-            historial.setVisible(true);
+            control.numerosActuales(accesoBD.numerosActuales());
         } catch (SQLException ex) {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_JMIActualesActionPerformed
 
     private void JMIHModificacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIHModificacionesActionPerformed
-
         try {
-            historial.setTitle("Historial de moficaciones");
-            historial.getJBSubir().setEnabled(false);
-            historial.setTipoAccion(false);
-            historial.historialModificaciones(accesoBD.historialModificaciones());
-            historial.setVisible(true);
+            control.historialModificaciones(accesoBD.historialModificaciones());
         } catch (SQLException ex) {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -463,13 +434,8 @@ public class MainControl extends javax.swing.JFrame {
     }//GEN-LAST:event_JMIHSorteosActionPerformed
 
     private void JMIHSorteosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMIHSorteosMousePressed
-
         try {
-            historial.setTitle("Historial de los sorteos");
-            historial.getJBSubir().setEnabled(false);
-            historial.setTipoAccion(false);
-            historial.historialSorteos(accesoBD.historialSorteos());
-            historial.setVisible(true);
+            control.historialSorteos(accesoBD.historialSorteos());
         } catch (SQLException ex) {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -482,11 +448,13 @@ public class MainControl extends javax.swing.JFrame {
     private void JMIHAsociadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIHAsociadosActionPerformed
 
         try {
-            historial.setTitle("Información del historial de los números asignados a cada asociado");
-            historial.getJBSubir().setEnabled(false);
-            historial.setTipoAccion(false);
-            historial.historialNumeros(accesoBD.historialNumeros());
-            historial.setVisible(true);
+//            historial.setTitle("Información del historial de los números asignados a cada asociado");
+//            historial.getJBSubir().setEnabled(false);
+//            historial.setTipoAccion(false);
+//            historial.historialNumeros(accesoBD.historialNumeros());
+//            historial.setVisible(true);
+            control.historialNumeros(accesoBD.historialNumeros());
+
         } catch (SQLException ex) {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -498,11 +466,8 @@ public class MainControl extends javax.swing.JFrame {
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         try {
-            historial.setTitle("Historial de los ex-asociados SIN participación");
-            historial.getJBSubir().setEnabled(false);
-            historial.setTipoAccion(false);
-            historial.historialExA(accesoBD.historialEASIN(), false);
-            historial.setVisible(true);
+            control.historialExA(accesoBD.historialEASIN(), false);
+
         } catch (SQLException ex) {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -510,11 +475,8 @@ public class MainControl extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         try {
-            historial.setTitle("Historial de los ex-asociados CON participación");
-            historial.getJBSubir().setEnabled(false);
-            historial.setTipoAccion(false);
-            historial.historialExA(accesoBD.historialEACON(), true);
-            historial.setVisible(true);
+            control.historialExA(accesoBD.historialEACON(), true);
+
         } catch (SQLException ex) {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
         }
