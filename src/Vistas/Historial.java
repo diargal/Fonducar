@@ -6,41 +6,22 @@
 package Vistas;
 
 import static Logica.BonoSolidario.accesoBD;
-import static Logica.Mensajes.A_HACON;
-import static Logica.Mensajes.A_HASIN;
-import static Logica.Mensajes.A_HNS;
-import static Logica.Mensajes.A_HOPERACIONES;
-import static Logica.Mensajes.A_RACTUALES;
-import static Logica.Mensajes.A_REPORTESORTEOS;
 import Vistas.Controlador.ControlArchivos;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -52,6 +33,7 @@ public class Historial extends javax.swing.JDialog {
     public boolean tipoAccion;
     Locale locale = new Locale("es", "CO");
     NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
+    private TableRowSorter trsFiltro;
 
     public void setTipoAccion(boolean tipoAccion) {
         this.tipoAccion = tipoAccion;
@@ -104,6 +86,30 @@ public class Historial extends javax.swing.JDialog {
         this.jScrollPane1 = jScrollPane1;
     }
 
+    public JComboBox<String> getJCBFiltro() {
+        return JCBFiltro;
+    }
+
+    public void setJCBFiltro(JComboBox<String> JCBFiltro) {
+        this.JCBFiltro = JCBFiltro;
+    }
+
+    public JPanel getJPFiltro() {
+        return JPFiltro;
+    }
+
+    public void setJPFiltro(JPanel JPFiltro) {
+        this.JPFiltro = JPFiltro;
+    }
+
+    public JTextField getJTxFFiltro() {
+        return JTxFFiltro;
+    }
+
+    public void setJTxFFiltro(JTextField JTxFFiltro) {
+        this.JTxFFiltro = JTxFFiltro;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -112,6 +118,9 @@ public class Historial extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         JTHistorial = new javax.swing.JTable();
         JBSubir = new javax.swing.JButton();
+        JPFiltro = new javax.swing.JPanel();
+        JCBFiltro = new javax.swing.JComboBox<>();
+        JTxFFiltro = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -141,7 +150,7 @@ public class Historial extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 993, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1055, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(JBSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -151,10 +160,39 @@ public class Historial extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(JBSubir)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        JPFiltro.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtrar por"));
+
+        JTxFFiltro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                JTxFFiltroKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout JPFiltroLayout = new javax.swing.GroupLayout(JPFiltro);
+        JPFiltro.setLayout(JPFiltroLayout);
+        JPFiltroLayout.setHorizontalGroup(
+            JPFiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPFiltroLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(JCBFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58)
+                .addComponent(JTxFFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        JPFiltroLayout.setVerticalGroup(
+            JPFiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPFiltroLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(JPFiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(JCBFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JTxFFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -163,15 +201,21 @@ public class Historial extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(JPFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(JPFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10))
         );
 
         pack();
@@ -194,59 +238,46 @@ public class Historial extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_JBSubirActionPerformed
 
-    public boolean generarArchivo() {
+    private void JTxFFiltroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFFiltroKeyTyped
 
+        JTxFFiltro.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String cadena = (JTxFFiltro.getText());
+                JTxFFiltro.setText(cadena);
+                repaint();
+                filtro();
+            }
+        });
+
+        trsFiltro = new TableRowSorter(JTHistorial.getModel());
+        JTHistorial.setRowSorter(trsFiltro);
+    }//GEN-LAST:event_JTxFFiltroKeyTyped
+
+    public boolean generarArchivo() {
         ControlArchivos control = new ControlArchivos();
         return control.generarArchivo(JTHistorial);
+    }
 
-//        Workbook wb;
-//
-//        JFileChooser selecArchivo = new JFileChooser();
-//        selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xls)", "xls"));
-//        selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xlsx)", "xlsx"));
-//        selecArchivo.showDialog(null, "Seleccionar archivo");
-//        archivo = selecArchivo.getSelectedFile();
-//
-//
-//        if (archivo.getName().endsWith("xls") || archivo.getName().endsWith("xlsx")) {
-//            String respuesta = "No se realizo con exito la exportación.";
-//            int numFila = JTHistorial.getRowCount(), numColumna = JTHistorial.getColumnCount();
-//            if (archivo.getName().endsWith("xls")) {
-//                wb = new HSSFWorkbook();
-//            } else {
-//                wb = new XSSFWorkbook();
-//            }
-//            Sheet hoja = wb.createSheet("Reporte");
-//
-//            try {
-//                for (int i = -1; i < numFila; i++) {
-//                    Row fila = hoja.createRow(i + 1);
-//                    for (int j = 0; j < numColumna; j++) {
-//                        Cell celda = fila.createCell(j);
-//                        if (i == -1) {
-//                            celda.setCellValue(String.valueOf(JTHistorial.getColumnName(j)));
-//                        } else {
-//                            celda.setCellValue(String.valueOf(JTHistorial.getValueAt(i, j)));
-//                        }
-//                        wb.write(new FileOutputStream(archivo));
-//                    }
-//                }
-//                return true;
-//            } catch (Exception e) {
-//                System.err.println(e.getMessage());
-//
-//            }
-//        } else {
-//
-//            JOptionPane.showMessageDialog(null, "Elija un formato valido.");
-//            return false;
-//        }
-//        return false;
+    public void filtro() {
+        int columna = 0;
+//        System.out.println(JCBFiltro.getSelectedItem().toString());
+        for (int i = 0; i < JTHistorial.getModel().getColumnCount(); i++) {
+            if (JTHistorial.getColumnName(i).equalsIgnoreCase(JCBFiltro.getSelectedItem().toString())) {
+                System.out.println(JTHistorial.getColumnName(i));
+                columna = i;
+            }
+        }
+        trsFiltro.setRowFilter(RowFilter.regexFilter(JTxFFiltro.getText(), columna));
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBSubir;
+    private javax.swing.JComboBox<String> JCBFiltro;
+    private javax.swing.JPanel JPFiltro;
     private javax.swing.JTable JTHistorial;
+    private javax.swing.JTextField JTxFFiltro;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables

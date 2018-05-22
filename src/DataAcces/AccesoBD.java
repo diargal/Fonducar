@@ -24,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.util.ArrayList;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 
 /**
  *
@@ -381,7 +382,7 @@ public class AccesoBD {
         } catch (IOException | InvalidFormatException ex) {
         } catch (SQLException es) {
             JOptionPane.showMessageDialog(null, EXISTE + cedula, "Coincidencia en registro.", JOptionPane.ERROR_MESSAGE);
-        } catch (IllegalStateException de) {
+        } catch (IllegalStateException | InvalidOperationException de) {
             JOptionPane.showMessageDialog(null, ERRORBDC, "Error de lectura", JOptionPane.ERROR_MESSAGE);
         }
         return false;

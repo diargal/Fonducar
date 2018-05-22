@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -53,50 +54,57 @@ public class ControlArchivos {
             } else {
                 JOptionPane.showMessageDialog(null, "Elija un formato válido");
             }
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | InvalidOperationException e) {
             System.out.println(e);
             JOptionPane.showMessageDialog(null, ERRORBDC, "Error de lectura", JOptionPane.ERROR_MESSAGE);
         } catch (NullPointerException exc) {
-
         }
     }
 
     public boolean generarArchivo(JTable tablita) {
         javax.swing.JFileChooser fileChooser = new JFileChooser();
 
-        HSSFWorkbook wb = new HSSFWorkbook();
-//        File archivo;
-
-//        JFileChooser selecArchivo = new JFileChooser();
-//        selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xls)", "xls"));
-//        selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xlsx)", "xlsx"));
-//        selecArchivo.showDialog(null, "Seleccionar ubicación");
-//        archivo = selecArchivo.getSelectedFile();
-        HSSFSheet hoja = wb.createSheet("Documento de prueba");
-        int numFila = tablita.getRowCount(), numColumna = tablita.getColumnCount();
-
-        for (int i = -1; i < numFila; i++) {
-            Row fila = hoja.createRow(i + 1);
-            for (int j = 0; j < numColumna; j++) {
-                Cell celda = fila.createCell(j);
-                if (i == -1) {
-                    celda.setCellValue(String.valueOf(tablita.getColumnName(j)));
-                } else {
-                    celda.setCellValue(String.valueOf(tablita.getValueAt(i, j)));
-                }
-                hoja.autoSizeColumn(j);
+        if (fileChooser.showSaveDialog(null) == javax.swing.JFileChooser.APPROVE_OPTION) {
+            System.out.println(new File(fileChooser.getCurrentDirectory(), fileChooser.getName(fileChooser.getSelectedFile())));
+            try {
+                return guardarArchivo(new File(fileChooser.getCurrentDirectory(), fileChooser.getName(fileChooser.getSelectedFile()) + ".xls"), tablita);
+//                JOptionPane.showMessageDialog(null, "Formato excel Generado");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
 
+        return false;
+    }
+
+    public boolean guardarArchivo(File file, JTable tablita) {
         try {
-            FileOutputStream file = new FileOutputStream(new File(fileChooser.getCurrentDirectory(), fileChooser.getName(fileChooser.getSelectedFile()) + ".xls"));
-            wb.write(file);
-            file.close();
+
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet hoja = wb.createSheet("Documento de prueba");
+            int numFila = tablita.getRowCount(), numColumna = tablita.getColumnCount();
+            for (int i = -1; i < numFila; i++) {
+                Row fila = hoja.createRow(i + 1);
+                for (int j = 0; j < numColumna; j++) {
+                    Cell celda = fila.createCell(j);
+                    if (i == -1) {
+                        celda.setCellValue(String.valueOf(tablita.getColumnName(j)));
+                    } else {
+                        celda.setCellValue(String.valueOf(tablita.getValueAt(i, j)));
+                    }
+                    hoja.autoSizeColumn(j);
+                }
+            }
+
+            FileOutputStream out = new FileOutputStream(file);
+            wb.write(out);
+            out.close();
             return true;
-        } catch (Exception ex) {
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return false;
     }
 }

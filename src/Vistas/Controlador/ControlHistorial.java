@@ -14,10 +14,12 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.apache.poi.EncryptedDocumentException;
@@ -34,13 +36,17 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
  */
 public class ControlHistorial {
 
-    public static Historial historial;
+    private static Historial historial;
     private File archivo;
-    Locale locale = new Locale("es", "CO");
-    NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
+    private Locale locale;
+    private NumberFormat nf;
+    ArrayList<String> array;
 
     public ControlHistorial() {
         historial = new Historial(null, true);
+        array = new ArrayList<>();
+        locale = new Locale("es", "CO");
+        nf = NumberFormat.getCurrencyInstance(locale);
     }
 
     /*
@@ -96,7 +102,7 @@ public class ControlHistorial {
                                     listaColumna[indiceColumna] = celda.getDateCellValue();
                                     break;
                             }
-                            System.out.println("col" + indiceColumna + " valor: true - " + celda + ".");
+                            //  System.out.println("col" + indiceColumna + " valor: true - " + celda + ".");
                         }
                     }
                 }
@@ -104,16 +110,15 @@ public class ControlHistorial {
                     modeloT.addRow(listaColumna);
                 }
             }
-            //  respuesta = "Importación exitosa";
-            // return true;
+
+            historial.setVisible(true);
+
+            return true;
         } catch (IOException | InvalidFormatException | EncryptedDocumentException e) {
             System.err.println(e.getMessage());
             System.out.println(e);
         }
 
-        historial.setVisible(true);
-
-        //return respuesta;
         return false;
     }
 
@@ -130,13 +135,19 @@ public class ControlHistorial {
                 return false;
             }
         };
-        System.out.println("Si entra");
+
         historial.getJTHistorial().setModel(tabla);
         tabla.addColumn("Nombre Asociado");
         tabla.addColumn("Cédula Asociado");
         tabla.addColumn("Número Asignado");
         tabla.addColumn("Fecha de Asignación");
         Object[] object = new Object[4];
+        array = new ArrayList<>();
+        array.add("Nombre Asociado");
+        array.add("Cédula Asociado");
+        array.add("Número Asignado");
+        array.add("Fecha de Asignación");
+        llenarComboBox();
 
         try {
             while (resul.next()) {
@@ -178,6 +189,15 @@ public class ControlHistorial {
         tabla.addColumn("Premio (Pesos)");
         tabla.addColumn("Tipo de Sorteo");
         Object[] object = new Object[6];
+        array = new ArrayList<>();
+        array.add("Nombre Ganador");
+        array.add("Cédula Ganador");
+        array.add("Hora y Fecha Sorteo");
+        array.add("Número Ganador");
+        array.add("Premio (Pesos)");
+        array.add("Tipo de Sorteo");
+        llenarComboBox();
+
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
@@ -210,9 +230,6 @@ public class ControlHistorial {
         historial.setVisible(true);
     }
 
-    /*
-    Modifica aspectos generales de la vista en el historial
-     */
     public void historialExA(ResultSet resul, boolean tipo) {
 
         aspectosGenerales("Historial de los ex-asociados SIN participación", false);
@@ -223,13 +240,18 @@ public class ControlHistorial {
                 return false;
             }
         };
-        System.out.println("Si entra");
         historial.getJTHistorial().setModel(tabla);
         tabla.addColumn("Nombre Asociado");
         tabla.addColumn("Cédula Asociado");
         tabla.addColumn("Fecha inhabilitación");
         tabla.addColumn("Razón");
         Object[] object = new Object[4];
+        array = new ArrayList<>();
+        array.add("Nombre Asociado");
+        array.add("Cédula Asociado");
+        array.add("Fecha inhabilitación");
+        array.add("Razón");
+        llenarComboBox();
 
         try {
             while (resul.next()) {
@@ -273,6 +295,13 @@ public class ControlHistorial {
         tabla.addColumn("Nombre Administrador");
         tabla.addColumn("Detalle Operación");
         Object[] object = new Object[4];
+        array = new ArrayList<>();
+        array.add("Hora y Fecha Realización");
+        array.add("Cédula Administrador");
+        array.add("Nombre Administrador");
+        array.add("Detalle Operación");
+        llenarComboBox();
+
         try {
             while (resul.next()) {
                 object[0] = resul.getString(3);
@@ -311,6 +340,12 @@ public class ControlHistorial {
         tabla.addColumn("Cédula");
         tabla.addColumn("Número");
         Object[] object = new Object[3];
+        array = new ArrayList<>();
+        array.add("Nombre");
+        array.add("Cédula");
+        array.add("Número");
+        llenarComboBox();
+
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
@@ -335,9 +370,28 @@ public class ControlHistorial {
         historial.setVisible(true);
     }
 
+    /*
+    Modifica aspectos generales de la vista en el historial
+     */
     public void aspectosGenerales(String titulo, boolean valor) {
         historial.setTitle(titulo);
         historial.getJBSubir().setEnabled(valor);
         historial.setTipoAccion(valor);
+        historial.getJPFiltro().setEnabled(!valor);
+        historial.getJCBFiltro().setEnabled(!valor);
+        historial.getJTxFFiltro().setEnabled(!valor);
     }
+
+    /*
+    Recibe los nombres de las columnas que componen la tabla en cuestión, para crear el combobox para filtrar los datos de la tabla correspondiente
+     */
+    public void llenarComboBox() {
+        JComboBox jc = new JComboBox();
+        for (int i = 0; i < array.size(); i++) {
+            System.out.println(array.get(i));
+            jc.addItem(array.get(i));
+        }
+        historial.getJCBFiltro().setModel(jc.getModel());
+    }
+
 }
