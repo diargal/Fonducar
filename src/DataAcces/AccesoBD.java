@@ -23,6 +23,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 
@@ -213,7 +215,7 @@ public class AccesoBD {
         return resultadoConexion("SELECT p.nombre, p.cedula, na.idnumero FROM `numeroasociado` as na, numero as n, persona as p, "
                 + "asociado as a WHERE n.estado = 0 and n.idNumero = na.idNumero and "
                 + "'" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) "
-                + "and na.idAsociado = a.idAsociado and a.idPersona = p.idPersona");
+                + "and na.idAsociado = a.idAsociado and a.idPersona = p.idPersona order by p.nombre desc");
     }
 
     public ResultSet historialEACON() throws SQLException {
@@ -235,6 +237,43 @@ public class AccesoBD {
 
     }
 
+    public ResultSet historialInhabilitadosActuales() throws SQLException {
+        Date date = new Date();
+        DateFormat fecha = new SimpleDateFormat("yyyy");
+        String fecha2 = fecha.format(date);
+        return resultadoConexion("SELECT p.nombre, p.cedula, i.fecha, i.razon "
+                + "FROM inhabilitacion as i, persona as p, asociado as a "
+                + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 1 and '" + fecha2 + "' = "
+                + "substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 )order by i.fecha");
+    }
+
+    public ResultSet historialHabilitadosActuales() throws SQLException {
+        Date date = new Date();
+        DateFormat fecha = new SimpleDateFormat("yyyy");
+        String fecha2 = fecha.format(date);
+        return resultadoConexion("SELECT p.nombre, p.cedula, i.fecha, i.razon "
+                + "FROM inhabilitacion as i, persona as p, asociado as a "
+                + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 0 and '" + fecha2 + "' = "
+                + "substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 )order by i.fecha");
+    }
+
+    public boolean numerosAsignados() {
+        Date date = new Date();
+        DateFormat fecha = new SimpleDateFormat("yyyy");
+        String fecha2 = fecha.format(date);
+        try {
+            resultado = resultadoConexion("select na.fecha "
+                    + "from numeroasociado as na "
+                    + "where '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15)");
+            if (resultado.next()) {
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+
     public String ganador(int numero, float premio, int tipo) {
         Date date = new Date();
         DateFormat fecha = new SimpleDateFormat("yyyy");
@@ -254,32 +293,16 @@ public class AccesoBD {
             }
 
             /*
-            luego busco si el ganador es asociado
+            luego busco al ganador a partir del número que tiene asociado y que es igual al número que salió en el sorteo
              */
-            resultado = resultadoConexion("SELECT p.nombre, nm.idnumeroasociado, a.idAsociado "
-                    + "FROM `numeroasociado` as nm, asociado as a, persona as p, numero as n "
-                    + "WHERE nm.idAsociado = a.idAsociado and nm.idNumero ='" + numero + "'and p.idPersona = a.idPersona "
-                    + "and n.Estado = 0 and a.estado = 0 order by nm.fecha desc limit 1");
+            resultado = resultadoConexion("select p.nombre, p.cedula, na.idnumero, na.idnumeroasociado "
+                    + "from numeroasociado as na, numero as n, asociado as a, persona as p "
+                    + "where n.estado = 0 and n.idnumero = na.idnumero and '" + fecha.format(date) + "' = "
+                    + "substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) and na.idasociado = a.idasociado "
+                    + "and a.idpersona = p.idpersona and na.idnumero = " + numero + "");
             if (resultado.next()) {
-                guardarGanador(resultado.getInt(2), premio, tipo);
+                guardarGanador(resultado.getInt(4), premio, tipo);
                 return resultado.getString(1);
-            } else {
-                /*
-                en caso tal de que no sea asociado, busco si es un ex-asociado con participación
-                 */
-                resultado = resultadoConexion("SELECT p.nombre, nm.idnumeroasociado, a.idAsociado "
-                        + "FROM `numeroasociado` as nm, asociado as a, persona as p, numero as n, inhabilitacion as i "
-                        + "WHERE nm.idAsociado = a.idAsociado and nm.idNumero = '" + numero + "' and p.idPersona = a.idPersona and n.Estado = 0 "
-                        + "and a.estado=1 and a.idAsociado = i.idAsociado and i.estado = 0 order by nm.fecha desc limit 1");
-                if (resultado.next()) {
-                    guardarGanador(resultado.getInt(2), premio, tipo);
-                    return resultado.getString(1);
-                } else {
-                    /*
-                    Aquí identifico si es un ex-asociado sin participación
-                     */
-                    return "false";
-                }
             }
         } catch (java.sql.SQLException er) {
             JOptionPane.showMessageDialog(null, "Error al saber el ganador" + er, "Failed!", JOptionPane.ERROR_MESSAGE);

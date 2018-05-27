@@ -20,7 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 /**
@@ -52,6 +52,13 @@ public class Historial extends javax.swing.JDialog {
         this.setLocationRelativeTo(this);
         this.setResizable(true);
         tipoAccion = true;
+//        ordenar();
+//        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+    }
+
+    public void ordenar() {
+        TableRowSorter<TableModel> elQueOrdena = new TableRowSorter<>(JTHistorial.getModel());
+        JTHistorial.setRowSorter(elQueOrdena);
     }
 
     public JButton getJBSubir() {
@@ -240,6 +247,9 @@ public class Historial extends javax.swing.JDialog {
 
     private void JTxFFiltroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFFiltroKeyTyped
 
+        trsFiltro = new TableRowSorter(JTHistorial.getModel());
+        JTHistorial.setRowSorter(trsFiltro);
+
         JTxFFiltro.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -250,26 +260,30 @@ public class Historial extends javax.swing.JDialog {
             }
         });
 
-        trsFiltro = new TableRowSorter(JTHistorial.getModel());
-        JTHistorial.setRowSorter(trsFiltro);
+
     }//GEN-LAST:event_JTxFFiltroKeyTyped
 
+    /*
+    Mètodo que genera el archivo excel de la tabla en cuestiòn
+     */
     public boolean generarArchivo() {
         ControlArchivos control = new ControlArchivos();
         return control.generarArchivo(JTHistorial);
     }
 
+    /*
+    Creado para identificar el número de la columna en la cual se hará el filtro
+     */
     public void filtro() {
         int columna = 0;
-//        System.out.println(JCBFiltro.getSelectedItem().toString());
         for (int i = 0; i < JTHistorial.getModel().getColumnCount(); i++) {
             if (JTHistorial.getColumnName(i).equalsIgnoreCase(JCBFiltro.getSelectedItem().toString())) {
                 System.out.println(JTHistorial.getColumnName(i));
                 columna = i;
             }
         }
-        trsFiltro.setRowFilter(RowFilter.regexFilter(JTxFFiltro.getText(), columna));
-
+        // trsFiltro.setRowFilter(RowFilter.regexFilter("^(?i)" + JTxFFiltro.getText(), columna));
+        trsFiltro.setRowFilter(RowFilter.regexFilter("(?i)" + JTxFFiltro.getText(), columna));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -202,7 +202,14 @@ public class NumSorteos extends javax.swing.JDialog {
     }//GEN-LAST:event_JTxFConfirmacionActionPerformed
 
     private void JTxFConfirmacionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFConfirmacionKeyPressed
-        // TODO add your handling code here:
+        ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.JBAceptarActionPerformed(jd);
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_JTxFConfirmacionKeyPressed
 
     private void JTxFConfirmacionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFConfirmacionKeyTyped

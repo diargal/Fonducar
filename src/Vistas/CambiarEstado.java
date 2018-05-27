@@ -7,6 +7,9 @@ package Vistas;
 import static Logica.Mensajes.MSG;
 import static Logica.Mensajes.RERROR;
 import Logica.Sorteo;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import static java.awt.image.ImageObserver.WIDTH;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
@@ -54,6 +57,11 @@ public class CambiarEstado extends javax.swing.JDialog {
         JTxAObservacion.setColumns(20);
         JTxAObservacion.setRows(5);
         JTxAObservacion.setEnabled(false);
+        JTxAObservacion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JTxAObservacionKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(JTxAObservacion);
 
         jLabel1.setText("Observación:");
@@ -63,6 +71,11 @@ public class CambiarEstado extends javax.swing.JDialog {
         JCBAccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ex asociado CON participación", "Ex asociado SIN participacion", "Habilitar como ASOCIADO" }));
         JCBAccion.setEnabled(false);
         JCBAccion.setOpaque(false);
+        JCBAccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JCBAccionKeyPressed(evt);
+            }
+        });
 
         JBBuscar.setText("Buscar");
         JBBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -215,6 +228,28 @@ public class CambiarEstado extends javax.swing.JDialog {
             evt.consume();
         }
     }//GEN-LAST:event_JTxFCedulaKeyTyped
+
+    private void JTxAObservacionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxAObservacionKeyPressed
+        ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.JBAceptarActionPerformed(jd);
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_JTxAObservacionKeyPressed
+
+    private void JCBAccionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JCBAccionKeyPressed
+        ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.JBAceptarActionPerformed(jd);
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_JCBAccionKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -1,10 +1,12 @@
 package Vistas.Controlador;
 
 import static Logica.BonoSolidario.accesoBD;
+import static Logica.Mensajes.A_HABILACTUALES;
 import static Logica.Mensajes.A_HACON;
 import static Logica.Mensajes.A_HASIN;
 import static Logica.Mensajes.A_HNS;
 import static Logica.Mensajes.A_HOPERACIONES;
+import static Logica.Mensajes.A_INHABILACTUALES;
 import static Logica.Mensajes.A_RACTUALES;
 import static Logica.Mensajes.A_REPORTESORTEOS;
 import Vistas.Historial;
@@ -36,7 +38,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
  */
 public class ControlHistorial {
 
-    private static Historial historial;
+    private Historial historial;
     private File archivo;
     private Locale locale;
     private NumberFormat nf;
@@ -53,7 +55,7 @@ public class ControlHistorial {
     Muestra en la tabla historial, todos los datos leidos del archivo de excel cargado para guardar los asociados
      */
     public boolean Importar(File file) {
-
+        historial = new Historial(null, true);
         historial.setArchivo(file);
         archivo = file;
         historial.getJBSubir().setText("Subir a la BD");
@@ -127,6 +129,7 @@ public class ControlHistorial {
      */
     public void historialNumeros(ResultSet resul) {
 
+        historial = new Historial(null, true);
         aspectosGenerales("Información del historial de los números asignados a cada asociado", false);
 
         DefaultTableModel tabla = new DefaultTableModel() {
@@ -136,7 +139,9 @@ public class ControlHistorial {
             }
         };
 
-        historial.getJTHistorial().setModel(tabla);
+        DefaultTableModel modelo2 = new DefaultTableModel();
+        historial.getJTHistorial().setModel(modelo2);
+
         tabla.addColumn("Nombre Asociado");
         tabla.addColumn("Cédula Asociado");
         tabla.addColumn("Número Asignado");
@@ -153,10 +158,11 @@ public class ControlHistorial {
             while (resul.next()) {
                 object[0] = resul.getString(1);
                 object[1] = resul.getLong(2);
-                object[2] = resul.getLong(3);
+                object[2] = resul.getInt(3);
                 object[3] = resul.getString(4);
                 tabla.addRow(object);
             }
+            historial.getJTHistorial().setModel(tabla);
             accesoBD.guardarOperacion(A_HNS);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
@@ -173,6 +179,7 @@ public class ControlHistorial {
      */
     public void historialSorteos(ResultSet resul) {
 
+        historial = new Historial(null, true);
         aspectosGenerales("Historial de los sorteos", false);
 
         DefaultTableModel tabla = new DefaultTableModel() {
@@ -181,7 +188,10 @@ public class ControlHistorial {
                 return false;
             }
         };
-        historial.getJTHistorial().setModel(tabla);
+
+        DefaultTableModel modelo2 = new DefaultTableModel();
+        historial.getJTHistorial().setModel(modelo2);
+
         tabla.addColumn("Nombre Ganador");
         tabla.addColumn("Cédula Ganador");
         tabla.addColumn("Hora y Fecha Sorteo");
@@ -219,6 +229,8 @@ public class ControlHistorial {
                 }
                 tabla.addRow(object);
             }
+
+            historial.getJTHistorial().setModel(tabla);
             accesoBD.guardarOperacion(A_REPORTESORTEOS);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
@@ -232,6 +244,7 @@ public class ControlHistorial {
 
     public void historialExA(ResultSet resul, boolean tipo) {
 
+        historial = new Historial(null, true);
         aspectosGenerales("Historial de los ex-asociados SIN participación", false);
 
         DefaultTableModel tabla = new DefaultTableModel() {
@@ -240,7 +253,10 @@ public class ControlHistorial {
                 return false;
             }
         };
-        historial.getJTHistorial().setModel(tabla);
+
+        DefaultTableModel modelo2 = new DefaultTableModel();
+        historial.getJTHistorial().setModel(modelo2);
+
         tabla.addColumn("Nombre Asociado");
         tabla.addColumn("Cédula Asociado");
         tabla.addColumn("Fecha inhabilitación");
@@ -266,6 +282,7 @@ public class ControlHistorial {
             } else {
                 accesoBD.guardarOperacion(A_HASIN);
             }
+            historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
             accesoBD.desconectar();
@@ -281,6 +298,7 @@ public class ControlHistorial {
      */
     public void historialModificaciones(ResultSet resul) {
 
+        historial = new Historial(null, true);
         aspectosGenerales("Historial de moficaciones", false);
 
         DefaultTableModel tabla = new DefaultTableModel() {
@@ -289,7 +307,10 @@ public class ControlHistorial {
                 return false;
             }
         };
-        historial.getJTHistorial().setModel(tabla);
+
+        DefaultTableModel modelo2 = new DefaultTableModel();
+        historial.getJTHistorial().setModel(modelo2);
+
         tabla.addColumn("Hora y Fecha Realización");
         tabla.addColumn("Cédula Administrador");
         tabla.addColumn("Nombre Administrador");
@@ -303,13 +324,17 @@ public class ControlHistorial {
         llenarComboBox();
 
         try {
+            int cont = 0;
             while (resul.next()) {
+                cont++;
                 object[0] = resul.getString(3);
                 object[1] = resul.getLong(2);
                 object[2] = resul.getString(1);
                 object[3] = resul.getString(4);
                 tabla.addRow(object);
             }
+            System.out.println(cont);
+            historial.getJTHistorial().setModel(tabla);
             accesoBD.guardarOperacion(A_HOPERACIONES);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
@@ -326,7 +351,7 @@ public class ControlHistorial {
     Carga una lista del número que tiene actualmente cada participante activo
      */
     public void numerosActuales(ResultSet resul) {
-
+        historial = new Historial(null, true);
         aspectosGenerales("Lista de los números actuales de cada asociado", false);
 
         DefaultTableModel tabla = new DefaultTableModel() {
@@ -335,7 +360,11 @@ public class ControlHistorial {
                 return false;
             }
         };
-        historial.getJTHistorial().setModel(tabla);
+
+        DefaultTableModel modelo2 = new DefaultTableModel();
+
+        historial.getJTHistorial().setModel(modelo2);
+
         tabla.addColumn("Nombre");
         tabla.addColumn("Cédula");
         tabla.addColumn("Número");
@@ -359,10 +388,61 @@ public class ControlHistorial {
                 }
                 tabla.addRow(object);
             }
+            historial.getJTHistorial().setModel(tabla);
             accesoBD.guardarOperacion(A_RACTUALES);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
 
+        } catch (SQLException ex) {
+            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        historial.setVisible(true);
+    }
+
+    public void historialInhabilitadosActuales(ResultSet resul, boolean tipo) {
+        historial = new Historial(null, true);
+        aspectosGenerales("Inhabilitados actuales", false);
+
+        DefaultTableModel tabla = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        DefaultTableModel modelo2 = new DefaultTableModel();
+        historial.getJTHistorial().setModel(modelo2);
+
+        tabla.addColumn("Nombre Asociado");
+        tabla.addColumn("Cédula Asociado");
+        tabla.addColumn("Fecha inhabilitación");
+        tabla.addColumn("Razón");
+        Object[] object = new Object[4];
+        array = new ArrayList<>();
+        array.add("Nombre Asociado");
+        array.add("Cédula Asociado");
+        array.add("Fecha inhabilitación");
+        array.add("Razón");
+        llenarComboBox();
+
+        try {
+            while (resul.next()) {
+                object[0] = resul.getString(1);
+                object[1] = resul.getLong(2);
+                object[2] = resul.getString(3);
+                object[3] = resul.getString(4);
+                tabla.addRow(object);
+            }
+            if (tipo) {
+                accesoBD.guardarOperacion(A_HABILACTUALES);
+            } else {
+                accesoBD.guardarOperacion(A_INHABILACTUALES);
+            }
+            historial.getJTHistorial().setModel(tabla);
+            historial.getJBSubir().setText("Descargar archivo");
+            historial.getJBSubir().setEnabled(true);
+            accesoBD.desconectar();
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
