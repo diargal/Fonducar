@@ -11,13 +11,14 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  *
@@ -35,7 +36,7 @@ public class ControlArchivos {
     Permite cargar del PC, el archivo de excel con el cual ingresarán asociados
      */
     public void cargarArchivo(ControlHistorial cntrl) {
-
+        cambiarApariencia(true);
         try {
             File archivo;
             JFileChooser selecArchivo = new JFileChooser();
@@ -50,6 +51,7 @@ public class ControlArchivos {
 
             if (archivo.getName().endsWith("xls") || archivo.getName().endsWith("xlsx")) {
                 JOptionPane.showMessageDialog(null, "Importación exitosa");
+                cambiarApariencia(false);
                 control.Importar(archivo);
             } else {
                 JOptionPane.showMessageDialog(null, "Elija un formato válido");
@@ -59,14 +61,17 @@ public class ControlArchivos {
             JOptionPane.showMessageDialog(null, ERRORBDC, "Error de lectura", JOptionPane.ERROR_MESSAGE);
         } catch (NullPointerException exc) {
         }
+        cambiarApariencia(false);
     }
 
     public boolean generarArchivo(JTable tablita) {
+        cambiarApariencia(true);
         javax.swing.JFileChooser fileChooser = new JFileChooser();
 
         if (fileChooser.showSaveDialog(null) == javax.swing.JFileChooser.APPROVE_OPTION) {
             System.out.println(new File(fileChooser.getCurrentDirectory(), fileChooser.getName(fileChooser.getSelectedFile())));
             try {
+                cambiarApariencia(false);
                 return guardarArchivo(new File(fileChooser.getCurrentDirectory(), fileChooser.getName(fileChooser.getSelectedFile()) + ".xls"), tablita);
 //                JOptionPane.showMessageDialog(null, "Formato excel Generado");
             } catch (Exception ex) {
@@ -106,5 +111,23 @@ public class ControlArchivos {
             Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    public void cambiarApariencia(boolean tipo) {
+        try {
+            if (tipo) {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            } else {
+                UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticLookAndFeel");
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

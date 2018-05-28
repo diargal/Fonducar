@@ -12,24 +12,34 @@ package Logica;
 public class Administrador extends Persona {
 
     private String pass, usuario;
-    private int idAdmin;
+    private int idAdmin, tipo;
 
     public Administrador() {
         super();
         pass = "";
         usuario = "";
         idAdmin = 0;
+        tipo = 0;
     }
 
-    public Administrador(long cedula, String pass, String usuario) {
+    public Administrador(long cedula, String pass, String usuario, int tipo) {
         this.cedula = cedula;
         this.pass = pass;
+        this.tipo = tipo;
         this.usuario = usuario;
     }
 
     @Override
     public String getNombre() {
         return nombre;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
     }
 
     public String getUsuario() {

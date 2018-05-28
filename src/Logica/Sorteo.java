@@ -6,8 +6,12 @@
 package Logica;
 
 import DataAcces.AccesoBD;
+import Vistas.MainControl;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -104,7 +108,6 @@ public class Sorteo {
                 return false;
             }
         }
-
         return true;
     }
 

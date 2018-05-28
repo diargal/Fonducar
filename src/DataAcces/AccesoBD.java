@@ -39,6 +39,9 @@ public class AccesoBD {
     private static final String login = "root";
     private static final String password = "";
     private static Connection conexion = null;
+    private Date date;
+    private DateFormat fechaCompleta;
+    private DateFormat fechaAnio;
     private ResultSet resultado;
     private String comandoSQL;
     private PreparedStatement prepar;
@@ -48,6 +51,9 @@ public class AccesoBD {
         resultado = null;
         comandoSQL = "";
         prepar = null;
+        date = new Date();
+        fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        fechaAnio = new SimpleDateFormat("yyyy");
     }
 
     public void conexion() {
@@ -75,15 +81,16 @@ public class AccesoBD {
 
         try {
             String password = DigestUtils.md5Hex(pass);
+            System.out.println(password);
             resultado = resultadoConexion("SELECT A.*, P.nombre, P.cedula FROM `administrador` as A, persona as P WHERE P.idPersona = A.idPersona and A.Password='" + password + "' and A.Usuario='" + usuario + "'");
             if (resultado.next()) {
                 administrador.setIdAdmin(resultado.getInt(1));
                 administrador.setUsuario(resultado.getString(2));
                 administrador.setPass(resultado.getString(3));
                 administrador.setIdPersona(resultado.getInt(4));
-                administrador.setNombre(resultado.getString(5));
-                administrador.setCedula(resultado.getLong(6));
-
+                administrador.setTipo(resultado.getInt(5));
+                administrador.setNombre(resultado.getString(6));
+                administrador.setCedula(resultado.getLong(7));
                 desconectar();
                 return true;
             }
@@ -116,9 +123,8 @@ public class AccesoBD {
 //    }
     private void guardarGanador(long idNumAso, float premio, int tipo) {
         conexion();
-        Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        String fecha2 = fecha.format(date);
+
+        String fecha2 = fechaCompleta.format(date);
 
         try {
 
@@ -135,13 +141,11 @@ public class AccesoBD {
 
     public boolean guardarOperacion(String tipo) {
         conexion();
-        Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
 
             comandoSQL = "Insert into movimiento (idMovimiento, Fecha, Detalle, idAdministrador) values (" + null + ",?,?,?)";
             prepar = conexion.prepareStatement(comandoSQL);
-            prepar.setString(1, fecha.format(date));
+            prepar.setString(1, fechaCompleta.format(date));
             prepar.setString(2, tipo);
             prepar.setLong(3, administrador.getIdAdmin());
             prepar.executeUpdate();
@@ -162,10 +166,8 @@ public class AccesoBD {
                 desconectar();
                 return resultado.getInt(1);
             }
-
         } catch (java.sql.SQLException er) {
             JOptionPane.showMessageDialog(null, er, "Failed!", JOptionPane.ERROR_MESSAGE);
-
         }
 
         desconectar();
@@ -184,7 +186,6 @@ public class AccesoBD {
 
         } catch (java.sql.SQLException er) {
             JOptionPane.showMessageDialog(null, er, "Failed!", JOptionPane.ERROR_MESSAGE);
-
         }
 
         desconectar();
@@ -209,9 +210,7 @@ public class AccesoBD {
     }
 
     public ResultSet numerosActuales() throws SQLException {
-        Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("yyyy");
-        String fecha2 = fecha.format(date);
+        String fecha2 = fechaAnio.format(date);
         return resultadoConexion("SELECT p.nombre, p.cedula, na.idnumero FROM `numeroasociado` as na, numero as n, persona as p, "
                 + "asociado as a WHERE n.estado = 0 and n.idNumero = na.idNumero and "
                 + "'" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) "
@@ -238,9 +237,7 @@ public class AccesoBD {
     }
 
     public ResultSet historialInhabilitadosActuales() throws SQLException {
-        Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("yyyy");
-        String fecha2 = fecha.format(date);
+        String fecha2 = fechaAnio.format(date);
         return resultadoConexion("SELECT p.nombre, p.cedula, i.fecha, i.razon "
                 + "FROM inhabilitacion as i, persona as p, asociado as a "
                 + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 1 and '" + fecha2 + "' = "
@@ -248,9 +245,7 @@ public class AccesoBD {
     }
 
     public ResultSet historialHabilitadosActuales() throws SQLException {
-        Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("yyyy");
-        String fecha2 = fecha.format(date);
+        String fecha2 = fechaAnio.format(date);
         return resultadoConexion("SELECT p.nombre, p.cedula, i.fecha, i.razon "
                 + "FROM inhabilitacion as i, persona as p, asociado as a "
                 + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 0 and '" + fecha2 + "' = "
@@ -258,9 +253,7 @@ public class AccesoBD {
     }
 
     public boolean numerosAsignados() {
-        Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("yyyy");
-        String fecha2 = fecha.format(date);
+        String fecha2 = fechaAnio.format(date);
         try {
             resultado = resultadoConexion("select na.fecha "
                     + "from numeroasociado as na "
@@ -275,9 +268,6 @@ public class AccesoBD {
     }
 
     public String ganador(int numero, float premio, int tipo) {
-        Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("yyyy");
-
         try {
             if (tipo == 0) {// si el premio es menor, busco que el número no haya ganado otro en el mismo año.
                 /*
@@ -285,7 +275,7 @@ public class AccesoBD {
                  */
                 resultado = resultadoConexion("Select na2.idNumero from numeroasociado as na2 where na2.idNumero "
                         + "= " + numero + " and na2.idNumero in ( SELECT na.idNumero FROM `sorteo` as s, numeroasociado as na"
-                        + " WHERE s.TipoSorteo = 0 and '" + fecha.format(date) + "' = substring( s.fecha, length(s.fecha)-12 ,"
+                        + " WHERE s.TipoSorteo = 0 and '" + fechaAnio.format(date) + "' = substring( s.fecha, length(s.fecha)-12 ,"
                         + " length(s.fecha)-15 ) and s.idNumeroAsociado = na.idNumeroAsociado)");
                 if (resultado.next()) {
                     return "anterior"; //si ha sido ganador, retorno un identificador.
@@ -297,7 +287,7 @@ public class AccesoBD {
              */
             resultado = resultadoConexion("select p.nombre, p.cedula, na.idnumero, na.idnumeroasociado "
                     + "from numeroasociado as na, numero as n, asociado as a, persona as p "
-                    + "where n.estado = 0 and n.idnumero = na.idnumero and '" + fecha.format(date) + "' = "
+                    + "where n.estado = 0 and n.idnumero = na.idnumero and '" + fechaAnio.format(date) + "' = "
                     + "substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) and na.idasociado = a.idasociado "
                     + "and a.idpersona = p.idpersona and na.idnumero = " + numero + "");
             if (resultado.next()) {
@@ -313,12 +303,9 @@ public class AccesoBD {
 
     public boolean asociarNumeros(int idAsociado, int idNumero) {
         conexion();
-        Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-
         try {
             prepar = conexion.prepareStatement("INSERT INTO `numeroasociado`(`idNumeroAsociado`, `Fecha`, `idAsociado`, `idNumero`) VALUES(" + null + ",?,?,?)");
-            prepar.setString(1, fecha.format(date));
+            prepar.setString(1, fechaCompleta.format(date));
             prepar.setDouble(2, idAsociado);
             prepar.setDouble(3, idNumero);
             prepar.execute();
@@ -334,9 +321,12 @@ public class AccesoBD {
     public ArrayList<Integer> idsAsociados() {
         ArrayList<Integer> array = new ArrayList<>();
         try {
-            resultado = resultadoConexion("SELECT A.idAsociado, P.Nombre FROM `asociado` as A, persona as P WHERE A.Estado = 0 and P.idPersona = A.idPersona order by P.Nombre asc");
+            resultado = resultadoConexion("SELECT p.nombre, a.idAsociado, na.idnumero "
+                    + "FROM numero as n, numeroasociado as na, asociado as a, persona as p "
+                    + "WHERE n.estado = 0 and n.idnumero = na.idnumero and '2018' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) "
+                    + "and na.idasociado = a.idasociado and a.idpersona = p.idpersona ORDER BY `p`.`Nombre` ASC");
             while (resultado.next()) {
-                array.add(resultado.getInt(1));
+                array.add(resultado.getInt(2));
             }
 //            return array;
         } catch (Exception e) {
@@ -348,8 +338,6 @@ public class AccesoBD {
     public boolean guardarAsociados(File file) {
         conexion();
         int id = 0;
-        Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         long cedula = 0, numero = 0;
         String nombre = "";
 
@@ -390,7 +378,7 @@ public class AccesoBD {
                 prepar.execute();
 
                 prepar = conexion.prepareStatement("Insert into numeroasociado (idNumeroAsociado, Fecha, idAsociado, idNumero) values (" + null + ",?,?,?)");
-                prepar.setString(1, fecha.format(date) + "");
+                prepar.setString(1, fechaCompleta.format(date) + "");
                 prepar.setDouble(2, id);
                 prepar.setDouble(3, numero);
                 prepar.execute();
@@ -440,9 +428,6 @@ public class AccesoBD {
     }
 
     public boolean cambiarEstado(long cedula, int tipo, String razon) {
-        Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-//        String fecha2 = fecha.format(date);
 
         try {
             conexion();
@@ -462,7 +447,7 @@ public class AccesoBD {
                         prepar = conexion.prepareStatement("INSERT INTO `inhabilitacion`(`idInhabilitacion`, `Razon`, `Fecha`, `Estado`, `idAsociado`) "
                                 + "VALUES (" + null + ",?,?,?,?)");
                         prepar.setString(1, razon);
-                        prepar.setString(2, fecha.format(date));
+                        prepar.setString(2, fechaCompleta.format(date));
                         prepar.setInt(4, resultado.getInt(1));
 
                         switch (tipo) {
@@ -509,9 +494,7 @@ public class AccesoBD {
     }
 
     public boolean verificarFecha() {
-        Date date = new Date();
-        DateFormat fecha = new SimpleDateFormat("yyyy");
-        String fecha2 = fecha.format(date);
+        String fecha2 = fechaAnio.format(date);
         try {
             resultado = resultadoConexion("SELECT na.fecha FROM `numeroasociado` as na WHERE '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 )");
             if (resultado.next()) {
@@ -522,6 +505,15 @@ public class AccesoBD {
         }
         desconectar();
         return true;
+    }
+
+    public ResultSet verificarsihayInhabilitados() throws SQLException {
+        int anioAnterior = Integer.parseInt(fechaAnio.format(date)) - 1;
+        System.out.println(anioAnterior);
+        return resultadoConexion("SELECT p.nombre, p.cedula, a.idAsociado "
+                + "FROM inhabilitacion as i, asociado as a, persona as p "
+                + "WHERE a.idasociado = i.idasociado and '" + anioAnterior + "' = substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 ) "
+                + "and i.estado = 0 and p.idpersona = a.idasociado");
     }
 
 }

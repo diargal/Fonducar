@@ -7,8 +7,10 @@ package Logica;
 
 import DataAcces.AccesoBD;
 import Vistas.ErrorBD;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import vistas.AccesControl;
 
 /**
@@ -30,7 +32,21 @@ public class BonoSolidario {
         } else {
             // TODO code application logic here
             // JFrame.setDefaultLookAndFeelDecorated(true);
-            //SubstanceLookAndFeel.setSkin("org.pushingpixels.substance.api.ColorSchemeAssociationKind.class");
+            try {
+//                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//                UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
+//                UIManager.setLookAndFeel("UpperEssential.UpperEssentialLookAndFeel");
+                //Plastic3DLookAndFeel.setPlasticTheme(new DarkStar());
+                UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticLookAndFeel");
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(BonoSolidario.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(BonoSolidario.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(BonoSolidario.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedLookAndFeelException ex) {
+                Logger.getLogger(BonoSolidario.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             AccesControl inicio = new AccesControl(null, true);
             inicio.setVisible(true);

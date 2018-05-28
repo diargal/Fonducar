@@ -65,7 +65,7 @@ public class AccesControl extends javax.swing.JDialog {
 
         JLUsuario.setText("Usuario:");
 
-        JTxFUsuario.setText("diegogarcia");
+        JTxFUsuario.setText("sofimanotas");
         JTxFUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JTxFUsuarioActionPerformed(evt);
@@ -82,7 +82,7 @@ public class AccesControl extends javax.swing.JDialog {
 
         JLPass.setText("Contraseña:");
 
-        JTxfPass.setText("0221310044");
+        JTxfPass.setText("manotas");
         JTxfPass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 JTxfPassKeyPressed(evt);
@@ -172,6 +172,13 @@ public class AccesControl extends javax.swing.JDialog {
             if (BonoSolidario.accesoBD.consultaAdmin(JTxFUsuario.getText(), JTxfPass.getText())) { //inmediatamente hago la consulta
                 this.setVisible(false);
                 sorteo.actividad(A_SESION);
+                System.out.println(BonoSolidario.administrador.getTipo());
+                if (BonoSolidario.administrador.getTipo() == 1) {
+                    controlPrincipal.getJMSuper().setEnabled(true);
+                } else {
+                    controlPrincipal.getJMSuper().setEnabled(false);
+                }
+
                 controlPrincipal.setVisible(true);
             } else {
                 ManagerError();
@@ -210,53 +217,12 @@ public class AccesControl extends javax.swing.JDialog {
 
     private void JTxFUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFUsuarioKeyTyped
 //Este evento sirve para validar que solo ingresen números.
-        char c = evt.getKeyChar();
-        if ((c < '0' || c > '9')) {
-            evt.consume();
-        }
+//        char c = evt.getKeyChar();
+//        if ((c < '0' || c > '9')) {
+//            evt.consume();
+//        }
     }//GEN-LAST:event_JTxFUsuarioKeyTyped
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AccesControl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AccesControl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AccesControl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AccesControl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                AccesControl dialog = new AccesControl(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBLogin;

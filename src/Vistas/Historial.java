@@ -5,6 +5,7 @@
  */
 package Vistas;
 
+import Logica.BonoSolidario;
 import static Logica.BonoSolidario.accesoBD;
 import Vistas.Controlador.ControlArchivos;
 import java.awt.event.KeyAdapter;
@@ -52,6 +53,7 @@ public class Historial extends javax.swing.JDialog {
         this.setLocationRelativeTo(this);
         this.setResizable(true);
         tipoAccion = true;
+        
 //        ordenar();
 //        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     }

@@ -110,7 +110,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="JTxFUsuario">
           <Properties>
-            <Property name="text" type="java.lang.String" value="diegogarcia"/>
+            <Property name="text" type="java.lang.String" value="sofimanotas"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JTxFUsuarioActionPerformed"/>
@@ -125,7 +125,7 @@
         </Component>
         <Component class="javax.swing.JPasswordField" name="JTxfPass">
           <Properties>
-            <Property name="text" type="java.lang.String" value="0221310044"/>
+            <Property name="text" type="java.lang.String" value="manotas"/>
           </Properties>
           <Events>
             <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTxfPassKeyPressed"/>

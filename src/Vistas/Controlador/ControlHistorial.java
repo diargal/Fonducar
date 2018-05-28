@@ -352,7 +352,7 @@ public class ControlHistorial {
      */
     public void numerosActuales(ResultSet resul) {
         historial = new Historial(null, true);
-        aspectosGenerales("Lista de los números actuales de cada asociado", false);
+        aspectosGenerales("Lista de los números actuales de cada asociado y ex-asocaiado con participación", false);
 
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
@@ -438,6 +438,45 @@ public class ControlHistorial {
                 accesoBD.guardarOperacion(A_HABILACTUALES);
             } else {
                 accesoBD.guardarOperacion(A_INHABILACTUALES);
+            }
+            historial.getJTHistorial().setModel(tabla);
+            historial.getJBSubir().setText("Descargar archivo");
+            historial.getJBSubir().setEnabled(true);
+            accesoBD.desconectar();
+        } catch (SQLException ex) {
+            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        historial.setVisible(true);
+    }
+
+    public void inhabilitadosAnioPasado(ResultSet resul) {
+        historial = new Historial(null, true);
+        aspectosGenerales("Ex-asociados del año pasado", false);
+
+        DefaultTableModel tabla = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        DefaultTableModel modelo2 = new DefaultTableModel();
+        historial.getJTHistorial().setModel(modelo2);
+
+        tabla.addColumn("Nombre ex-asociado");
+        tabla.addColumn("Cédula ex-asociado");
+        Object[] object = new Object[2];
+        array = new ArrayList<>();
+        array.add("Nombre ex-asociado");
+        array.add("Cédula ex-asociado");
+        llenarComboBox();
+
+        try {
+            while (resul.next()) {
+                object[0] = resul.getString(1);
+                object[1] = resul.getLong(2);
+                tabla.addRow(object);
             }
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setText("Descargar archivo");

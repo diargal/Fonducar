@@ -15,6 +15,7 @@ import static Imagenes.ControlImagenes.SEIS;
 import static Imagenes.ControlImagenes.SIETE;
 import static Imagenes.ControlImagenes.TRES;
 import static Imagenes.ControlImagenes.UNO;
+import Logica.BonoSolidario;
 import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.numerodeSorteos;
 import static Logica.Mensajes.A_NUMEROS;
@@ -28,7 +29,9 @@ import static Logica.Mensajes.YGENERADOS;
 import Logica.Sorteo;
 import Vistas.Controlador.ControlArchivos;
 import Vistas.Controlador.ControlHistorial;
+import Vistas.Controlador.hiloCarga;
 import java.io.File;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -37,6 +40,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 
 /**
@@ -53,14 +57,16 @@ public class MainControl extends javax.swing.JFrame {
     private static Historial historial;
     private NumSorteos numeroSorteos;
     private ValorSorteo valorSorteo;
-
     private ControlHistorial control;
     private ControlArchivos cntrlArchivos;
+    private AddAdministrador agregarAdmin;
+    // public hiloCarga hilo;
 
     public MainControl() {
         initComponents();
         this.setResizable(true);
         this.setLocationRelativeTo(this);
+        agregarAdmin = new AddAdministrador(this, true);
         sorteosRealizados = 0;
         premio = 0;
         tipoPremio = 0;
@@ -72,15 +78,33 @@ public class MainControl extends javax.swing.JFrame {
         historial = new Historial(this, true);
         JLActivos.setText("Número de participantes para los sorteos: " + accesoBD.numeroAsociadosActivos());
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        cerrarVentana();
+//        verificarInhabilitados();
+    }
 
+    public void verificarInhabilitados() {
+        if (accesoBD.numerosAsignados()) {
+
+            try {
+                ResultSet resultado = accesoBD.verificarsihayInhabilitados();
+                ResultSet resl = resultado;
+                //if (resultado.next()) {
+                JOptionPane.showMessageDialog(jMenu1, "En la siguiente tabla se mostrarán los ex-asociados que se les debe definir su estado.");
+                control.inhabilitadosAnioPasado(resl);
+                //  }
+            } catch (SQLException ex) {
+                Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public void cerrarVentana() {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 cierre();
             }
         });
-
     }
 
     public void cierre() {
@@ -95,11 +119,22 @@ public class MainControl extends javax.swing.JFrame {
         this.JLCuanto = JLCuanto;
     }
 
+    public JMenu getJMSuper() {
+        return JMSuper;
+    }
+
+    public void setJMSuper(JMenu JMSuper) {
+        this.JMSuper = JMSuper;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu4 = new javax.swing.JMenu();
+        jMenu5 = new javax.swing.JMenu();
         jPanel4 = new javax.swing.JPanel();
         JBSorteo1 = new javax.swing.JButton();
         JLBalota2 = new javax.swing.JLabel();
@@ -124,8 +159,18 @@ public class MainControl extends javax.swing.JFrame {
         JMIAsignarAso = new javax.swing.JMenuItem();
         JMAAsociados = new javax.swing.JMenuItem();
         JMIModificar = new javax.swing.JMenuItem();
+        JMSuper = new javax.swing.JMenu();
+        jMenu6 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
+
+        jMenu4.setText("File");
+        jMenuBar2.add(jMenu4);
+
+        jMenu5.setText("Edit");
+        jMenuBar2.add(jMenu5);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("FONDUCAR - Bono Solidario ");
@@ -176,10 +221,8 @@ public class MainControl extends javax.swing.JFrame {
                         .addComponent(JLBalota3, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
                         .addComponent(JLBalota4, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(JBSorteo1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(JBSorteo1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,7 +331,7 @@ public class MainControl extends javax.swing.JFrame {
         });
         jMenu1.add(JMIHModificaciones);
 
-        JMIActuales.setText("Informe del número actual de los asociados hábiles para sorteos");
+        JMIActuales.setText("Informe del número actual de los asociados y ex-asociados hábiles para sorteos");
         JMIActuales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIActualesActionPerformed(evt);
@@ -325,6 +368,30 @@ public class MainControl extends javax.swing.JFrame {
         jMenu2.add(JMIModificar);
 
         jMenuBar1.add(jMenu2);
+
+        JMSuper.setText("Super Usuario");
+
+        jMenu6.setText("Gestionar administradores");
+
+        jMenuItem2.setText("Eliminar administrador");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMenuItem2);
+
+        jMenuItem3.setText("Agregar administrador");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMenuItem3);
+
+        JMSuper.add(jMenu6);
+
+        jMenuBar1.add(JMSuper);
 
         setJMenuBar(jMenuBar1);
 
@@ -365,11 +432,17 @@ public class MainControl extends javax.swing.JFrame {
     }//GEN-LAST:event_JMAAsociadosActionPerformed
 
     private void JMIAsignarAsoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIAsignarAsoActionPerformed
-
+// 
+//        hiloCarga carga = new hiloCarga();
+//        Thread hilo = new Thread(carga);
+//        hilo.start();
         if (!sorteo.verificarFecha()) {
             JOptionPane.showMessageDialog(null, YGENERADOS, "Información importante", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            if (sorteo.asociarNumeros()) {
+            //hilo.start();
+            boolean asociar = sorteo.asociarNumeros();
+
+            if (asociar) {
                 JOptionPane.showMessageDialog(this, REXITOSO, "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
                 try {
                     control.numerosActuales(accesoBD.numerosActuales());
@@ -379,11 +452,13 @@ public class MainControl extends javax.swing.JFrame {
                 }
             } else {
                 JOptionPane.showMessageDialog(this, RERROR, "Operacion fallida", JOptionPane.ERROR_MESSAGE);
+//                miRunnable.terminar();
             }
         }
     }//GEN-LAST:event_JMIAsignarAsoActionPerformed
 
     private void JBSorteoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSorteoActionPerformed
+
         if (accesoBD.numerosAsignados()) {
             JOptionPane.showMessageDialog(this, NOHAY);
             sorteo.asociarNumeros();
@@ -507,6 +582,16 @@ public class MainControl extends javax.swing.JFrame {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_JMIHabilitadosActualActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        agregarAdmin.setTitle("Formulario para eliminar un administrador");
+        agregarAdmin.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        agregarAdmin.setTitle("Formulario para agregar un administrador");
+        agregarAdmin.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
     public void animacion(int numero) {
 
         String ganador = sorteo.ganador(numero, premio, tipoPremio);
@@ -600,11 +685,18 @@ public class MainControl extends javax.swing.JFrame {
     private javax.swing.JMenuItem JMIHabilitadosActual;
     private javax.swing.JMenuItem JMIInhabilitadosActual;
     private javax.swing.JMenuItem JMIModificar;
+    private javax.swing.JMenu JMSuper;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel4;
