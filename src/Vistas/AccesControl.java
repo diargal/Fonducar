@@ -169,7 +169,7 @@ public class AccesControl extends javax.swing.JDialog {
         if (JTxfPass.getText().isEmpty() || JTxFUsuario.getText().isEmpty()) { //Si dejan los campos en blanco.
             ManagerError(); //método para mostrar errores.
         } else {
-            if (BonoSolidario.accesoBD.consultaAdmin(JTxFUsuario.getText(), JTxfPass.getText())) { //inmediatamente hago la consulta
+            if (BonoSolidario.accesoBD.consultaAdmin(JTxFUsuario.getText(), JTxfPass.getText(), true)) { //inmediatamente hago la consulta
                 this.setVisible(false);
                 sorteo.actividad(A_SESION);
                 System.out.println(BonoSolidario.administrador.getTipo());

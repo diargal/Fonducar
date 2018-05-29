@@ -22,11 +22,12 @@ public class Administrador extends Persona {
         tipo = 0;
     }
 
-    public Administrador(long cedula, String pass, String usuario, int tipo) {
+    public Administrador(String nombre, long cedula, String pass, String usuario, int tipo) {
         this.cedula = cedula;
         this.pass = pass;
         this.tipo = tipo;
         this.usuario = usuario;
+        this.nombre = nombre;
     }
 
     @Override

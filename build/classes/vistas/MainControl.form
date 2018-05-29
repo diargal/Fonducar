@@ -32,7 +32,7 @@
             <Property name="text" type="java.lang.String" value="Informes"/>
           </Properties>
           <SubComponents>
-            <Menu class="javax.swing.JMenu" name="jMenu3">
+            <Menu class="javax.swing.JMenu" name="JMExAsociados">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Ex-Asociados"/>
               </Properties>
@@ -145,25 +145,34 @@
             <Property name="text" type="java.lang.String" value="Super Usuario"/>
           </Properties>
           <SubComponents>
-            <Menu class="javax.swing.JMenu" name="jMenu6">
+            <Menu class="javax.swing.JMenu" name="JMGestionAdmins">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Gestionar administradores"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
+                <MenuItem class="javax.swing.JMenuItem" name="JMIDeleteAdmin">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Eliminar administrador"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem2ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIDeleteAdminActionPerformed"/>
                   </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
+                <MenuItem class="javax.swing.JMenuItem" name="JMIAddAdmin">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Agregar administrador"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem3ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIAddAdminActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="JMIVerAdmins">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Ver administradores"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIVerAdminsActionPerformed"/>
                   </Events>
                 </MenuItem>
               </SubComponents>

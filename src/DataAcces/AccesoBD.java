@@ -1,11 +1,14 @@
 package DataAcces;
 
+import Logica.Administrador;
 import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.administrador;
+import static Logica.Mensajes.ADD_ADMIN;
 //import static Logica.BonoSolidario.asociados;
 import static Logica.Mensajes.A_AGREGARASOCIADOS;
 import static Logica.Mensajes.ERRORBDC;
 import static Logica.Mensajes.EXISTE;
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -77,25 +80,28 @@ public class AccesoBD {
         }
     }
 
-    public boolean consultaAdmin(String usuario, String pass) {
+    public boolean consultaAdmin(String usuario, String pass, boolean tipo) {
 
         try {
             String password = DigestUtils.md5Hex(pass);
             System.out.println(password);
             resultado = resultadoConexion("SELECT A.*, P.nombre, P.cedula FROM `administrador` as A, persona as P WHERE P.idPersona = A.idPersona and A.Password='" + password + "' and A.Usuario='" + usuario + "'");
             if (resultado.next()) {
-                administrador.setIdAdmin(resultado.getInt(1));
-                administrador.setUsuario(resultado.getString(2));
-                administrador.setPass(resultado.getString(3));
-                administrador.setIdPersona(resultado.getInt(4));
-                administrador.setTipo(resultado.getInt(5));
-                administrador.setNombre(resultado.getString(6));
-                administrador.setCedula(resultado.getLong(7));
+                if (tipo) {
+                    administrador.setIdAdmin(resultado.getInt(1));
+                    administrador.setUsuario(resultado.getString(2));
+                    administrador.setPass(resultado.getString(3));
+                    administrador.setIdPersona(resultado.getInt(4));
+                    administrador.setTipo(resultado.getInt(5));
+                    administrador.setNombre(resultado.getString(7));
+                    administrador.setCedula(resultado.getLong(8));
+                }
                 desconectar();
                 return true;
             }
 
         } catch (java.sql.SQLException er) {
+            System.out.println(er);
             JOptionPane.showMessageDialog(null, "No se pudo realizar la consulta de Administrador", "Failed!", JOptionPane.ERROR_MESSAGE);
         }
         desconectar();
@@ -514,6 +520,72 @@ public class AccesoBD {
                 + "FROM inhabilitacion as i, asociado as a, persona as p "
                 + "WHERE a.idasociado = i.idasociado and '" + anioAnterior + "' = substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 ) "
                 + "and i.estado = 0 and p.idpersona = a.idasociado");
+    }
+
+    public boolean guardarAdministrador(Administrador admin) {
+        try {
+            int idPersona = 0;
+            Long cedula = (long) admin.getCedula();
+
+            /*
+            Verifico si el usuario no concuerda con otro ya utilizado.
+             */
+            resultado = resultadoConexion("Select a.idAdministrador "
+                    + "from administrador as a "
+                    + "where a.usuario = '" + admin.getUsuario() + "'");
+
+            if (resultado.next()) {
+                desconectar();
+                return false;
+            }
+
+            /*
+            Ingreso una nueva persona.
+             */
+            prepar = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, cedula) VALUES(" + null + ",?,?)");
+            prepar.setString(1, admin.getNombre());
+            prepar.setLong(2, cedula);
+            try {
+                prepar.execute();
+            } catch (SQLException ee) {
+                return false;
+            }
+
+            /*
+            Obtengo el ID de la persona para poder insertar un nuevo admin.
+             */
+            resultado = resultadoConexion("Select p.idPersona "
+                    + "from persona as p "
+                    + "where p.cedula = " + cedula);
+
+            if (resultado.next()) {
+                idPersona = resultado.getInt(1);
+            }
+
+            /*
+            Ingreso un nuevo administrador.
+             */
+            prepar = conexion.prepareStatement("INSERT INTO `administrador`(`idAdministrador`, `Usuario`, `Password`, `idPersona`, `tipo`) VALUES (" + null + ",?,?,?,?)");
+            prepar.setString(1, admin.getUsuario());
+            String password = DigestUtils.md5Hex(admin.getPass());
+            prepar.setString(2, password);
+            prepar.setInt(3, idPersona);
+            prepar.setInt(4, 0);
+            prepar.execute();
+            desconectar();
+            guardarOperacion(ADD_ADMIN);
+            return true;
+        } catch (MySQLIntegrityConstraintViolationException er) {
+            return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        desconectar();
+        return false;
+    }
+
+    public ResultSet verAdministradores() throws SQLException {
+        return resultadoConexion("SELECT p.nombre, p.cedula FROM `administrador` as a, persona as p WHERE a.idPersona = p.idPersona and a.tipo = 0");
     }
 
 }

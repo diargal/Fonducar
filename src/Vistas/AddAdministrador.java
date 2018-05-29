@@ -5,6 +5,13 @@
  */
 package Vistas;
 
+import Logica.Administrador;
+import Logica.BonoSolidario;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
 /**
  *
  * @author Diego García
@@ -30,20 +37,129 @@ public class AddAdministrador extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        JPNuevoAdmin = new javax.swing.JPanel();
+        JLNombre = new javax.swing.JLabel();
+        JLCedula = new javax.swing.JLabel();
+        JLUsuario = new javax.swing.JLabel();
+        JLPass = new javax.swing.JLabel();
+        JLConfiPass = new javax.swing.JLabel();
+        JTxFNombre = new javax.swing.JTextField();
+        JTxFCedula = new javax.swing.JTextField();
+        JTxFUsuario = new javax.swing.JTextField();
+        JTxFPass = new javax.swing.JPasswordField();
+        JTxFConfiPass = new javax.swing.JPasswordField();
+        JPSU = new javax.swing.JPanel();
+        JLSUUsuario = new javax.swing.JLabel();
+        JTxFSUUsuario = new javax.swing.JTextField();
+        JLSUPass = new javax.swing.JLabel();
+        JTxFSUPass = new javax.swing.JPasswordField();
+        JBAceptar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 558, Short.MAX_VALUE)
+        JPNuevoAdmin.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        JLNombre.setText("Nombre:");
+
+        JLCedula.setText("Cédula:");
+
+        JLUsuario.setText("Usuario:");
+
+        JLPass.setText("Password:");
+
+        JLConfiPass.setText("Confirmar password:");
+
+        javax.swing.GroupLayout JPNuevoAdminLayout = new javax.swing.GroupLayout(JPNuevoAdmin);
+        JPNuevoAdmin.setLayout(JPNuevoAdminLayout);
+        JPNuevoAdminLayout.setHorizontalGroup(
+            JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPNuevoAdminLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(JLNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(JLCedula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(JLUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(JLPass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(JLConfiPass, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JTxFNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(JTxFConfiPass, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(JTxFPass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                        .addComponent(JTxFUsuario, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(JTxFCedula, javax.swing.GroupLayout.Alignment.LEADING)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 420, Short.MAX_VALUE)
+        JPNuevoAdminLayout.setVerticalGroup(
+            JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPNuevoAdminLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(JLNombre)
+                    .addComponent(JTxFNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(JLCedula)
+                    .addComponent(JTxFCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(JLUsuario)
+                    .addComponent(JTxFUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(JLPass)
+                    .addComponent(JTxFPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JLConfiPass)
+                    .addComponent(JTxFConfiPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        JPSU.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del Super Usuario"));
+
+        JLSUUsuario.setText("Usuario:");
+
+        JLSUPass.setText("Password:");
+
+        javax.swing.GroupLayout JPSULayout = new javax.swing.GroupLayout(JPSU);
+        JPSU.setLayout(JPSULayout);
+        JPSULayout.setHorizontalGroup(
+            JPSULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPSULayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(JPSULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JLSUUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JTxFSUUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(67, 67, 67)
+                .addGroup(JPSULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JPSULayout.createSequentialGroup()
+                        .addComponent(JLSUPass, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 41, Short.MAX_VALUE))
+                    .addComponent(JTxFSUPass))
+                .addContainerGap())
+        );
+        JPSULayout.setVerticalGroup(
+            JPSULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPSULayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(JPSULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(JLSUUsuario)
+                    .addComponent(JLSUPass))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(JPSULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(JTxFSUUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JTxFSUPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        JBAceptar.setText("Aceptar");
+        JBAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBAceptarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -51,21 +167,88 @@ public class AddAdministrador extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(JPNuevoAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(JPSU, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(JBAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(JPNuevoAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(JPSU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(JBAceptar)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void JBAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAceptarActionPerformed
+        if (vacio(JPSU) || vacio(JPNuevoAdmin)) {
+            JOptionPane.showMessageDialog(this, "Debe diligenciar todo el formulario.", "Existen campos vacíos.", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            if (JTxFPass.getText().equals(JTxFConfiPass.getText())) {
+                if (BonoSolidario.accesoBD.consultaAdmin(JTxFSUUsuario.getText(), JTxFSUPass.getText(), false)) {
+                    Administrador admin = new Administrador(JTxFNombre.getText(), Long.parseLong(JTxFCedula.getText()), JTxFPass.getText(), JTxFUsuario.getText(), 0);
+                    if (BonoSolidario.accesoBD.guardarAdministrador(admin)) {
+                        JOptionPane.showMessageDialog(this, "Administrador creado con éxito.", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
+                        this.setVisible(false);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Ya el nombre de usuario existe o la cédula ya ha sido registrada para otro admin.", "Verificar", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Los datos del Super Usuario no son válidos. Verifique.", "Verificar.", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Las contraseñas del nuevo administrador no coinciden.", "Verificar.", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_JBAceptarActionPerformed
+
+    public boolean vacio(JPanel jpa) {
+        for (int i = 0; i < jpa.getComponentCount(); i++) {
+            if (jpa.getComponent(i) instanceof JTextField) {
+                JTextField jt = (JTextField) jpa.getComponent(i);
+                if (jt.getText().isEmpty()) {
+                    return true;
+                }
+            } else {
+                if (jpa.getComponent(i) instanceof JPasswordField) {
+                    JPasswordField jp = (JPasswordField) jpa.getComponent(i);
+                    if (jp.getText().isEmpty()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton JBAceptar;
+    private javax.swing.JLabel JLCedula;
+    private javax.swing.JLabel JLConfiPass;
+    private javax.swing.JLabel JLNombre;
+    private javax.swing.JLabel JLPass;
+    private javax.swing.JLabel JLSUPass;
+    private javax.swing.JLabel JLSUUsuario;
+    private javax.swing.JLabel JLUsuario;
+    private javax.swing.JPanel JPNuevoAdmin;
+    private javax.swing.JPanel JPSU;
+    private javax.swing.JTextField JTxFCedula;
+    private javax.swing.JPasswordField JTxFConfiPass;
+    private javax.swing.JTextField JTxFNombre;
+    private javax.swing.JPasswordField JTxFPass;
+    private javax.swing.JPasswordField JTxFSUPass;
+    private javax.swing.JTextField JTxFSUUsuario;
+    private javax.swing.JTextField JTxFUsuario;
     // End of variables declaration//GEN-END:variables
 }

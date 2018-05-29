@@ -489,6 +489,45 @@ public class ControlHistorial {
         historial.setVisible(true);
     }
 
+    public void verAdministradores(ResultSet resul) {
+        historial = new Historial(null, true);
+        aspectosGenerales("Administradores activos", false);
+
+        DefaultTableModel tabla = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        DefaultTableModel modelo2 = new DefaultTableModel();
+        historial.getJTHistorial().setModel(modelo2);
+
+        tabla.addColumn("Nombre administrador");
+        tabla.addColumn("Cédula administrador");
+        Object[] object = new Object[2];
+        array = new ArrayList<>();
+        array.add("Nombre administrador");
+        array.add("Cédula administrador");
+        llenarComboBox();
+
+        try {
+            while (resul.next()) {
+                object[0] = resul.getString(1);
+                object[1] = resul.getLong(2);
+                tabla.addRow(object);
+            }
+            historial.getJTHistorial().setModel(tabla);
+            historial.getJBSubir().setText("Descargar archivo");
+            historial.getJBSubir().setEnabled(true);
+            accesoBD.desconectar();
+        } catch (SQLException ex) {
+            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        historial.setVisible(true);
+    }
+
     /*
     Modifica aspectos generales de la vista en el historial
      */

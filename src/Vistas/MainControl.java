@@ -76,10 +76,24 @@ public class MainControl extends javax.swing.JFrame {
         numeroSorteos = new NumSorteos(this, true);
         sorteo = new Sorteo();
         historial = new Historial(this, true);
-        JLActivos.setText("Número de participantes para los sorteos: " + accesoBD.numeroAsociadosActivos());
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         cerrarVentana();
+        //verActivos();
+        JLActivos.setText("Número de participantes para los sorteos: " + accesoBD.numeroAsociadosActivos());
 //        verificarInhabilitados();
+    }
+
+    public void verActivos() {
+        Thread hilo = new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    JLActivos.setText("Número de participantes para los sorteos: " + accesoBD.numeroAsociadosActivos());
+                }
+            }
+        };
+
+        hilo.start();
     }
 
     public void verificarInhabilitados() {
@@ -146,7 +160,7 @@ public class MainControl extends javax.swing.JFrame {
         JLActivos = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        JMExAsociados = new javax.swing.JMenu();
         JMIInhabilitadosActual = new javax.swing.JMenuItem();
         JMIHabilitadosActual = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -160,9 +174,10 @@ public class MainControl extends javax.swing.JFrame {
         JMAAsociados = new javax.swing.JMenuItem();
         JMIModificar = new javax.swing.JMenuItem();
         JMSuper = new javax.swing.JMenu();
-        jMenu6 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        JMGestionAdmins = new javax.swing.JMenu();
+        JMIDeleteAdmin = new javax.swing.JMenuItem();
+        JMIAddAdmin = new javax.swing.JMenuItem();
+        JMIVerAdmins = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -253,7 +268,7 @@ public class MainControl extends javax.swing.JFrame {
 
         jMenu1.setText("Informes");
 
-        jMenu3.setText("Ex-Asociados");
+        JMExAsociados.setText("Ex-Asociados");
 
         JMIInhabilitadosActual.setText("Inhabilitados para los sorteos de este año");
         JMIInhabilitadosActual.addActionListener(new java.awt.event.ActionListener() {
@@ -261,7 +276,7 @@ public class MainControl extends javax.swing.JFrame {
                 JMIInhabilitadosActualActionPerformed(evt);
             }
         });
-        jMenu3.add(JMIInhabilitadosActual);
+        JMExAsociados.add(JMIInhabilitadosActual);
 
         JMIHabilitadosActual.setText("Habilitados para los sorteos de este año");
         JMIHabilitadosActual.addActionListener(new java.awt.event.ActionListener() {
@@ -269,7 +284,7 @@ public class MainControl extends javax.swing.JFrame {
                 JMIHabilitadosActualActionPerformed(evt);
             }
         });
-        jMenu3.add(JMIHabilitadosActual);
+        JMExAsociados.add(JMIHabilitadosActual);
 
         jMenuItem4.setText("Historial ex-asociados CON participación en sorteos");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
@@ -277,7 +292,7 @@ public class MainControl extends javax.swing.JFrame {
                 jMenuItem4ActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem4);
+        JMExAsociados.add(jMenuItem4);
 
         jMenuItem5.setText("Historial de los ex-asociados SIN participaron en sorteos");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
@@ -285,9 +300,9 @@ public class MainControl extends javax.swing.JFrame {
                 jMenuItem5ActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem5);
+        JMExAsociados.add(jMenuItem5);
 
-        jMenu1.add(jMenu3);
+        jMenu1.add(JMExAsociados);
 
         JMIHAsociados.setText("Historial de números asignados a asociados");
         JMIHAsociados.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -371,25 +386,34 @@ public class MainControl extends javax.swing.JFrame {
 
         JMSuper.setText("Super Usuario");
 
-        jMenu6.setText("Gestionar administradores");
+        JMGestionAdmins.setText("Gestionar administradores");
 
-        jMenuItem2.setText("Eliminar administrador");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        JMIDeleteAdmin.setText("Eliminar administrador");
+        JMIDeleteAdmin.setEnabled(false);
+        JMIDeleteAdmin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                JMIDeleteAdminActionPerformed(evt);
             }
         });
-        jMenu6.add(jMenuItem2);
+        JMGestionAdmins.add(JMIDeleteAdmin);
 
-        jMenuItem3.setText("Agregar administrador");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        JMIAddAdmin.setText("Agregar administrador");
+        JMIAddAdmin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                JMIAddAdminActionPerformed(evt);
             }
         });
-        jMenu6.add(jMenuItem3);
+        JMGestionAdmins.add(JMIAddAdmin);
 
-        JMSuper.add(jMenu6);
+        JMIVerAdmins.setText("Ver administradores");
+        JMIVerAdmins.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JMIVerAdminsActionPerformed(evt);
+            }
+        });
+        JMGestionAdmins.add(JMIVerAdmins);
+
+        JMSuper.add(JMGestionAdmins);
 
         jMenuBar1.add(JMSuper);
 
@@ -583,15 +607,23 @@ public class MainControl extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_JMIHabilitadosActualActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void JMIDeleteAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIDeleteAdminActionPerformed
         agregarAdmin.setTitle("Formulario para eliminar un administrador");
         agregarAdmin.setVisible(true);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_JMIDeleteAdminActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void JMIAddAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIAddAdminActionPerformed
         agregarAdmin.setTitle("Formulario para agregar un administrador");
         agregarAdmin.setVisible(true);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_JMIAddAdminActionPerformed
+
+    private void JMIVerAdminsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIVerAdminsActionPerformed
+        try {
+            control.verAdministradores(accesoBD.verAdministradores());
+        } catch (SQLException ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_JMIVerAdminsActionPerformed
     public void animacion(int numero) {
 
         String ganador = sorteo.ganador(numero, premio, tipoPremio);
@@ -677,26 +709,27 @@ public class MainControl extends javax.swing.JFrame {
     private javax.swing.JLabel JLCuanto;
     private javax.swing.JLabel JLGanador1;
     private javax.swing.JMenuItem JMAAsociados;
+    private javax.swing.JMenu JMExAsociados;
+    private javax.swing.JMenu JMGestionAdmins;
     private javax.swing.JMenuItem JMIActuales;
+    private javax.swing.JMenuItem JMIAddAdmin;
     private javax.swing.JMenuItem JMIAsignarAso;
+    private javax.swing.JMenuItem JMIDeleteAdmin;
     private javax.swing.JMenuItem JMIHAsociados;
     private javax.swing.JMenuItem JMIHModificaciones;
     private javax.swing.JMenuItem JMIHSorteos;
     private javax.swing.JMenuItem JMIHabilitadosActual;
     private javax.swing.JMenuItem JMIInhabilitadosActual;
     private javax.swing.JMenuItem JMIModificar;
+    private javax.swing.JMenuItem JMIVerAdmins;
     private javax.swing.JMenu JMSuper;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel4;
