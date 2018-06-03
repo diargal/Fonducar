@@ -7,6 +7,7 @@ package Vistas;
 
 import Logica.Administrador;
 import Logica.BonoSolidario;
+import static Logica.BonoSolidario.administrador;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -18,14 +19,22 @@ import javax.swing.JTextField;
  */
 public class AddAdministrador extends javax.swing.JDialog {
 
-    /**
-     * Creates new form AddAdministrador
-     */
+    public boolean tipoOperacion;
+
     public AddAdministrador(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setResizable(false);
         setLocationRelativeTo(this);
+        tipoOperacion = false;
+    }
+
+    public boolean isTipoOperacion() {
+        return tipoOperacion;
+    }
+
+    public void setTipoOperacion(boolean tipoOperacion) {
+        this.tipoOperacion = tipoOperacion;
     }
 
     /**
@@ -196,13 +205,19 @@ public class AddAdministrador extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Debe diligenciar todo el formulario.", "Existen campos vacíos.", JOptionPane.INFORMATION_MESSAGE);
         } else {
             if (JTxFPass.getText().equals(JTxFConfiPass.getText())) {
-                if (BonoSolidario.accesoBD.consultaAdmin(JTxFSUUsuario.getText(), JTxFSUPass.getText(), false)) {
+                //if (BonoSolidario.accesoBD.consultaAdmin(JTxFSUUsuario.getText(), JTxFSUPass.getText(), false)) {
+                if (administrador.getTipo() == 1 && administrador.getUsuario().equals(JTxFSUUsuario.getText()) && administrador.getPass().equals(JTxFSUPass.getText())) {
+
                     Administrador admin = new Administrador(JTxFNombre.getText(), Long.parseLong(JTxFCedula.getText()), JTxFPass.getText(), JTxFUsuario.getText(), 0);
-                    if (BonoSolidario.accesoBD.guardarAdministrador(admin)) {
-                        JOptionPane.showMessageDialog(this, "Administrador creado con éxito.", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
-                        this.setVisible(false);
+                    if (tipoOperacion) {
+                        if (BonoSolidario.accesoBD.guardarAdministrador(admin)) {
+                            JOptionPane.showMessageDialog(this, "Administrador creado con éxito.", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
+                            this.setVisible(false);
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Ya el nombre de usuario existe o la cédula ya ha sido registrada para otro admin.", "Verificar", JOptionPane.ERROR_MESSAGE);
+                        }
                     } else {
-                        JOptionPane.showMessageDialog(this, "Ya el nombre de usuario existe o la cédula ya ha sido registrada para otro admin.", "Verificar", JOptionPane.ERROR_MESSAGE);
+//aquí llamaré al métod para eliminar 
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "Los datos del Super Usuario no son válidos. Verifique.", "Verificar.", JOptionPane.ERROR_MESSAGE);

@@ -40,7 +40,7 @@ public class Mensajes {
     public static final String MENSAJE = "Recuerde que el formato del archivo para cargar nuevos asociados es: NOMBRE, CEDULA y NUMERO respectivamente.";
     public static final String REXITOSO = "Todos los números fueron asignados a todos los empleados habilitados.";
     public static final String RERROR = "Ocurrió un error durante el proceso. Inténtelo nuevamente.";
-    public static final String NOHAY = "No hay números asignados a los asociados para este año. El sistema automaticamente los generará.";
+    public static final String NOHAY = "No hay números asignados a los asociados para este año. Vaya a operaciones > asignar números.";
     public static final String EXISTE = "Ya existe una persona registrada con la cédula ";
     public static final String MSG = "Se realizó el cambio efectivamente.";
     public static final String YGENERADOS = "Ya este año han sido generados los números.";

@@ -30,6 +30,7 @@ import Logica.Sorteo;
 import Vistas.Controlador.ControlArchivos;
 import Vistas.Controlador.ControlHistorial;
 import Vistas.Controlador.hiloCarga;
+import java.awt.Image;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,6 +38,8 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -56,31 +59,49 @@ public class MainControl extends javax.swing.JFrame {
     private File archivo;
     private static Historial historial;
     private NumSorteos numeroSorteos;
-    private ValorSorteo valorSorteo;
+    // private ValorSorteo valorSorteo;
     private ControlHistorial control;
     private ControlArchivos cntrlArchivos;
     private AddAdministrador agregarAdmin;
+    private ImageIcon imagen;
+    private Icon icono;
     // public hiloCarga hilo;
 
     public MainControl() {
         initComponents();
         this.setResizable(true);
         this.setLocationRelativeTo(this);
+//        imagen = new ImageIcon("src/Imagenes/Logo.png");
+//        icono = new ImageIcon(imagen.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_DEFAULT));
+//        jLabel1.setIcon(icono);
+        this.repaint();
+//         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        JCBPruebaSorteos.setSelected(false);
         agregarAdmin = new AddAdministrador(this, true);
         sorteosRealizados = 0;
         premio = 0;
         tipoPremio = 0;
         control = new ControlHistorial();
         cntrlArchivos = new ControlArchivos();
-        valorSorteo = new ValorSorteo(this, true);
+        // valorSorteo = new ValorSorteo(this, true);
         numeroSorteos = new NumSorteos(this, true);
         sorteo = new Sorteo();
         historial = new Historial(this, true);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        prepararAsociacion();
         cerrarVentana();
         //verActivos();
         JLActivos.setText("Número de participantes para los sorteos: " + accesoBD.numeroAsociadosActivos());
 //        verificarInhabilitados();
+    }
+
+    public void prepararAsociacion() {
+        if (!accesoBD.numerosAsignados()) {
+            if (accesoBD.prepararAsociacion()) {
+//             //   sorteo.asociarNumeros();
+//                JOptionPane.showMessageDialog(jMenu1, "Se cambió el estado de los ex-asociados con participación");
+            }
+        }
     }
 
     public void verActivos() {
@@ -96,22 +117,21 @@ public class MainControl extends javax.swing.JFrame {
         hilo.start();
     }
 
-    public void verificarInhabilitados() {
-        if (accesoBD.numerosAsignados()) {
-
-            try {
-                ResultSet resultado = accesoBD.verificarsihayInhabilitados();
-                ResultSet resl = resultado;
-                //if (resultado.next()) {
-                JOptionPane.showMessageDialog(jMenu1, "En la siguiente tabla se mostrarán los ex-asociados que se les debe definir su estado.");
-                control.inhabilitadosAnioPasado(resl);
-                //  }
-            } catch (SQLException ex) {
-                Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
+//    public void verificarInhabilitados() {
+//        if (accesoBD.numerosAsignados()) {
+//
+//            try {
+//                ResultSet resultado = accesoBD.verificarsihayInhabilitados();
+//                ResultSet resl = resultado;
+//                //if (resultado.next()) {
+//                JOptionPane.showMessageDialog(jMenu1, "En la siguiente tabla se mostrarán los ex-asociados que se les debe definir su estado.");
+//                control.inhabilitadosAnioPasado(resl);
+//                //  }
+//            } catch (SQLException ex) {
+//                Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//    }
     public void cerrarVentana() {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -173,11 +193,13 @@ public class MainControl extends javax.swing.JFrame {
         JMIAsignarAso = new javax.swing.JMenuItem();
         JMAAsociados = new javax.swing.JMenuItem();
         JMIModificar = new javax.swing.JMenuItem();
+        JMIModificarDatos = new javax.swing.JMenuItem();
         JMSuper = new javax.swing.JMenu();
         JMGestionAdmins = new javax.swing.JMenu();
         JMIDeleteAdmin = new javax.swing.JMenuItem();
         JMIAddAdmin = new javax.swing.JMenuItem();
         JMIVerAdmins = new javax.swing.JMenuItem();
+        JCBPruebaSorteos = new javax.swing.JCheckBoxMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -226,15 +248,15 @@ public class MainControl extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(JLBalota1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                         .addComponent(JLBalota2, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                         .addComponent(JLBalota3, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                         .addComponent(JLBalota4, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(JBSorteo1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -265,6 +287,7 @@ public class MainControl extends javax.swing.JFrame {
         JLGanador1.setText("GANADOR");
 
         JLActivos.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        JLActivos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jMenu1.setText("Informes");
 
@@ -382,6 +405,10 @@ public class MainControl extends javax.swing.JFrame {
         });
         jMenu2.add(JMIModificar);
 
+        JMIModificarDatos.setText("Modificar datos asociado");
+        JMIModificarDatos.setEnabled(false);
+        jMenu2.add(JMIModificarDatos);
+
         jMenuBar1.add(jMenu2);
 
         JMSuper.setText("Super Usuario");
@@ -389,7 +416,6 @@ public class MainControl extends javax.swing.JFrame {
         JMGestionAdmins.setText("Gestionar administradores");
 
         JMIDeleteAdmin.setText("Eliminar administrador");
-        JMIDeleteAdmin.setEnabled(false);
         JMIDeleteAdmin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIDeleteAdminActionPerformed(evt);
@@ -415,6 +441,15 @@ public class MainControl extends javax.swing.JFrame {
 
         JMSuper.add(JMGestionAdmins);
 
+        JCBPruebaSorteos.setSelected(true);
+        JCBPruebaSorteos.setText("Pruebas de sorteos");
+        JCBPruebaSorteos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JCBPruebaSorteosActionPerformed(evt);
+            }
+        });
+        JMSuper.add(JCBPruebaSorteos);
+
         jMenuBar1.add(JMSuper);
 
         setJMenuBar(jMenuBar1);
@@ -424,28 +459,28 @@ public class MainControl extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(JLActivos, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(JLCuanto, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(JLGanador1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(20, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(JLGanador1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JLCuanto, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLActivos, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(JLCuanto, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
-                    .addComponent(JLActivos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(JLGanador1, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
-                .addGap(32, 32, 32))
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(JLGanador1)
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         pack();
@@ -483,15 +518,15 @@ public class MainControl extends javax.swing.JFrame {
 
     private void JBSorteoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSorteoActionPerformed
 
-        if (accesoBD.numerosAsignados()) {
+        if (!accesoBD.numerosAsignados()) {
             JOptionPane.showMessageDialog(this, NOHAY);
-            sorteo.asociarNumeros();
-            try {
-                control.numerosActuales(accesoBD.numerosActuales());
-                accesoBD.guardarOperacion(A_NUMEROS);
-            } catch (SQLException ex) {
-                Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            sorteo.asociarNumeros();
+//            try {
+//                control.numerosActuales(accesoBD.numerosActuales());
+//                accesoBD.guardarOperacion(A_NUMEROS);
+//            } catch (SQLException ex) {
+//                Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         } else {
             if (numerodeSorteos == 0) {
                 numeroSorteos.setVisible(true);
@@ -503,7 +538,7 @@ public class MainControl extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, SORTEOS_FINAL, MSG_SORTEO, JOptionPane.ERROR_MESSAGE);
                 } else {
                     double[] datosSorteo;
-
+                    ValorSorteo valorSorteo = new ValorSorteo(this, true);
                     valorSorteo.visible(sorteosRealizados + 1);
                     datosSorteo = valorSorteo.valoresSorteo();
 
@@ -523,10 +558,15 @@ public class MainControl extends javax.swing.JFrame {
     }//GEN-LAST:event_JMIModificarActionPerformed
 
     private void JMIActualesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIActualesActionPerformed
-        try {
-            control.numerosActuales(accesoBD.numerosActuales());
-        } catch (SQLException ex) {
-            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+
+        if (!accesoBD.numerosAsignados()) {
+            JOptionPane.showMessageDialog(this, NOHAY);
+        } else {
+            try {
+                control.numerosActuales(accesoBD.numerosActuales());
+            } catch (SQLException ex) {
+                Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_JMIActualesActionPerformed
 
@@ -608,11 +648,13 @@ public class MainControl extends javax.swing.JFrame {
     }//GEN-LAST:event_JMIHabilitadosActualActionPerformed
 
     private void JMIDeleteAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIDeleteAdminActionPerformed
+        agregarAdmin.setTipoOperacion(false);
         agregarAdmin.setTitle("Formulario para eliminar un administrador");
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMIDeleteAdminActionPerformed
 
     private void JMIAddAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIAddAdminActionPerformed
+        agregarAdmin.setTipoOperacion(true);
         agregarAdmin.setTitle("Formulario para agregar un administrador");
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMIAddAdminActionPerformed
@@ -624,15 +666,31 @@ public class MainControl extends javax.swing.JFrame {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_JMIVerAdminsActionPerformed
-    public void animacion(int numero) {
 
-        String ganador = sorteo.ganador(numero, premio, tipoPremio);
+    private void JCBPruebaSorteosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JCBPruebaSorteosActionPerformed
+        if (!JCBPruebaSorteos.isSelected()) {
+            numerodeSorteos = 0;
+            sorteosRealizados = 0;
+            JLCuanto.setText("");
+            JLBalota1.setIcon(seleccionNumero(0));
+            JLBalota2.setIcon(seleccionNumero(0));
+            JLBalota3.setIcon(seleccionNumero(0));
+            JLBalota4.setIcon(seleccionNumero(0));
+            JLGanador1.setText("");
+        }
+    }//GEN-LAST:event_JCBPruebaSorteosActionPerformed
+    public void animacion(int numero) {
+        String ganador;
+        if (JCBPruebaSorteos.isSelected()) {
+            ganador = sorteo.ganador(numero, premio, tipoPremio, true);
+        } else {
+            ganador = sorteo.ganador(numero, premio, tipoPremio, false);
+        }
         Locale locale = new Locale("es", "CO");
         NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
 
         if (ganador.equals("anterior") || ganador.equals("")) {
             animacion(sorteo.generarSorteo());
-
         } else {
 
             int mil = numero / 1000;
@@ -640,31 +698,36 @@ public class MainControl extends javax.swing.JFrame {
             int dec = ((numero % 1000) % 100) / 10;
             int uni = numero % 10;
 
-            if (numero < 10) {
-                JLBalota1.setIcon(CERO);
-                JLBalota2.setIcon(CERO);
-                JLBalota3.setIcon(CERO);
-                JLBalota4.setIcon(seleccionNumero(numero));
-            } else {
-                if (numero < 100) {
-                    JLBalota1.setIcon(CERO);
-                    JLBalota2.setIcon(CERO);
-                    JLBalota3.setIcon(seleccionNumero(dec));
-                    JLBalota4.setIcon(seleccionNumero(uni));
-                } else {
-                    if (numero < 1000) {
-                        JLBalota1.setIcon(CERO);
-                        JLBalota2.setIcon(seleccionNumero(cent));
-                        JLBalota3.setIcon(seleccionNumero(dec));
-                        JLBalota4.setIcon(seleccionNumero(uni));
-                    } else {
-                        JLBalota1.setIcon(seleccionNumero(mil));
-                        JLBalota2.setIcon(seleccionNumero(cent));
-                        JLBalota3.setIcon(seleccionNumero(dec));
-                        JLBalota4.setIcon(seleccionNumero(uni));
-                    }
-                }
-            }
+            JLBalota1.setIcon(seleccionNumero(mil));
+            JLBalota2.setIcon(seleccionNumero(cent));
+            JLBalota3.setIcon(seleccionNumero(dec));
+            JLBalota4.setIcon(seleccionNumero(uni));
+
+//            if (numero < 10) {
+//                JLBalota1.setIcon(seleccionNumero(0));
+//                JLBalota2.setIcon(seleccionNumero(0));
+//                JLBalota3.setIcon(seleccionNumero(0));
+//                JLBalota4.setIcon(seleccionNumero(numero));
+//            } else {
+//                if (numero < 100) {
+//                    JLBalota1.setIcon(seleccionNumero(0));
+//                    JLBalota2.setIcon(seleccionNumero(0));
+//                    JLBalota3.setIcon(seleccionNumero(dec));
+//                    JLBalota4.setIcon(seleccionNumero(uni));
+//                } else {
+//                    if (numero < 1000) {
+//                        JLBalota1.setIcon(seleccionNumero(0));
+//                        JLBalota2.setIcon(seleccionNumero(cent));
+//                        JLBalota3.setIcon(seleccionNumero(dec));
+//                        JLBalota4.setIcon(seleccionNumero(uni));
+//                    } else {
+//                        JLBalota1.setIcon(seleccionNumero(mil));
+//                        JLBalota2.setIcon(seleccionNumero(cent));
+//                        JLBalota3.setIcon(seleccionNumero(dec));
+//                        JLBalota4.setIcon(seleccionNumero(uni));
+//                    }
+//                }
+//            }
             JLGanador1.setText("Felicitaciones " + ganador + ", usted ha ganado " + nf.format(premio) + " Pesos");
             sorteosRealizados++;
             JLCuanto.setText("Sorteo " + sorteosRealizados + " de " + numerodeSorteos);
@@ -673,34 +736,39 @@ public class MainControl extends javax.swing.JFrame {
     }
 
     public ImageIcon seleccionNumero(int numero) {
+        //imagen = new ImageIcon("src/Imagenes/Logo.png");
+//        icono = new ImageIcon(imagen.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_DEFAULT));
+//        jLabel1.setIcon(icono);
         switch (numero) {
             case 0:
-                return CERO;
+                return new ImageIcon(CERO.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 1:
-                return UNO;
+                return new ImageIcon(UNO.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 2:
-                return DOS;
+                return new ImageIcon(DOS.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 3:
-                return TRES;
+                return new ImageIcon(TRES.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 4:
-                return CUATRO;
+                return new ImageIcon(CUATRO.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 5:
-                return CINCO;
+                return new ImageIcon(CINCO.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 6:
-                return SEIS;
+                return new ImageIcon(SEIS.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 7:
-                return SIETE;
+                return new ImageIcon(SIETE.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 8:
-                return OCHO;
+                return new ImageIcon(OCHO.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 9:
-                return NUEVE;
+                return new ImageIcon(NUEVE.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             default:
-                return CERO;
+                return new ImageIcon(CERO.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
         }
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBSorteo1;
+    private javax.swing.JCheckBoxMenuItem JCBPruebaSorteos;
     private javax.swing.JLabel JLActivos;
     private javax.swing.JLabel JLBalota1;
     private javax.swing.JLabel JLBalota2;
@@ -721,6 +789,7 @@ public class MainControl extends javax.swing.JFrame {
     private javax.swing.JMenuItem JMIHabilitadosActual;
     private javax.swing.JMenuItem JMIInhabilitadosActual;
     private javax.swing.JMenuItem JMIModificar;
+    private javax.swing.JMenuItem JMIModificarDatos;
     private javax.swing.JMenuItem JMIVerAdmins;
     private javax.swing.JMenu JMSuper;
     private javax.swing.JMenu jMenu1;

@@ -158,7 +158,14 @@ public class ControlHistorial {
             while (resul.next()) {
                 object[0] = resul.getString(1);
                 object[1] = resul.getLong(2);
-                object[2] = resul.getInt(3);
+//                object[2] = resul.getInt(3);
+                if ((resul.getInt(3) < 1000) && (resul.getInt(3) >= 100)) {
+                    object[2] = "0" + resul.getInt(3);
+                } else if ((resul.getInt(3) < 100) && (resul.getInt(3) >= 10)) {
+                    object[2] = "00" + resul.getInt(3);
+                } else if (resul.getInt(3) < 10) {
+                    object[2] = "000" + resul.getInt(3);
+                }
                 object[3] = resul.getString(4);
                 tabla.addRow(object);
             }
@@ -194,7 +201,7 @@ public class ControlHistorial {
 
         tabla.addColumn("Nombre Ganador");
         tabla.addColumn("Cédula Ganador");
-        tabla.addColumn("Hora y Fecha Sorteo");
+        tabla.addColumn("Fecha Sorteo");
         tabla.addColumn("Número Ganador");
         tabla.addColumn("Premio (Pesos)");
         tabla.addColumn("Tipo de Sorteo");
@@ -202,7 +209,7 @@ public class ControlHistorial {
         array = new ArrayList<>();
         array.add("Nombre Ganador");
         array.add("Cédula Ganador");
-        array.add("Hora y Fecha Sorteo");
+        array.add("Fecha sorteo (DD/MM/AAAA)");
         array.add("Número Ganador");
         array.add("Premio (Pesos)");
         array.add("Tipo de Sorteo");
@@ -213,19 +220,23 @@ public class ControlHistorial {
                 object[0] = resul.getString(1);
                 object[1] = resul.getLong(2);
                 object[2] = resul.getString(3);
-                if ((resul.getInt(4) < 100) && (resul.getInt(4) >= 10)) {
+                if (resul.getInt(4) < 1000 && resul.getInt(4) >= 100) {
                     object[3] = "0" + resul.getInt(4);
                 } else {
-                    if (resul.getInt(4) < 10) {
+                    if ((resul.getInt(4) < 100) && (resul.getInt(4) >= 10)) {
                         object[3] = "00" + resul.getInt(4);
+                    } else {
+                        if (resul.getInt(4) < 10) {
+                            object[3] = "000" + resul.getInt(4);
+                        }
                     }
-                }
 
-                object[4] = nf.format(resul.getLong(5));
-                if (resul.getInt(6) == 0) {
-                    object[5] = "Premio menor";
-                } else if (resul.getInt(6) == 1) {
-                    object[5] = "Premio mayor";
+                    object[4] = nf.format(resul.getLong(5));
+                    if (resul.getInt(6) == 0) {
+                        object[5] = "Premio menor";
+                    } else if (resul.getInt(6) == 1) {
+                        object[5] = "Premio mayor";
+                    }
                 }
                 tabla.addRow(object);
             }
@@ -368,24 +379,28 @@ public class ControlHistorial {
         tabla.addColumn("Nombre");
         tabla.addColumn("Cédula");
         tabla.addColumn("Número");
-        Object[] object = new Object[3];
+        tabla.addColumn("Estado Asociado");
+        Object[] object = new Object[4];
         array = new ArrayList<>();
         array.add("Nombre");
         array.add("Cédula");
         array.add("Número");
+        array.add("Estado Asociado");
         llenarComboBox();
 
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
                 object[1] = resul.getInt(2);
-                if ((resul.getInt(3) < 100) && (resul.getInt(3) >= 10)) {
+                if ((resul.getInt(3) < 1000) && (resul.getInt(3) >= 100)) {
                     object[2] = "0" + resul.getInt(3);
-                } else {
-                    if (resul.getInt(3) < 10) {
-                        object[2] = "00" + resul.getInt(3);
-                    }
+                } else if ((resul.getInt(3) < 100) && (resul.getInt(3) >= 10)) {
+                    object[2] = "00" + resul.getInt(3);
+                } else if (resul.getInt(3) < 10) {
+                    object[2] = "000" + resul.getInt(3);
+
                 }
+                object[3] = resul.getString(4);
                 tabla.addRow(object);
             }
             historial.getJTHistorial().setModel(tabla);
@@ -397,7 +412,8 @@ public class ControlHistorial {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        historial.setVisible(true);
+        historial.setVisible(
+                true);
     }
 
     public void historialInhabilitadosActuales(ResultSet resul, boolean tipo) {
@@ -443,8 +459,10 @@ public class ControlHistorial {
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
             accesoBD.desconectar();
+
         } catch (SQLException ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Historial.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         historial.setVisible(true);
@@ -482,8 +500,10 @@ public class ControlHistorial {
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
             accesoBD.desconectar();
+
         } catch (SQLException ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Historial.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         historial.setVisible(true);
@@ -521,8 +541,10 @@ public class ControlHistorial {
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
             accesoBD.desconectar();
+
         } catch (SQLException ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Historial.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         historial.setVisible(true);

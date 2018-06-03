@@ -7,9 +7,15 @@ package Vistas;
 
 import static Logica.Mensajes.C_VALIDA;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import static java.awt.image.ImageObserver.WIDTH;
+import java.text.NumberFormat;
+import java.util.Locale;
 import javax.swing.JOptionPane;
+//import javax.swing.table.TableRowSorter;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 
 /**
  *
@@ -20,7 +26,12 @@ public class ValorSorteo extends javax.swing.JDialog {
     /**
      * Creates new form ValorSorteo
      */
-    private double valor, tipo;
+    private double valor, tipo, valorSorteo, valorConfirmacion;
+    NumberFormat dispFormat = NumberFormat.getCurrencyInstance();
+    NumberFormat editFormat = NumberFormat.getNumberInstance(Locale.ENGLISH);
+    NumberFormatter dnFormat = new NumberFormatter(dispFormat);
+    NumberFormatter enFormat = new NumberFormatter(editFormat);
+    DefaultFormatterFactory currFactory = new DefaultFormatterFactory(dnFormat, dnFormat, enFormat);
 
     public ValorSorteo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -28,6 +39,11 @@ public class ValorSorteo extends javax.swing.JDialog {
         setResizable(false);
         setLocationRelativeTo(this);
         valor = tipo = 0;
+        editFormat.setGroupingUsed(false);
+        enFormat.setAllowsInvalid(true);
+        JTxFValor.setFormatterFactory(currFactory);
+        JTxFConfirmacion1.setFormatterFactory(currFactory);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
     /**
@@ -42,13 +58,11 @@ public class ValorSorteo extends javax.swing.JDialog {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         JLValor = new javax.swing.JLabel();
-        JTxFValor = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         JRBMayor = new javax.swing.JRadioButton();
         JRBMenor = new javax.swing.JRadioButton();
-        JTxFConfirmacion = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         JLConfirmacion = new javax.swing.JLabel();
+        JTxFValor = new javax.swing.JFormattedTextField();
+        JTxFConfirmacion1 = new javax.swing.JFormattedTextField();
         JBAceptar = new javax.swing.JButton();
         JBCancelar = new javax.swing.JButton();
         JLValores = new javax.swing.JLabel();
@@ -60,20 +74,6 @@ public class ValorSorteo extends javax.swing.JDialog {
 
         JLValor.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         JLValor.setText("Valor del sorteo");
-
-        JTxFValor.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        JTxFValor.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        JTxFValor.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                JTxFValorKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTxFValorKeyTyped(evt);
-            }
-        });
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel2.setText("$");
 
         buttonGroup1.add(JRBMayor);
         JRBMayor.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
@@ -98,22 +98,33 @@ public class ValorSorteo extends javax.swing.JDialog {
             }
         });
 
-        JTxFConfirmacion.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        JTxFConfirmacion.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        JTxFConfirmacion.addKeyListener(new java.awt.event.KeyAdapter() {
+        JLConfirmacion.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        JLConfirmacion.setText("Confirmación del valor");
+
+        JTxFValor.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        JTxFValor.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                JTxFValorFocusLost(evt);
+            }
+        });
+        JTxFValor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                JTxFConfirmacionKeyPressed(evt);
+                JTxFValorKeyPressed(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTxFConfirmacionKeyTyped(evt);
+                JTxFValorKeyTyped(evt);
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel3.setText("$");
-
-        JLConfirmacion.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        JLConfirmacion.setText("Confirmación del valor");
+        JTxFConfirmacion1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        JTxFConfirmacion1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JTxFConfirmacion1KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                JTxFConfirmacion1KeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -122,26 +133,21 @@ public class ValorSorteo extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(134, 134, 134)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(JTxFConfirmacion)
-                            .addComponent(JTxFValor, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)))
+                        .addGap(47, 47, 47)
+                        .addComponent(JRBMenor, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(JRBMayor, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(JLConfirmacion, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(JLValor, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addComponent(JRBMenor, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                .addComponent(JRBMayor, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
+                            .addComponent(JLValor, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(JLConfirmacion, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(175, 175, 175)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(JTxFConfirmacion1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(JTxFValor, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,20 +155,16 @@ public class ValorSorteo extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(JLValor, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JTxFValor, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addComponent(JLConfirmacion, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(JTxFValor)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JTxFConfirmacion, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(JLConfirmacion, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(JTxFConfirmacion1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JRBMenor)
                     .addComponent(JRBMayor))
-                .addGap(30, 30, 30))
+                .addGap(42, 42, 42))
         );
 
         JBAceptar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -187,23 +189,23 @@ public class ValorSorteo extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(31, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(JLValores, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
                             .addComponent(JBCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(JBAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(29, 29, 29))
+                            .addComponent(JBAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(JLValores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(JLValores, javax.swing.GroupLayout.DEFAULT_SIZE, 17, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -222,19 +224,24 @@ public class ValorSorteo extends javax.swing.JDialog {
 
     private void JBAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAceptarActionPerformed
         boolean error = true;
+
         try {
-            if (Double.parseDouble(JTxFValor.getText()) <= 0 || JTxFValor.getText().isEmpty() || JTxFConfirmacion.getText().isEmpty() || Double.parseDouble(JTxFConfirmacion.getText()) <= 0) {
+            if (valorSorteo <= 0 || JTxFValor.getText().isEmpty() || JTxFConfirmacion1.getText().isEmpty() || valorConfirmacion <= 0) {
                 JOptionPane.showMessageDialog(this, C_VALIDA, "Monto de premio no válido", JOptionPane.ERROR_MESSAGE);
             } else {
-                if (!JTxFValor.getText().equals(JTxFConfirmacion.getText())) {
+                if (valorSorteo != valorConfirmacion) {
                     JOptionPane.showMessageDialog(this, "Las cantidades ingresadas no concuerdan.", "Cantidades deiferentes", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    valor = Double.parseDouble(JTxFValor.getText());
+                    valor = valorSorteo;
                     if (JRBMenor.isSelected()) {
                         tipo = 0;
+                        JTxFValor.setText("");
+                        JTxFConfirmacion1.setText("");
                         this.setVisible(false);
                     } else if (JRBMayor.isSelected()) {
                         tipo = 1;
+                        JTxFValor.setText("");
+                        JTxFConfirmacion1.setText("");
                         this.setVisible(false);
                     } else {
                         error = true;
@@ -250,24 +257,8 @@ public class ValorSorteo extends javax.swing.JDialog {
 
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
         this.setVisible(false);
+        valor = 0;
     }//GEN-LAST:event_JBCancelarActionPerformed
-
-    private void JTxFValorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFValorKeyTyped
-        char c = evt.getKeyChar();
-        if ((c < '0' || c > '9')) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_JTxFValorKeyTyped
-
-    private void JTxFValorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFValorKeyPressed
-        ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            this.JBAceptarActionPerformed(jd);
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            this.JBCancelarActionPerformed(jd);
-        }
-    }//GEN-LAST:event_JTxFValorKeyPressed
 
     private void JRBMayorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JRBMayorKeyPressed
         ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
@@ -289,22 +280,56 @@ public class ValorSorteo extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_JRBMenorKeyPressed
 
-    private void JTxFConfirmacionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFConfirmacionKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JTxFConfirmacionKeyPressed
-
-    private void JTxFConfirmacionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFConfirmacionKeyTyped
+    private void JTxFValorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFValorKeyTyped
         char c = evt.getKeyChar();
         if ((c < '0' || c > '9')) {
             evt.consume();
+        } else {
+
+            JTxFValor.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    System.out.println(JTxFValor.getText());
+                    valorSorteo = Long.parseLong(JTxFValor.getText());
+                }
+            });
         }
-    }//GEN-LAST:event_JTxFConfirmacionKeyTyped
+    }//GEN-LAST:event_JTxFValorKeyTyped
+
+    private void JTxFValorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_JTxFValorFocusLost
+//
+//        JTxFValor.setFormatterFactory(currFactory);
+//        System.out.println("sssojjskms");
+    }//GEN-LAST:event_JTxFValorFocusLost
+
+    private void JTxFValorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFValorKeyPressed
+
+    }//GEN-LAST:event_JTxFValorKeyPressed
+
+    private void JTxFConfirmacion1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFConfirmacion1KeyTyped
+        char c = evt.getKeyChar();
+        if ((c < '0' || c > '9')) {
+            evt.consume();
+        } else {
+            JTxFConfirmacion1.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    System.out.println(JTxFConfirmacion1.getText());
+                    valorConfirmacion = Long.parseLong(JTxFConfirmacion1.getText());
+                }
+            });
+        }
+    }//GEN-LAST:event_JTxFConfirmacion1KeyTyped
+
+    private void JTxFConfirmacion1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFConfirmacion1KeyPressed
+
+    }//GEN-LAST:event_JTxFConfirmacion1KeyPressed
 
     public void visible(int numero) {
         JLValores.setText("Valores para el sorteo número " + numero);
         this.setVisible(true);
         JTxFValor.setText("");
-        JTxFConfirmacion.setText("");
+        JTxFConfirmacion1.setText("");
         JRBMayor.setSelected(false);
         JRBMenor.setSelected(false);
     }
@@ -328,11 +353,9 @@ public class ValorSorteo extends javax.swing.JDialog {
     private javax.swing.JLabel JLValores;
     private javax.swing.JRadioButton JRBMayor;
     private javax.swing.JRadioButton JRBMenor;
-    private javax.swing.JTextField JTxFConfirmacion;
-    private javax.swing.JTextField JTxFValor;
+    private javax.swing.JFormattedTextField JTxFConfirmacion1;
+    private javax.swing.JFormattedTextField JTxFValor;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

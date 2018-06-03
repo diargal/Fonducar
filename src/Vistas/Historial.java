@@ -53,7 +53,7 @@ public class Historial extends javax.swing.JDialog {
         this.setLocationRelativeTo(this);
         this.setResizable(true);
         tipoAccion = true;
-        
+
 //        ordenar();
 //        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     }
@@ -233,7 +233,7 @@ public class Historial extends javax.swing.JDialog {
     private void JBSubirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSubirActionPerformed
         if (tipoAccion) {
             if (accesoBD.guardarAsociados(archivo)) {
-                JOptionPane.showMessageDialog(this, "Se cargaron todos los datos a la BD", "Proceso exitoso", JOptionPane.OK_CANCEL_OPTION);
+                JOptionPane.showMessageDialog(this, "Se cargaron todos los datos a la BD", "Proceso exitoso", JOptionPane.INFORMATION_MESSAGE);
                 this.setVisible(false);
             }
         } else {

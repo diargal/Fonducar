@@ -55,13 +55,13 @@ public class Sorteo {
         Random r1 = new Random(System.currentTimeMillis());
         cantidadAsociados = acceso.numerodeAsociados();
         random = r1.nextInt(cantidadAsociados);
-        random = Integer.parseInt(JOptionPane.showInputDialog(this, "Ingrese nùmero: "));
+//        random = Integer.parseInt(JOptionPane.showInputDialog(this, "Ingrese nùmero: "));
         System.out.println("Número ganador generado: " + random);
         return random;
     }
 
-    public String ganador(int numero, float premio, int tipo) {
-        return acceso.ganador(numero, premio, tipo);
+    public String ganador(int numero, float premio, int tipo, boolean prueba) {
+        return acceso.ganador(numero, premio, tipo, prueba);
     }
 
     public boolean actividad(String tipo) {
