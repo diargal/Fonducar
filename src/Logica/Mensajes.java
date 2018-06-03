@@ -46,4 +46,6 @@ public class Mensajes {
     public static final String YGENERADOS = "Ya este año han sido generados los números.";
     public static final String ERRORBDC = "El formato requerido no es correcto. Recuerde que es: NOMBRE, CEDULA, NUMERO respectivamente y con su tipo de dato correspondiente.";
     public static final String ADD_ADMIN = "Creación de un nuevo administrador.";
+    public static final String DELETE_ADMIN = "Eliminación de administrador.";
+    public static final String REI_ADMIN = "Reingreso de un administrador.";
 }

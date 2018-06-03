@@ -525,16 +525,19 @@ public class ControlHistorial {
 
         tabla.addColumn("Nombre administrador");
         tabla.addColumn("Cédula administrador");
-        Object[] object = new Object[2];
+        tabla.addColumn("Activo");
+        Object[] object = new Object[3];
         array = new ArrayList<>();
         array.add("Nombre administrador");
         array.add("Cédula administrador");
+        array.add("Activo");
         llenarComboBox();
 
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
                 object[1] = resul.getLong(2);
+                object[2] = resul.getString(3);
                 tabla.addRow(object);
             }
             historial.getJTHistorial().setModel(tabla);

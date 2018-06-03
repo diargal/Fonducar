@@ -198,6 +198,7 @@ public class MainControl extends javax.swing.JFrame {
         JMGestionAdmins = new javax.swing.JMenu();
         JMIDeleteAdmin = new javax.swing.JMenuItem();
         JMIAddAdmin = new javax.swing.JMenuItem();
+        JMIReingreso = new javax.swing.JMenuItem();
         JMIVerAdmins = new javax.swing.JMenuItem();
         JCBPruebaSorteos = new javax.swing.JCheckBoxMenuItem();
 
@@ -431,6 +432,14 @@ public class MainControl extends javax.swing.JFrame {
         });
         JMGestionAdmins.add(JMIAddAdmin);
 
+        JMIReingreso.setText("Reingresar administrador");
+        JMIReingreso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JMIReingresoActionPerformed(evt);
+            }
+        });
+        JMGestionAdmins.add(JMIReingreso);
+
         JMIVerAdmins.setText("Ver administradores");
         JMIVerAdmins.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -648,13 +657,15 @@ public class MainControl extends javax.swing.JFrame {
     }//GEN-LAST:event_JMIHabilitadosActualActionPerformed
 
     private void JMIDeleteAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIDeleteAdminActionPerformed
-        agregarAdmin.setTipoOperacion(false);
+        agregarAdmin.setTipoOperacion(2);
+        agregarAdmin.enabled(false);
         agregarAdmin.setTitle("Formulario para eliminar un administrador");
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMIDeleteAdminActionPerformed
 
     private void JMIAddAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIAddAdminActionPerformed
-        agregarAdmin.setTipoOperacion(true);
+        agregarAdmin.setTipoOperacion(1);
+        agregarAdmin.enabled(true);
         agregarAdmin.setTitle("Formulario para agregar un administrador");
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMIAddAdminActionPerformed
@@ -679,6 +690,13 @@ public class MainControl extends javax.swing.JFrame {
             JLGanador1.setText("");
         }
     }//GEN-LAST:event_JCBPruebaSorteosActionPerformed
+
+    private void JMIReingresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIReingresoActionPerformed
+        agregarAdmin.setTipoOperacion(3);
+        agregarAdmin.enabled(false);
+        agregarAdmin.setTitle("Formulario para reingresar un administrador");
+        agregarAdmin.setVisible(true);
+    }//GEN-LAST:event_JMIReingresoActionPerformed
     public void animacion(int numero) {
         String ganador;
         if (JCBPruebaSorteos.isSelected()) {
@@ -790,6 +808,7 @@ public class MainControl extends javax.swing.JFrame {
     private javax.swing.JMenuItem JMIInhabilitadosActual;
     private javax.swing.JMenuItem JMIModificar;
     private javax.swing.JMenuItem JMIModificarDatos;
+    private javax.swing.JMenuItem JMIReingreso;
     private javax.swing.JMenuItem JMIVerAdmins;
     private javax.swing.JMenu JMSuper;
     private javax.swing.JMenu jMenu1;

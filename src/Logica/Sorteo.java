@@ -56,7 +56,7 @@ public class Sorteo {
         cantidadAsociados = acceso.numerodeAsociados();
         random = r1.nextInt(cantidadAsociados);
 //        random = Integer.parseInt(JOptionPane.showInputDialog(this, "Ingrese nùmero: "));
-        System.out.println("Número ganador generado: " + random);
+       // System.out.println("Número ganador generado: " + random);
         return random;
     }
 

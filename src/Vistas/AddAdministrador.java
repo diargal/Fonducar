@@ -6,12 +6,13 @@
 package Vistas;
 
 import Logica.Administrador;
-import Logica.BonoSolidario;
+import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.administrador;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
@@ -19,21 +20,22 @@ import javax.swing.JTextField;
  */
 public class AddAdministrador extends javax.swing.JDialog {
 
-    public boolean tipoOperacion;
+    public int tipoOperacion;
 
     public AddAdministrador(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setResizable(false);
         setLocationRelativeTo(this);
-        tipoOperacion = false;
+        tipoOperacion = 0;
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
-    public boolean isTipoOperacion() {
+    public int isTipoOperacion() {
         return tipoOperacion;
     }
 
-    public void setTipoOperacion(boolean tipoOperacion) {
+    public void setTipoOperacion(int tipoOperacion) {
         this.tipoOperacion = tipoOperacion;
     }
 
@@ -63,6 +65,7 @@ public class AddAdministrador extends javax.swing.JDialog {
         JLSUPass = new javax.swing.JLabel();
         JTxFSUPass = new javax.swing.JPasswordField();
         JBAceptar = new javax.swing.JButton();
+        JBCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -77,6 +80,18 @@ public class AddAdministrador extends javax.swing.JDialog {
         JLPass.setText("Password:");
 
         JLConfiPass.setText("Confirmar password:");
+
+        JTxFNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                JTxFNombreKeyTyped(evt);
+            }
+        });
+
+        JTxFCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                JTxFCedulaKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout JPNuevoAdminLayout = new javax.swing.GroupLayout(JPNuevoAdmin);
         JPNuevoAdmin.setLayout(JPNuevoAdminLayout);
@@ -170,19 +185,29 @@ public class AddAdministrador extends javax.swing.JDialog {
             }
         });
 
+        JBCancelar.setText("Cancelar");
+        JBCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBCancelarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(JPNuevoAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(JPSU, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(JBAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(JPNuevoAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(JPSU, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(JBCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(JBAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -193,7 +218,9 @@ public class AddAdministrador extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JPSU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(JBAceptar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(JBAceptar)
+                    .addComponent(JBCancelar))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -201,32 +228,102 @@ public class AddAdministrador extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAceptarActionPerformed
-        if (vacio(JPSU) || vacio(JPNuevoAdmin)) {
-            JOptionPane.showMessageDialog(this, "Debe diligenciar todo el formulario.", "Existen campos vacíos.", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            if (JTxFPass.getText().equals(JTxFConfiPass.getText())) {
-                //if (BonoSolidario.accesoBD.consultaAdmin(JTxFSUUsuario.getText(), JTxFSUPass.getText(), false)) {
-                if (administrador.getTipo() == 1 && administrador.getUsuario().equals(JTxFSUUsuario.getText()) && administrador.getPass().equals(JTxFSUPass.getText())) {
+        if (JTxFPass.getText().equals(JTxFConfiPass.getText())) {
+            //if (BonoSolidario.accesoBD.consultaAdmin(JTxFSUUsuario.getText(), JTxFSUPass.getText(), false)) {
 
-                    Administrador admin = new Administrador(JTxFNombre.getText(), Long.parseLong(JTxFCedula.getText()), JTxFPass.getText(), JTxFUsuario.getText(), 0);
-                    if (tipoOperacion) {
-                        if (BonoSolidario.accesoBD.guardarAdministrador(admin)) {
-                            JOptionPane.showMessageDialog(this, "Administrador creado con éxito.", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
-                            this.setVisible(false);
+            String password = DigestUtils.md5Hex(JTxFSUPass.getText());
+
+            if (administrador.getTipo() == 1 && administrador.getUsuario().equals(JTxFSUUsuario.getText()) && administrador.getPass().equals(password)) {
+
+                password = DigestUtils.md5Hex(JTxFPass.getText());
+                Administrador admin = new Administrador(JTxFNombre.getText(), Long.parseLong(JTxFCedula.getText()), password, JTxFUsuario.getText(), 0);
+                boolean exito = true;
+                String mensaje = "";
+
+                switch (tipoOperacion) {
+                    case 1:
+                        if (vacio(JPSU) || vacio(JPNuevoAdmin)) {
+                            JOptionPane.showMessageDialog(this, "Debe diligenciar todo el formulario.", "Existen campos vacíos.", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            JOptionPane.showMessageDialog(this, "Ya el nombre de usuario existe o la cédula ya ha sido registrada para otro admin.", "Verificar", JOptionPane.ERROR_MESSAGE);
+                            if (accesoBD.guardarAdministrador(admin)) {
+                                exito = true;
+                                mensaje = "Administrador creado con éxito.";
+                            } else {
+                                exito = false;
+                                mensaje = "Ya el nombre de usuario existe o la cédula ya ha sido registrada para otro admin.";
+                            }
                         }
-                    } else {
-//aquí llamaré al métod para eliminar 
-                    }
+                        break;
+                    case 2:
+                        if (JTxFCedula.getText().isEmpty()) {
+                            JOptionPane.showMessageDialog(this, "Debe diligenciar la cédula del administrador.", "Existen campos vacíos.", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            //aquí llamaré al método para eliminar al admin
+                            if (accesoBD.deleteAdmin(admin)) {
+                                exito = true;
+                                mensaje = "Administrador eliminado con éxito.";
+
+                            } else {
+                                exito = false;
+                                mensaje = "Los datos del administrador no son correctos.";
+                            }
+                        }
+                        break;
+                    case 3:
+                        if (JTxFCedula.getText().isEmpty()) {
+                            JOptionPane.showMessageDialog(this, "Debe diligenciar la cédula del administrador.", "Existen campos vacíos.", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            //aquí llamaré al método para reingresar al administrador 
+                            if (accesoBD.reingresarAdmin(admin)) {
+                                exito = true;
+                                mensaje = "Administrador reingresado con éxito.";
+                            } else {
+                                exito = false;
+                                mensaje = "Los datos del administrador no son correctos.";
+                            }
+                        }
+                        break;
+                }
+
+                if (exito) {
+
+                    JOptionPane.showMessageDialog(this, mensaje, "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
+                    vaciar(JPSU);
+                    vaciar(JPNuevoAdmin);
+                    this.setVisible(false);
+
                 } else {
-                    JOptionPane.showMessageDialog(this, "Los datos del Super Usuario no son válidos. Verifique.", "Verificar.", JOptionPane.ERROR_MESSAGE);
+
+                    JOptionPane.showMessageDialog(this, mensaje, "Verificar", JOptionPane.ERROR_MESSAGE);
+
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Las contraseñas del nuevo administrador no coinciden.", "Verificar.", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Los datos del Super Usuario no son válidos. Verifique.", "Verificar.", JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Las contraseñas del nuevo administrador no coinciden.", "Verificar.", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_JBAceptarActionPerformed
+
+    private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
+        vaciar(JPSU);
+        vaciar(JPNuevoAdmin);
+        this.setVisible(false);
+    }//GEN-LAST:event_JBCancelarActionPerformed
+
+    private void JTxFCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFCedulaKeyTyped
+        char c = evt.getKeyChar();
+        if ((c < '0' || c > '9')) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_JTxFCedulaKeyTyped
+
+    private void JTxFNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFNombreKeyTyped
+        char c = evt.getKeyChar();
+        if (!(c < '0' || c > '9')) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_JTxFNombreKeyTyped
 
     public boolean vacio(JPanel jpa) {
         for (int i = 0; i < jpa.getComponentCount(); i++) {
@@ -247,8 +344,34 @@ public class AddAdministrador extends javax.swing.JDialog {
         return false;
     }
 
+    public void enabled(boolean q) {
+        JTxFNombre.setEnabled(q);
+        JLNombre.setEnabled(q);
+        JLUsuario.setEnabled(q);
+        JTxFUsuario.setEnabled(q);
+        JLPass.setEnabled(q);
+        JTxFPass.setEnabled(q);
+        JLConfiPass.setEnabled(q);
+        JTxFConfiPass.setEnabled(q);
+    }
+
+    public void vaciar(JPanel jpa) {
+        for (int i = 0; i < jpa.getComponentCount(); i++) {
+            if (jpa.getComponent(i) instanceof JTextField) {
+                JTextField jt = (JTextField) jpa.getComponent(i);
+                jt.setText("");
+            } else {
+                if (jpa.getComponent(i) instanceof JPasswordField) {
+                    JPasswordField jp = (JPasswordField) jpa.getComponent(i);
+                    jp.setText("");
+                }
+            }
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBAceptar;
+    private javax.swing.JButton JBCancelar;
     private javax.swing.JLabel JLCedula;
     private javax.swing.JLabel JLConfiPass;
     private javax.swing.JLabel JLNombre;
