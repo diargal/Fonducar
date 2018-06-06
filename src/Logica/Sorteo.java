@@ -6,13 +6,8 @@
 package Logica;
 
 import DataAcces.AccesoBD;
-import Vistas.MainControl;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -53,10 +48,10 @@ public class Sorteo {
 
     public int generarSorteo() {
         Random r1 = new Random(System.currentTimeMillis());
-        cantidadAsociados = acceso.numerodeAsociados();
+        cantidadAsociados = acceso.numerodeAsociados(false);
         random = r1.nextInt(cantidadAsociados);
 //        random = Integer.parseInt(JOptionPane.showInputDialog(this, "Ingrese nùmero: "));
-       // System.out.println("Número ganador generado: " + random);
+        // System.out.println("Número ganador generado: " + random);
         return random;
     }
 
@@ -69,6 +64,30 @@ public class Sorteo {
     }
 
     public boolean asociarNumeros() {
+        /*
+        Primero verificaré y haré que haya el mismo número de personas habilitadas y de números habilitados
+         */
+        int cantidadHabilitados = acceso.numerodeAsociados(true);
+        int cantidadNumerosHabiles = acceso.cantidadNumerosHabiles(true);
+        int cantidadTotal = acceso.cantidadNumerosHabiles(false);
+        if (cantidadHabilitados > cantidadNumerosHabiles) {
+            if (cantidadHabilitados >= cantidadTotal) {
+                System.out.println("ingresa segundo if");
+                acceso.todoNumeroHabilitado();//habilito todos los números
+                System.out.println("habilita todos los nùmeros");
+                for (int i = cantidadTotal + 1; i <= cantidadHabilitados; i++) {
+                    acceso.nuevoNumero(i);//creo más numeros
+                    System.out.println("crea el nuevo nùmero");
+                }
+            } else { //si la cantidad de números habilitados (na) es menor que los que ya existen, sólo habilito hasta el número igual a na.
+                for (int i = cantidadNumerosHabiles + 1; i <= cantidadHabilitados; i++) {
+                    acceso.setEstadoNumero(i);
+                }
+            }
+        } else if (cantidadHabilitados < cantidadNumerosHabiles) {
+        }
+
+        //Descargo todos los ids de los asociados activos
         ArrayList<Integer> array = new ArrayList<>(acceso.idsAsociados());
         ArrayList<Integer> aux = new ArrayList<>(array);
         ArrayList<Integer> aux2 = new ArrayList<>(array);

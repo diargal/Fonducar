@@ -179,7 +179,7 @@ public class AccesoBD {
 
             for (int a = 1; a <= numFilas; a++) {
                 Row fila = sheet.getRow(a);
-
+                //Leo del archivo, y obtengo los valores de cada fila para crear una persona
                 prepar = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, cedula) VALUES(" + null + ",?,?)");
                 nombre = fila.getCell(0).getStringCellValue();
                 prepar.setString(1, nombre);
@@ -187,30 +187,37 @@ public class AccesoBD {
                 prepar.setLong(2, cedula);
                 prepar.execute();
 
+                // Selecciono el id de la persona recien creada, para poder crear un asociado
                 resultado = resultadoConexion("SELECT P.idPersona FROM persona as P WHERE P.Cedula = '" + cedula + "'");
                 if (resultado.next()) {
                     id = resultado.getInt(1);
                 }
-
+                //Creo el asociado
                 prepar = conexion.prepareStatement("Insert into asociado (idAsociado, Estado, idPersona) values (" + null + ",0,?)");
                 prepar.setDouble(1, id);
                 prepar.execute();
 
-                resultado = resultadoConexion("select A.idAsociado from asociado as A where A.idPersona = '" + id + "'");
-                if (resultado.next()) {
-                    id = resultado.getInt(1);
+                /*
+                Ahora verifico si aún no se han asignado los números a cada asociado.
+                 */
+                if (numerosAsignados()) {//si hay números asignados
+                } else if (asociadosVacia()) {//está completamente vacía la tabla asociados
+                    resultado = resultadoConexion("select A.idAsociado from asociado as A where A.idPersona = '" + id + "'");
+                    if (resultado.next()) {
+                        id = resultado.getInt(1);
+                    }
+
+                    prepar = conexion.prepareStatement("Insert into numero (idNumero, Estado) values (?," + 0 + ")");
+                    // numero = (long) fila.getCell(2).getNumericCellValue();
+                    prepar.setInt(1, a);
+                    prepar.execute();
+
+                    prepar = conexion.prepareStatement("Insert into numeroasociado (idNumeroAsociado, Fecha, idAsociado, idNumero) values (" + null + ",?,?,?)");
+                    prepar.setString(1, fechaCompleta.format(date) + "");
+                    prepar.setDouble(2, id);
+                    prepar.setDouble(3, numero);
+                    prepar.execute();
                 }
-
-                prepar = conexion.prepareStatement("Insert into numero (idNumero, Estado) values (?," + 0 + ")");
-                numero = (long) fila.getCell(2).getNumericCellValue();
-                prepar.setDouble(1, numero);
-                prepar.execute();
-
-                prepar = conexion.prepareStatement("Insert into numeroasociado (idNumeroAsociado, Fecha, idAsociado, idNumero) values (" + null + ",?,?,?)");
-                prepar.setString(1, fechaCompleta.format(date) + "");
-                prepar.setDouble(2, id);
-                prepar.setDouble(3, numero);
-                prepar.execute();
             }
 
             guardarOperacion(A_AGREGARASOCIADOS);
@@ -219,6 +226,7 @@ public class AccesoBD {
             desconectar();
 
             return true;
+
         } catch (IOException | InvalidFormatException ex) {
         } catch (SQLException es) {
             JOptionPane.showMessageDialog(null, EXISTE + cedula, "Coincidencia en registro.", JOptionPane.ERROR_MESSAGE);
@@ -513,6 +521,22 @@ public class AccesoBD {
         return false;
     }
 
+    public boolean asociadosVacia() {
+        try {
+            conexion();
+            resultado = resultadoConexion("Select count(a.idAsociado) from asociado as a");
+            if (resultado.next()) {
+                if (resultado.getInt(1) == 0) {
+                    desconectar();
+                    return false;
+                }
+            }
+        } catch (SQLException ex) {
+        }
+        desconectar();
+        return true;
+    }
+
     public ArrayList<Integer> idsAsociados() {
         ArrayList<Integer> array = new ArrayList<>();
         try {
@@ -526,7 +550,7 @@ public class AccesoBD {
                 array.add(resultado.getInt(1));
             }
 //            return array;
-        } catch (Exception e) {
+        } catch (SQLException e) {
         }
 
         return array;
@@ -549,11 +573,11 @@ public class AccesoBD {
             }
 
             //cuento cuantos números tienen estado 0.
-            int cantidad = 0;
-            resultado = resultadoConexion("SELECT count(n.idnumero) as conteo FROM `numero` as n WHERE n.estado = 0");
-            if (resultado.next()) {
-                cantidad = resultado.getInt(1);
-            }
+            int cantidad = cantidadNumerosHabiles(true);
+//            resultado = resultadoConexion("SELECT count(n.idnumero) as conteo FROM `numero` as n WHERE n.estado = 0");
+//            if (resultado.next()) {
+//                cantidad = resultado.getInt(1);
+//            }
 
             //modifico el estado a cero(0) de todos los números que son menores o iguales al conteo anterior
             prepar = conexion.prepareStatement("UPDATE `numero` as n SET `Estado`=? WHERE n.idnumero <= ? ");
@@ -592,14 +616,77 @@ public class AccesoBD {
         }
     }
 
+    public int cantidadNumerosHabiles(boolean habiles) {
+        try {
+            conexion();
+            if (habiles) {
+                resultado = resultadoConexion("Select count(n.idNumero) From numero as n where n.estado = 0");
+            } else {
+                resultado = resultadoConexion("select count(n.idnumero) from numero as n");
+            }
+            if (resultado.next()) {
+                return resultado.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public boolean todoNumeroHabilitado() {
+        try {
+            conexion();
+            prepar = conexion.prepareStatement("UPDATE `numero` as n SET n.Estado = 0 WHERE n.estado = 1");
+            prepar.executeUpdate();
+            desconectar();
+        } catch (SQLException ex) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean nuevoNumero(int num) {
+        try {
+            conexion();
+            prepar = conexion.prepareStatement("Insert into numero (idNumero, Estado) values (?," + 0 + ")");
+            prepar.setInt(1, num);
+            prepar.execute();
+            desconectar();
+        } catch (SQLException ex) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean setEstadoNumero(int numero) {
+        try {
+            conexion();
+            prepar = conexion.prepareStatement("UPDATE `numero` as n SET n.Estado = 0 WHERE n.idNumero = ?");
+            prepar.setInt(1, numero);
+            if (prepar.executeUpdate() != 0) {
+                desconectar();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+//SELECT count(na.idNumeroAsociado) FROM `numeroasociado` as na WHERE '2025' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) 
+
     /* ------------------------------------------------------------------------------------------------------------------------- */
  /*
     Operaciones del sorteo
      */
-    public int numerodeAsociados() {
+    public int numerodeAsociados(boolean habilitado) {
 
         try {
-            resultado = resultadoConexion("SELECT count(*) FROM asociado");
+            if (!habilitado) {
+                resultado = resultadoConexion("SELECT count(*) FROM asociado");
+            } else {
+                resultado = resultadoConexion("SELECT count(*) FROM asociado as a WHERE a.estado = 0");
+            }
 
             if (resultado.next()) {
                 desconectar();

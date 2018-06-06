@@ -99,7 +99,7 @@ public class MainControl extends javax.swing.JFrame {
         if (!accesoBD.numerosAsignados()) {
             if (accesoBD.prepararAsociacion()) {
 //             //   sorteo.asociarNumeros();
-//                JOptionPane.showMessageDialog(jMenu1, "Se cambió el estado de los ex-asociados con participación");
+                JOptionPane.showMessageDialog(jMenu1, "Se cambió el estado de los ex-asociados con participación");
             }
         }
     }

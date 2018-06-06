@@ -391,7 +391,7 @@ public class ControlHistorial {
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
-                object[1] = resul.getInt(2);
+                object[1] = resul.getLong(2);
                 if ((resul.getInt(3) < 1000) && (resul.getInt(3) >= 100)) {
                     object[2] = "0" + resul.getInt(3);
                 } else if ((resul.getInt(3) < 100) && (resul.getInt(3) >= 10)) {
