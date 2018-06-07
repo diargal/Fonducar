@@ -335,23 +335,30 @@ public class AccesoBD {
                     return false;
                 } else {
                     //busco el id del asociado que concuerda con la cédula ingresada
-                    resultado = resultadoConexion("SELECT a.idAsociado FROM `asociado` as a, persona as p "
-                            + "WHERE a.idPersona = p.idPersona and p.Cedula ='" + cedula + "'");
+                    resultado = idAsociado(cedula);
                     if (resultado.next()) {
                         //agrego el id del asociado a la tabla de inhabilitación
                         prepar = conexion.prepareStatement("INSERT INTO `inhabilitacion`(`idInhabilitacion`, `Razon`, `Fecha`, `Estado`, `idAsociado`) "
                                 + "VALUES (" + null + ",?,?,?,?)");
                         prepar.setString(1, razon);
                         prepar.setString(2, fechaCompleta.format(date));
-                        prepar.setInt(4, resultado.getInt(1));
+                        int idAsociado = resultado.getInt(1);
+                        prepar.setInt(4, idAsociado);
 
                         switch (tipo) {
                             case 2:
                                 prepar.setInt(3, 0);
                                 prepar.execute();
                                 desconectar();
-                                //modifico el estado del número, lo coloco en 0 que indica que el número está habilitado para sorteos
-                                return modificarEstadoNumero(cedula, 0);
+                                if (numerosAsignados()) //hago todo el proceso sólo si hay números asignados
+                                { //modifico el estado del número, lo coloco en 0 que indica que el número está habilitado para sorteos
+
+                                    if (asociacionAnioActual(idAsociado)) { //aquí miro si la persona tiene asignado un número este año
+                                        return modificarEstadoNumero(cedula, 0); //la persona ya tenía un número este año, sólo cambio el estado del número
+                                    } else {
+                                        return reingresarAsociado(idAsociado);
+                                    }
+                                }
                             case 3:
                                 prepar.setInt(3, 1);
                                 prepar.execute();
@@ -362,18 +369,81 @@ public class AccesoBD {
                     }
                 }
             } else {
-                modificarEstadoNumero(cedula, 0);
-
                 prepar = conexion.prepareStatement("UPDATE `asociado`, persona SET asociado.Estado = 0 "
                         + "WHERE persona.cedula = ? and persona.idPersona = asociado.idPersona");
                 prepar.setDouble(1, cedula);
+                prepar.executeUpdate();
+
+                if (numerosAsignados()) {//solo si hay números asignados
+                    resultado = idAsociado(cedula);//obtengo el id del asociado
+
+                    if (resultado.next()) {
+                        int idAsociado = resultado.getInt(1);
+                        System.out.println("Resultado: " + idAsociado);
+                        if (asociacionAnioActual(resultado.getInt(1))) {
+                            System.out.println("entra");
+                            modificarEstadoNumero(cedula, 0);
+                        } else {
+                            System.out.println("otra");
+                            return reingresarAsociado(idAsociado);
+                        }
+                    }
+                }
                 desconectar();
-                return prepar.executeUpdate() != 0;
             }
         } catch (SQLException e) {
+            System.out.println("error: " + e);
             return false;
         }
         return false;
+    }
+
+    public ResultSet idAsociado(long cedula) throws SQLException {
+        return resultado = resultadoConexion("SELECT a.idAsociado FROM `asociado` as a, persona as p "
+                + "WHERE a.idPersona = p.idPersona and p.Cedula ='" + cedula + "'");
+    }
+
+    public boolean asociacionAnioActual(int idAsociado) {
+        try {
+            resultado = resultadoConexion("SELECT na.idNumeroAsociado FROM `numeroasociado` as na "
+                    + "WHERE na.idAsociado = " + idAsociado + " and '" + fechaAnio.format(date) + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 )");
+            if (resultado.next()) {
+                return true;
+            }
+        } catch (SQLException ex) {
+        }
+        return false;
+    }
+
+    public boolean reingresarAsociado(int idAsociado) {
+        try {
+            System.out.println("llega");
+            int cantidad = cantidadNumAsociados() + 1;
+            System.out.println("cantidad: " + cantidad);
+
+            if (!nuevoNumero(cantidad)) {
+                System.out.println("puta madre");
+                conexion();
+                //si ya el número existía en la tabla numero, debo cambiar su estado a 0
+                prepar = conexion.prepareStatement("UPDATE `numero` as n SET n.Estado = 0 "
+                        + "WHERE n.idnumero = ? and n.estado = 1");
+                prepar.setDouble(1, cantidad);
+                prepar.executeUpdate();
+
+            }
+            conexion();
+            System.out.println("verga");
+            prepar = conexion.prepareStatement("Insert into numeroasociado (idNumeroAsociado, Fecha, idAsociado, idNumero) values (" + null + ",?,?,?)");
+            prepar.setString(1, fechaCompleta.format(date) + "");
+            prepar.setDouble(2, idAsociado);
+            prepar.setDouble(3, cantidad);
+            prepar.execute();
+            desconectar();
+        } catch (SQLException ex) {
+            return false;
+        }
+
+        return true;
     }
 
     public int estadoAsociado(long cedula) {
@@ -600,10 +670,6 @@ public class AccesoBD {
 
             //cuento cuantos números tienen estado 0.
             int cantidad = cantidadNumerosHabiles(true);
-//            resultado = resultadoConexion("SELECT count(n.idnumero) as conteo FROM `numero` as n WHERE n.estado = 0");
-//            if (resultado.next()) {
-//                cantidad = resultado.getInt(1);
-//            }
 
             //modifico el estado a cero(0) de todos los números que son menores o iguales al conteo anterior
             prepar = conexion.prepareStatement("UPDATE `numero` as n SET `Estado`=? WHERE n.idnumero <= ? ");

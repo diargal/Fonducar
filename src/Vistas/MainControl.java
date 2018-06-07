@@ -86,8 +86,8 @@ public class MainControl extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         prepararAsociacion();
         cerrarVentana();
-        verActivos();
-       // JLActivos.setText("Número de participantes para los sorteos: " + accesoBD.numeroAsociadosActivos());
+//        verActivos();
+        // JLActivos.setText("Número de participantes para los sorteos: " + accesoBD.numeroAsociadosActivos());
 //        verificarInhabilitados();
     }
 
