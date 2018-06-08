@@ -296,7 +296,7 @@ public class ControlHistorial {
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
-            accesoBD.desconectar();
+//            accesoBD.desconectar();
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -349,7 +349,7 @@ public class ControlHistorial {
             accesoBD.guardarOperacion(A_HOPERACIONES);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
-            accesoBD.desconectar();
+//            accesoBD.desconectar();
 
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
@@ -458,7 +458,7 @@ public class ControlHistorial {
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
-            accesoBD.desconectar();
+//            accesoBD.desconectar();
 
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class
@@ -499,7 +499,7 @@ public class ControlHistorial {
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
-            accesoBD.desconectar();
+//            accesoBD.desconectar();
 
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class
@@ -543,7 +543,7 @@ public class ControlHistorial {
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
-            accesoBD.desconectar();
+//            accesoBD.desconectar();
 
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class

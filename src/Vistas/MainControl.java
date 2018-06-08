@@ -5,6 +5,7 @@
  */
 package Vistas;
 
+import DataAcces.AccesoBD;
 import static Imagenes.ControlImagenes.CERO;
 import static Imagenes.ControlImagenes.CINCO;
 import static Imagenes.ControlImagenes.CUATRO;
@@ -94,18 +95,18 @@ public class MainControl extends javax.swing.JFrame {
     public void prepararAsociacion() {
         if (!accesoBD.numerosAsignados()) {
             if (accesoBD.prepararAsociacion()) {
-//             //   sorteo.asociarNumeros();
-//                JOptionPane.showMessageDialog(jMenu1, "Se cambió el estado de los ex-asociados con participación");
             }
         }
     }
 
     public void verActivos() {
+        AccesoBD acces = new AccesoBD();
         Thread hilo = new Thread() {
             @Override
             public void run() {
                 while (true) {
-                    JLActivos.setText("Número de participantes para los sorteos: " + accesoBD.numeroAsociadosActivos());
+                    JLActivos.setText("Número de participantes para los sorteos: " + acces.numeroAsociadosActivos());
+                    repaint();
                 }
             }
         };
@@ -113,21 +114,6 @@ public class MainControl extends javax.swing.JFrame {
         hilo.start();
     }
 
-//    public void verificarInhabilitados() {
-//        if (accesoBD.numerosAsignados()) {
-//
-//            try {
-//                ResultSet resultado = accesoBD.verificarsihayInhabilitados();
-//                ResultSet resl = resultado;
-//                //if (resultado.next()) {
-//                JOptionPane.showMessageDialog(jMenu1, "En la siguiente tabla se mostrarán los ex-asociados que se les debe definir su estado.");
-//                control.inhabilitadosAnioPasado(resl);
-//                //  }
-//            } catch (SQLException ex) {
-//                Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//    }
     public void cerrarVentana() {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -403,7 +389,11 @@ public class MainControl extends javax.swing.JFrame {
         jMenu2.add(JMIModificar);
 
         JMIModificarDatos.setText("Modificar datos asociado");
-        JMIModificarDatos.setEnabled(false);
+        JMIModificarDatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JMIModificarDatosActionPerformed(evt);
+            }
+        });
         jMenu2.add(JMIModificarDatos);
 
         jMenuBar1.add(jMenu2);
@@ -693,6 +683,11 @@ public class MainControl extends javax.swing.JFrame {
         agregarAdmin.setTitle("Formulario para reingresar un administrador");
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMIReingresoActionPerformed
+
+    private void JMIModificarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIModificarDatosActionPerformed
+        DatosAsociado datos = new DatosAsociado(this, true);
+        datos.setVisible(true);
+    }//GEN-LAST:event_JMIModificarDatosActionPerformed
     public void animacion(int numero) {
         String ganador;
         if (JCBPruebaSorteos.isSelected()) {

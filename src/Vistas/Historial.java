@@ -5,7 +5,6 @@
  */
 package Vistas;
 
-import Logica.BonoSolidario;
 import static Logica.BonoSolidario.accesoBD;
 import Vistas.Controlador.ControlArchivos;
 import java.awt.event.KeyAdapter;

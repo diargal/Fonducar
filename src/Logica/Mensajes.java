@@ -48,4 +48,5 @@ public class Mensajes {
     public static final String ADD_ADMIN = "Creación de un nuevo administrador.";
     public static final String DELETE_ADMIN = "Eliminación de administrador.";
     public static final String REI_ADMIN = "Reingreso de un administrador.";
+    public static final String A_SETASOCIADO = "Modificación de datos de Asociado";
 }

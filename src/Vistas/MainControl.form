@@ -141,8 +141,10 @@
             <MenuItem class="javax.swing.JMenuItem" name="JMIModificarDatos">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Modificar datos asociado"/>
-                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIModificarDatosActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

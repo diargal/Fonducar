@@ -6,6 +6,7 @@
 package Logica;
 
 import DataAcces.AccesoBD;
+import static Logica.BonoSolidario.accesoBD;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JOptionPane;
@@ -18,10 +19,10 @@ public class Sorteo {
 
     private int random;
     private int cantidadAsociados;
-    private AccesoBD acceso;
+    //private AccesoBD acceso;
 
     public Sorteo() {
-        this.acceso = new AccesoBD();
+        // this.acceso = new AccesoBD();
         random = 0;
         cantidadAsociados = 0;
     }
@@ -49,7 +50,7 @@ public class Sorteo {
 
     public int generarSorteo() {
         Random r1 = new Random(System.currentTimeMillis());
-        cantidadAsociados = acceso.numerodeAsociados(false);
+        cantidadAsociados = accesoBD.numerodeAsociados(false);
         random = r1.nextInt(cantidadAsociados);
         random = Integer.parseInt(JOptionPane.showInputDialog(this, "Ingrese nùmero: "));
         // System.out.println("Número ganador generado: " + random);
@@ -57,39 +58,39 @@ public class Sorteo {
     }
 
     public String ganador(int numero, float premio, int tipo, boolean prueba) {
-        return acceso.ganador(numero, premio, tipo, prueba);
+        return accesoBD.ganador(numero, premio, tipo, prueba);
     }
 
     public boolean actividad(String tipo) {
-        return acceso.guardarOperacion(tipo);
+        return accesoBD.guardarOperacion(tipo);
     }
 
     public boolean asociarNumeros() {
         /*
         Primero verificaré y haré que haya el mismo número de personas habilitadas y de números habilitados
          */
-        int cantidadHabilitados = acceso.numerodeAsociados(true);
-        int cantidadNumerosHabiles = acceso.cantidadNumerosHabiles(true);
-        int cantidadTotal = acceso.cantidadNumerosHabiles(false);
+        int cantidadHabilitados = accesoBD.numerodeAsociados(true);
+        int cantidadNumerosHabiles = accesoBD.cantidadNumerosHabiles(true);
+        int cantidadTotal = accesoBD.cantidadNumerosHabiles(false);
         if (cantidadHabilitados > cantidadNumerosHabiles) {
             if (cantidadHabilitados >= cantidadTotal) {
                 System.out.println("ingresa segundo if");
-                acceso.todoNumeroHabilitado();//habilito todos los números
+                accesoBD.todoNumeroHabilitado();//habilito todos los números
                 System.out.println("habilita todos los nùmeros");
                 for (int i = cantidadTotal + 1; i <= cantidadHabilitados; i++) {
-                    acceso.nuevoNumero(i);//creo más numeros
+                    accesoBD.nuevoNumero(i);//creo más numeros
                     System.out.println("crea el nuevo nùmero");
                 }
             } else { //si la cantidad de números habilitados (na) es menor que los que ya existen, sólo habilito hasta el número igual a na.
                 for (int i = cantidadNumerosHabiles + 1; i <= cantidadHabilitados; i++) {
-                    acceso.setEstadoNumero(i);
+                    accesoBD.setEstadoNumero(i);
                 }
             }
         } else if (cantidadHabilitados < cantidadNumerosHabiles) {
         }
 
         //Descargo todos los ids de los asociados activos
-        ArrayList<Integer> array = new ArrayList<>(acceso.idsAsociados());
+        ArrayList<Integer> array = new ArrayList<>(accesoBD.idsAsociados());
         ArrayList<Integer> aux = new ArrayList<>(array);
         ArrayList<Integer> aux2 = new ArrayList<>(array);
         Random r;
@@ -124,7 +125,7 @@ public class Sorteo {
         // System.out.println("Id Persona ---> Número");
         for (int i = 0; i < tamanio; i++) {
             // System.out.println(aux.get(i) + " ---> " + aux2.get(i));
-            if (!acceso.asociarNumeros(aux.get(i), aux2.get(i))) {
+            if (!accesoBD.asociarNumeros(aux.get(i), aux2.get(i))) {
                 return false;
             }
         }
@@ -132,15 +133,15 @@ public class Sorteo {
     }
 
     public int estadoAsociado(long cedula) {
-        return acceso.estadoAsociado(cedula);
+        return accesoBD.estadoAsociado(cedula);
     }
 
     public boolean cambiarEstado(long cedula, int tipo, String texto) {
-        return acceso.cambiarEstado(cedula, tipo, texto);
+        return accesoBD.cambiarEstado(cedula, tipo, texto);
     }
 
     public boolean verificarFecha() {
-        return acceso.verificarFecha();
+        return accesoBD.verificarFecha();
     }
 
 }

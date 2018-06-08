@@ -6,6 +6,7 @@
 package vistas;
 
 import Logica.BonoSolidario;
+import static Logica.BonoSolidario.accesoBD;
 import static Logica.Mensajes.A_SESION;
 import static Logica.Mensajes.ERROR_LOGIN;
 import static Logica.Mensajes.LOGIN_VER;
@@ -169,7 +170,7 @@ public class AccesControl extends javax.swing.JDialog {
         if (JTxfPass.getText().isEmpty() || JTxFUsuario.getText().isEmpty()) { //Si dejan los campos en blanco.
             ManagerError(); //método para mostrar errores.
         } else {
-            if (BonoSolidario.accesoBD.consultaAdmin(JTxFUsuario.getText(), JTxfPass.getText(), true)) { //inmediatamente hago la consulta
+            if (accesoBD.consultaAdmin(JTxFUsuario.getText(), JTxfPass.getText(), true)) { //inmediatamente hago la consulta
                 this.setVisible(false);
                 sorteo.actividad(A_SESION);
                 System.out.println(BonoSolidario.administrador.getTipo());
@@ -178,7 +179,7 @@ public class AccesControl extends javax.swing.JDialog {
                 } else {
                     controlPrincipal.getJMSuper().setEnabled(false);
                 }
-
+                controlPrincipal.verActivos();
                 controlPrincipal.setVisible(true);
             } else {
                 ManagerError();
