@@ -1,6 +1,5 @@
 package Vistas;
 
-import Logica.BonoSolidario;
 import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.administrador;
 import java.awt.event.ActionEvent;
@@ -17,7 +16,7 @@ import org.apache.commons.codec.digest.DigestUtils;
  * @author Diego García
  */
 public class DatosAsociado extends javax.swing.JDialog {
-    
+
     public DatosAsociado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -25,7 +24,7 @@ public class DatosAsociado extends javax.swing.JDialog {
         setLocationRelativeTo(this);
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -206,7 +205,7 @@ public class DatosAsociado extends javax.swing.JDialog {
 
     private void JTxFPassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFPassKeyPressed
         ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
-        
+
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             JBModificarActionPerformed(jd);
         }
@@ -216,7 +215,7 @@ public class DatosAsociado extends javax.swing.JDialog {
         if (vacio(JPAsociado) && vacio(JPAdmin)) {
             JOptionPane.showMessageDialog(this, "Debe diligenciar todo el formulario.", "Existen campos vacios", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            String password = DigestUtils.md5Hex(JTxFPass.getText());
+            String password = DigestUtils.md5Hex(new String(JTxFPass.getPassword()));
             if ((JTxFUsuario.getText().equals(administrador.getUsuario())) && (administrador.getPass().equals(password))) {
                 if (!accesoBD.modificarAsociado(JTxFNombre.getText(), Long.parseLong(JTxFCedula.getText()))) {
                     JOptionPane.showMessageDialog(this, "La cédula del asociado no se encuentra en la base de datos.", "Operación fallida", JOptionPane.ERROR_MESSAGE);
@@ -229,7 +228,7 @@ public class DatosAsociado extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_JBModificarActionPerformed
-    
+
     public boolean vacio(JPanel jpa) {
         for (int i = 0; i < jpa.getComponentCount(); i++) {
             if (jpa.getComponent(i) instanceof JTextField) {

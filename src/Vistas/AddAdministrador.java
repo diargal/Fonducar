@@ -228,14 +228,14 @@ public class AddAdministrador extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAceptarActionPerformed
-        if (JTxFPass.getText().equals(JTxFConfiPass.getText())) {
+        if (new String(JTxFPass.getPassword()).equals(new String(JTxFConfiPass.getPassword()))) {
             //if (BonoSolidario.accesoBD.consultaAdmin(JTxFSUUsuario.getText(), JTxFSUPass.getText(), false)) {
 
-            String password = DigestUtils.md5Hex(JTxFSUPass.getText());
+            String password = DigestUtils.md5Hex(new String(JTxFSUPass.getPassword()));
 
             if (administrador.getTipo() == 1 && administrador.getUsuario().equals(JTxFSUUsuario.getText()) && administrador.getPass().equals(password)) {
 
-                password = DigestUtils.md5Hex(JTxFPass.getText());
+                password = DigestUtils.md5Hex(new String(JTxFPass.getPassword()));
                 Administrador admin = new Administrador(JTxFNombre.getText(), Long.parseLong(JTxFCedula.getText()), password, JTxFUsuario.getText(), 0);
                 boolean exito = true;
                 String mensaje = "";
@@ -335,7 +335,7 @@ public class AddAdministrador extends javax.swing.JDialog {
             } else {
                 if (jpa.getComponent(i) instanceof JPasswordField) {
                     JPasswordField jp = (JPasswordField) jpa.getComponent(i);
-                    if (jp.getText().isEmpty()) {
+                    if (jp.getPassword().length == 0) {
                         return true;
                     }
                 }

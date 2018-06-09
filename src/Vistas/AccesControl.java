@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package vistas;
+package Vistas;
 
 import Logica.BonoSolidario;
 import static Logica.BonoSolidario.accesoBD;
@@ -24,7 +24,7 @@ public class AccesControl extends javax.swing.JDialog {
 
     private final String pass;
     private final long cedula;
-    private final Vistas.MainControl controlPrincipal;
+    private final MainControl controlPrincipal;
     Sorteo sorteo;
 
     /**
@@ -38,7 +38,7 @@ public class AccesControl extends javax.swing.JDialog {
         pass = "";
         sorteo = new Sorteo();
         cedula = 0;
-        controlPrincipal = new Vistas.MainControl();
+        controlPrincipal = new MainControl();
     }
 
     /**
@@ -167,10 +167,10 @@ public class AccesControl extends javax.swing.JDialog {
 
     private void JBLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBLoginActionPerformed
         boolean error = true;
-        if (JTxfPass.getText().isEmpty() || JTxFUsuario.getText().isEmpty()) { //Si dejan los campos en blanco.
+        if (new String(JTxfPass.getPassword()).isEmpty() || JTxFUsuario.getText().isEmpty()) { //Si dejan los campos en blanco.
             ManagerError(); //método para mostrar errores.
         } else {
-            if (accesoBD.consultaAdmin(JTxFUsuario.getText(), JTxfPass.getText(), true)) { //inmediatamente hago la consulta
+            if (accesoBD.consultaAdmin(JTxFUsuario.getText(), new String(JTxfPass.getPassword()), true)) { //inmediatamente hago la consulta
                 this.setVisible(false);
                 sorteo.actividad(A_SESION);
                 System.out.println(BonoSolidario.administrador.getTipo());
