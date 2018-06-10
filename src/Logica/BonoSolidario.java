@@ -12,6 +12,10 @@ import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import Vistas.AccesControl;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,6 +26,7 @@ public class BonoSolidario {
     public static Administrador administrador = new Administrador();
     public static int numerodeSorteos = 0;
     public static AccesoBD accesoBD = new AccesoBD();
+    private static ServerSocket SERVER_SOCKET;
 //    public static final List<Asociado> asociados = new ArrayList<Asociado>();
 
     public static void main(String[] args) {
@@ -49,7 +54,13 @@ public class BonoSolidario {
             }
 
             AccesControl inicio = new AccesControl(null, true);
-            inicio.setVisible(true);
+            try {
+                SERVER_SOCKET = new ServerSocket(1334);
+                inicio.setVisible(true);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(inicio, "Este programa ya se está ejecutando.", "No se puede ejecutar nuevamente.", JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
+            }
         }
     }
 

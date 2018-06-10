@@ -7,6 +7,7 @@ package Logica;
 
 import DataAcces.AccesoBD;
 import static Logica.BonoSolidario.accesoBD;
+import Vistas.Controlador.hiloCarga;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JOptionPane;
@@ -52,7 +53,7 @@ public class Sorteo {
         Random r1 = new Random(System.currentTimeMillis());
         cantidadAsociados = accesoBD.numerodeAsociados(false);
         random = r1.nextInt(cantidadAsociados);
-        random = Integer.parseInt(JOptionPane.showInputDialog(this, "Ingrese nùmero: "));
+//        random = Integer.parseInt(JOptionPane.showInputDialog(this, "Ingrese nùmero: "));
         // System.out.println("Número ganador generado: " + random);
         return random;
     }
@@ -66,6 +67,7 @@ public class Sorteo {
     }
 
     public boolean asociarNumeros() {
+
         /*
         Primero verificaré y haré que haya el mismo número de personas habilitadas y de números habilitados
          */
@@ -74,12 +76,9 @@ public class Sorteo {
         int cantidadTotal = accesoBD.cantidadNumerosHabiles(false);
         if (cantidadHabilitados > cantidadNumerosHabiles) {
             if (cantidadHabilitados >= cantidadTotal) {
-                System.out.println("ingresa segundo if");
                 accesoBD.todoNumeroHabilitado();//habilito todos los números
-                System.out.println("habilita todos los nùmeros");
                 for (int i = cantidadTotal + 1; i <= cantidadHabilitados; i++) {
                     accesoBD.nuevoNumero(i);//creo más numeros
-                    System.out.println("crea el nuevo nùmero");
                 }
             } else { //si la cantidad de números habilitados (na) es menor que los que ya existen, sólo habilito hasta el número igual a na.
                 for (int i = cantidadNumerosHabiles + 1; i <= cantidadHabilitados; i++) {

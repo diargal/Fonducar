@@ -5,6 +5,8 @@
  */
 package Vistas;
 
+import java.awt.Color;
+
 /**
  *
  * @author Diego García
@@ -16,13 +18,17 @@ public class Carga extends javax.swing.JDialog {
      */
     public Carga(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+//        setUndecorated(true);
         initComponents();
-        //setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+//        setBackground(new Color(0, 0, 0, 0));
+//        setOpacity(0.6f);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setResizable(false);
         this.setLocationRelativeTo(this);
     }
-
+    
     public void terminar() {
+        System.exit(0);
         this.setVisible(false);
     }
 

@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import static java.awt.image.ImageObserver.WIDTH;
 import java.text.NumberFormat;
 import java.util.Locale;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 //import javax.swing.table.TableRowSorter;
 import javax.swing.text.DefaultFormatterFactory;
@@ -36,6 +37,7 @@ public class ValorSorteo extends javax.swing.JDialog {
     public ValorSorteo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
         setResizable(false);
         setLocationRelativeTo(this);
         valor = tipo = 0;
@@ -289,7 +291,6 @@ public class ValorSorteo extends javax.swing.JDialog {
             JTxFValor.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyReleased(KeyEvent e) {
-                    System.out.println(JTxFValor.getText());
                     valorSorteo = Long.parseLong(JTxFValor.getText());
                 }
             });
@@ -314,7 +315,6 @@ public class ValorSorteo extends javax.swing.JDialog {
             JTxFConfirmacion1.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyReleased(KeyEvent e) {
-                    System.out.println(JTxFConfirmacion1.getText());
                     valorConfirmacion = Long.parseLong(JTxFConfirmacion1.getText());
                 }
             });

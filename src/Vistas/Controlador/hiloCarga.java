@@ -8,39 +8,27 @@ import java.util.logging.Logger;
  *
  * @author Diego García
  */
-public class hiloCarga implements Runnable {
+public class hiloCarga extends Thread {
 
     private Carga carga;
     public boolean ejecutar;
-
-    public boolean isEjecutar() {
-        return ejecutar;
-    }
-
-    public void setEjecutar(boolean ejecutar) {
-        this.ejecutar = ejecutar;
-    }
 
     public hiloCarga() {
         super();
         carga = new Carga(null, true);
         ejecutar = true;
+        this.carga.setVisible(true);
     }
 
     @Override
     public void run() {
-        carga.setVisible(true);
-        try {
-            Thread.sleep(3500);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(hiloCarga.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        carga.dispose();
+
+        this.carga.setVisible(true);
     }
 
     public void terminar() {
-        ejecutar = false;
-        System.out.println("hola");
-    }
+        System.out.println("mirala");
+        this.carga.setVisible(false);
 
+    }
 }

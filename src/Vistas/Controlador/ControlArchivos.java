@@ -57,7 +57,6 @@ public class ControlArchivos {
                 JOptionPane.showMessageDialog(null, "Elija un formato válido");
             }
         } catch (IllegalStateException | InvalidOperationException e) {
-            System.out.println(e);
             JOptionPane.showMessageDialog(null, ERRORBDC, "Error de lectura", JOptionPane.ERROR_MESSAGE);
         } catch (NullPointerException exc) {
         }

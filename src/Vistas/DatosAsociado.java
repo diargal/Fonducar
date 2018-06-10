@@ -5,6 +5,7 @@ import static Logica.BonoSolidario.administrador;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import static java.awt.image.ImageObserver.WIDTH;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -20,6 +21,7 @@ public class DatosAsociado extends javax.swing.JDialog {
     public DatosAsociado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setIconImage (new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
         setResizable(false);
         setLocationRelativeTo(this);
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

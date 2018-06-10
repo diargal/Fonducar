@@ -11,6 +11,7 @@ import static Logica.Mensajes.I_SORTEO;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import static java.awt.image.ImageObserver.WIDTH;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,6 +25,7 @@ public class NumSorteos extends javax.swing.JDialog {
     public NumSorteos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
         setLocationRelativeTo(this);
         setResizable(false);
     }

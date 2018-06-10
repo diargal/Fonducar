@@ -117,8 +117,6 @@ public class ControlHistorial {
 
             return true;
         } catch (IOException | InvalidFormatException | EncryptedDocumentException e) {
-            System.err.println(e.getMessage());
-            System.out.println(e);
         }
 
         return false;
@@ -335,16 +333,13 @@ public class ControlHistorial {
         llenarComboBox();
 
         try {
-            int cont = 0;
             while (resul.next()) {
-                cont++;
                 object[0] = resul.getString(3);
                 object[1] = resul.getLong(2);
                 object[2] = resul.getString(1);
                 object[3] = resul.getString(4);
                 tabla.addRow(object);
             }
-            System.out.println(cont);
             historial.getJTHistorial().setModel(tabla);
             accesoBD.guardarOperacion(A_HOPERACIONES);
             historial.getJBSubir().setText("Descargar archivo");
@@ -571,7 +566,6 @@ public class ControlHistorial {
     public void llenarComboBox() {
         JComboBox jc = new JComboBox();
         for (int i = 0; i < array.size(); i++) {
-            System.out.println(array.get(i));
             jc.addItem(array.get(i));
         }
         historial.getJCBFiltro().setModel(jc.getModel());

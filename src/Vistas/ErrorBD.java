@@ -5,6 +5,8 @@
  */
 package Vistas;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Diego García
@@ -17,6 +19,7 @@ public class ErrorBD extends javax.swing.JDialog {
     public ErrorBD(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setIconImage (new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
         this.setLocationRelativeTo(this);
         this.setResizable(false);
     }

@@ -29,11 +29,16 @@ import static Logica.Mensajes.YGENERADOS;
 import Logica.Sorteo;
 import Vistas.Controlador.ControlArchivos;
 import Vistas.Controlador.ControlHistorial;
+import Vistas.Controlador.hiloCarga;
 import java.awt.Image;
 import java.io.File;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
@@ -66,6 +71,7 @@ public class MainControl extends javax.swing.JFrame {
 
     public MainControl() {
         initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
         this.setResizable(true);
         this.setLocationRelativeTo(this);
 //        imagen = new ImageIcon("src/Imagenes/Logo.png");
@@ -486,14 +492,12 @@ public class MainControl extends javax.swing.JFrame {
     }//GEN-LAST:event_JMAAsociadosActionPerformed
 
     private void JMIAsignarAsoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIAsignarAsoActionPerformed
-// 
-//        hiloCarga carga = new hiloCarga();
-//        Thread hilo = new Thread(carga);
-//        hilo.start();
+
         if (!sorteo.verificarFecha()) {
+//
             JOptionPane.showMessageDialog(null, YGENERADOS, "Información importante", JOptionPane.INFORMATION_MESSAGE);
+
         } else {
-            //hilo.start();
             boolean asociar = sorteo.asociarNumeros();
 
             if (asociar) {
@@ -506,7 +510,7 @@ public class MainControl extends javax.swing.JFrame {
                 }
             } else {
                 JOptionPane.showMessageDialog(this, RERROR, "Operacion fallida", JOptionPane.ERROR_MESSAGE);
-//                miRunnable.terminar();
+
             }
         }
     }//GEN-LAST:event_JMIAsignarAsoActionPerformed
@@ -712,31 +716,6 @@ public class MainControl extends javax.swing.JFrame {
             JLBalota3.setIcon(seleccionNumero(dec));
             JLBalota4.setIcon(seleccionNumero(uni));
 
-//            if (numero < 10) {
-//                JLBalota1.setIcon(seleccionNumero(0));
-//                JLBalota2.setIcon(seleccionNumero(0));
-//                JLBalota3.setIcon(seleccionNumero(0));
-//                JLBalota4.setIcon(seleccionNumero(numero));
-//            } else {
-//                if (numero < 100) {
-//                    JLBalota1.setIcon(seleccionNumero(0));
-//                    JLBalota2.setIcon(seleccionNumero(0));
-//                    JLBalota3.setIcon(seleccionNumero(dec));
-//                    JLBalota4.setIcon(seleccionNumero(uni));
-//                } else {
-//                    if (numero < 1000) {
-//                        JLBalota1.setIcon(seleccionNumero(0));
-//                        JLBalota2.setIcon(seleccionNumero(cent));
-//                        JLBalota3.setIcon(seleccionNumero(dec));
-//                        JLBalota4.setIcon(seleccionNumero(uni));
-//                    } else {
-//                        JLBalota1.setIcon(seleccionNumero(mil));
-//                        JLBalota2.setIcon(seleccionNumero(cent));
-//                        JLBalota3.setIcon(seleccionNumero(dec));
-//                        JLBalota4.setIcon(seleccionNumero(uni));
-//                    }
-//                }
-//            }
             JLGanador1.setText("Felicitaciones " + ganador + ", usted ha ganado " + nf.format(premio) + " Pesos");
             sorteosRealizados++;
             JLCuanto.setText("Sorteo " + sorteosRealizados + " de " + numerodeSorteos);
@@ -773,7 +752,6 @@ public class MainControl extends javax.swing.JFrame {
                 return new ImageIcon(CERO.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
         }
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBSorteo1;

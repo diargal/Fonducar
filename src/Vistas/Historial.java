@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.NumberFormat;
 import java.util.Locale;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -35,6 +36,18 @@ public class Historial extends javax.swing.JDialog {
     NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
     private TableRowSorter trsFiltro;
 
+    public Historial(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
+        this.setLocationRelativeTo(this);
+        this.setResizable(true);
+        tipoAccion = true;
+
+//        ordenar();
+//        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+    }
+
     public void setTipoAccion(boolean tipoAccion) {
         this.tipoAccion = tipoAccion;
     }
@@ -44,17 +57,6 @@ public class Historial extends javax.swing.JDialog {
      */
     public void setArchivo(File archivo) {
         this.archivo = archivo;
-    }
-
-    public Historial(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-        this.setLocationRelativeTo(this);
-        this.setResizable(true);
-        tipoAccion = true;
-
-//        ordenar();
-//        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     }
 
     public void ordenar() {
@@ -242,7 +244,6 @@ public class Historial extends javax.swing.JDialog {
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo generar el archivo.", "Error de operación", JOptionPane.ERROR_MESSAGE);
             }
-            System.out.println("Otra acción de historiales");
         }
     }//GEN-LAST:event_JBSubirActionPerformed
 
@@ -279,7 +280,6 @@ public class Historial extends javax.swing.JDialog {
         int columna = 0;
         for (int i = 0; i < JTHistorial.getModel().getColumnCount(); i++) {
             if (JTHistorial.getColumnName(i).equalsIgnoreCase(JCBFiltro.getSelectedItem().toString())) {
-                System.out.println(JTHistorial.getColumnName(i));
                 columna = i;
             }
         }

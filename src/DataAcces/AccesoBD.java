@@ -65,7 +65,7 @@ public class AccesoBD {
         try {
             Class.forName(driver).newInstance();
             conexion = DriverManager.getConnection(url, login, password);
-            System.out.println("Se acaba de acceder a la BD de fonducar!");
+            //System.out.println("Se acaba de acceder a la BD de fonducar!");
         } catch (Exception exc) {
             System.out.println("Error al tratar de abrir la base de datos");
         }
@@ -84,7 +84,7 @@ public class AccesoBD {
 
     /* --------------------------------------------------------------------------------------------------------------------------- */
     private ResultSet resultadoConexion(String comando) throws SQLException {
-        conexion();
+        //conexion();
         Statement stmt = conexion.createStatement();
         return stmt.executeQuery(comando);
 
@@ -370,12 +370,9 @@ public class AccesoBD {
 
                     if (resultado.next()) {
                         int idAsociado = resultado.getInt(1);
-                        System.out.println("Resultado: " + idAsociado);
                         if (asociacionAnioActual(resultado.getInt(1))) {
-                            System.out.println("entra");
                             modificarEstadoNumero(cedula, 0);
                         } else {
-                            System.out.println("otra");
                             return reingresarAsociado(idAsociado);
                         }
                     }
@@ -383,7 +380,6 @@ public class AccesoBD {
 //                desconectar();
             }
         } catch (SQLException e) {
-            System.out.println("error: " + e);
             return false;
         }
         return false;
@@ -408,12 +404,9 @@ public class AccesoBD {
 
     public boolean reingresarAsociado(int idAsociado) {
         try {
-            System.out.println("llega");
             int cantidad = cantidadNumAsociados() + 1;
-            System.out.println("cantidad: " + cantidad);
 
             if (!nuevoNumero(cantidad)) {
-                System.out.println("puta madre");
                 conexion();
                 //si ya el número existía en la tabla numero, debo cambiar su estado a 0
                 prepar = conexion.prepareStatement("UPDATE `numero` as n SET n.Estado = 0 "
@@ -423,7 +416,6 @@ public class AccesoBD {
 
             }
             conexion();
-            System.out.println("verga");
             prepar = conexion.prepareStatement("Insert into numeroasociado (idNumeroAsociado, Fecha, idAsociado, idNumero) values (" + null + ",?,?,?)");
             prepar.setString(1, fechaCompleta.format(date) + "");
             prepar.setDouble(2, idAsociado);

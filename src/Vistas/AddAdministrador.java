@@ -8,6 +8,7 @@ package Vistas;
 import Logica.Administrador;
 import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.administrador;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -25,6 +26,7 @@ public class AddAdministrador extends javax.swing.JDialog {
     public AddAdministrador(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setIconImage (new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
         setResizable(false);
         setLocationRelativeTo(this);
         tipoOperacion = 0;
