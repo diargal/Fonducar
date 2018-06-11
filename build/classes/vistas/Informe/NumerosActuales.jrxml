@@ -21,7 +21,7 @@
 	<title>
 		<band height="116" splitType="Stretch">
 			<textField>
-				<reportElement x="187" y="15" width="311" height="83"/>
+				<reportElement x="187" y="15" width="345" height="83"/>
 				<textElement textAlignment="Center">
 					<font fontName="Baskerville Old Face" size="24" isBold="false"/>
 				</textElement>
