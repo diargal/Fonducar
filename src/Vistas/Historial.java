@@ -12,6 +12,8 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -23,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import net.sf.jasperreports.engine.JRException;
 
 /**
  *
@@ -32,9 +35,10 @@ public class Historial extends javax.swing.JDialog {
 
     private File archivo;
     public boolean tipoAccion;
-    Locale locale = new Locale("es", "CO");
-    NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
+    private Locale locale = new Locale("es", "CO");
+    private NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
     private TableRowSorter trsFiltro;
+    public int numeroInforme;
 
     public Historial(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -43,6 +47,7 @@ public class Historial extends javax.swing.JDialog {
         this.setLocationRelativeTo(this);
         this.setResizable(true);
         tipoAccion = true;
+        numeroInforme = 0;
 
 //        ordenar();
 //        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -118,6 +123,14 @@ public class Historial extends javax.swing.JDialog {
 
     public void setJTxFFiltro(JTextField JTxFFiltro) {
         this.JTxFFiltro = JTxFFiltro;
+    }
+
+    public int getNumeroInforme() {
+        return numeroInforme;
+    }
+
+    public void setNumeroInforme(int numeroInforme) {
+        this.numeroInforme = numeroInforme;
     }
 
     @SuppressWarnings("unchecked")
@@ -239,7 +252,7 @@ public class Historial extends javax.swing.JDialog {
             }
         } else {
             if (generarArchivo()) {
-                JOptionPane.showMessageDialog(this, "Archivo generado con éxito.");
+                //JOptionPane.showMessageDialog(this, "Archivo generado con éxito.");
                 this.setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo generar el archivo.", "Error de operación", JOptionPane.ERROR_MESSAGE);
@@ -270,7 +283,12 @@ public class Historial extends javax.swing.JDialog {
      */
     public boolean generarArchivo() {
         ControlArchivos control = new ControlArchivos();
-        return control.generarArchivo(JTHistorial);
+        try {
+            return control.generarArchivo(JTHistorial, numeroInforme, this.getTitle(), JCBFiltro.getSelectedItem().toString(), JTxFFiltro.getText());
+        } catch (JRException ex) {
+            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     /*

@@ -1,4 +1,3 @@
-
 package Imagenes;
 
 import javax.swing.ImageIcon;
@@ -9,7 +8,8 @@ import javax.swing.ImageIcon;
  */
 public class ControlImagenes {
 
-    public static final ImageIcon CERO = new ImageIcon("src/Imagenes/pelotas/animacion.gif");
+    public static final ImageIcon ANIMACION = new ImageIcon("src/Imagenes/pelotas/animacion.gif");
+    public static final ImageIcon CERO = new ImageIcon("src/Imagenes/pelotas/0.png");
     public static final ImageIcon UNO = new ImageIcon("src/Imagenes/pelotas/1.png");
     public static final ImageIcon DOS = new ImageIcon("src/Imagenes/pelotas/2.png");
     public static final ImageIcon TRES = new ImageIcon("src/Imagenes/pelotas/3.png");
@@ -19,5 +19,5 @@ public class ControlImagenes {
     public static final ImageIcon SIETE = new ImageIcon("src/Imagenes/pelotas/7.png");
     public static final ImageIcon OCHO = new ImageIcon("src/Imagenes/pelotas/8.png");
     public static final ImageIcon NUEVE = new ImageIcon("src/Imagenes/pelotas/9.png");
-    
+
 }

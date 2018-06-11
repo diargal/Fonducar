@@ -140,16 +140,16 @@ public class ControlHistorial {
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
 
-        tabla.addColumn("Nombre Asociado");
-        tabla.addColumn("Cédula Asociado");
-        tabla.addColumn("Número Asignado");
-        tabla.addColumn("Fecha de Asignación");
+        tabla.addColumn("NOMBRE");
+        tabla.addColumn("CEDULA");
+        tabla.addColumn("NUMERO");
+        tabla.addColumn("FECHA");
         Object[] object = new Object[4];
         array = new ArrayList<>();
-        array.add("Nombre Asociado");
-        array.add("Cédula Asociado");
-        array.add("Número Asignado");
-        array.add("Fecha de Asignación");
+        array.add("NOMBRE");
+        array.add("CEDULA");
+        array.add("NUMERO");
+        array.add("FECHA");
         llenarComboBox();
 
         try {
@@ -167,6 +167,7 @@ public class ControlHistorial {
                 object[3] = resul.getString(4);
                 tabla.addRow(object);
             }
+            historial.setNumeroInforme(1);
             historial.getJTHistorial().setModel(tabla);
             accesoBD.guardarOperacion(A_HNS);
             historial.getJBSubir().setText("Descargar archivo");
@@ -238,7 +239,7 @@ public class ControlHistorial {
                 }
                 tabla.addRow(object);
             }
-
+            historial.setNumeroInforme(2);
             historial.getJTHistorial().setModel(tabla);
             accesoBD.guardarOperacion(A_REPORTESORTEOS);
             historial.getJBSubir().setText("Descargar archivo");
@@ -291,6 +292,7 @@ public class ControlHistorial {
             } else {
                 accesoBD.guardarOperacion(A_HASIN);
             }
+            historial.setNumeroInforme(3);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
@@ -340,6 +342,7 @@ public class ControlHistorial {
                 object[3] = resul.getString(4);
                 tabla.addRow(object);
             }
+            historial.setNumeroInforme(4);
             historial.getJTHistorial().setModel(tabla);
             accesoBD.guardarOperacion(A_HOPERACIONES);
             historial.getJBSubir().setText("Descargar archivo");
@@ -371,16 +374,16 @@ public class ControlHistorial {
 
         historial.getJTHistorial().setModel(modelo2);
 
-        tabla.addColumn("Nombre");
-        tabla.addColumn("Cédula");
-        tabla.addColumn("Número");
-        tabla.addColumn("Estado Asociado");
+        tabla.addColumn("NOMBRE");
+        tabla.addColumn("CEDULA");
+        tabla.addColumn("NUMERO");
+        tabla.addColumn("ESTADO");
         Object[] object = new Object[4];
         array = new ArrayList<>();
-        array.add("Nombre");
-        array.add("Cédula");
-        array.add("Número");
-        array.add("Estado Asociado");
+        array.add("NOMBRE");
+        array.add("CEDULA");
+        array.add("NUMERO");
+        array.add("ESTADO");
         llenarComboBox();
 
         try {
@@ -398,6 +401,7 @@ public class ControlHistorial {
                 object[3] = resul.getString(4);
                 tabla.addRow(object);
             }
+            historial.setNumeroInforme(5);
             historial.getJTHistorial().setModel(tabla);
             accesoBD.guardarOperacion(A_RACTUALES);
             historial.getJBSubir().setText("Descargar archivo");
@@ -407,8 +411,7 @@ public class ControlHistorial {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        historial.setVisible(
-                true);
+        historial.setVisible(true);
     }
 
     public void historialInhabilitadosActuales(ResultSet resul, boolean tipo) {
@@ -450,6 +453,7 @@ public class ControlHistorial {
             } else {
                 accesoBD.guardarOperacion(A_INHABILACTUALES);
             }
+            historial.setNumeroInforme(6);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
@@ -491,6 +495,7 @@ public class ControlHistorial {
                 object[1] = resul.getLong(2);
                 tabla.addRow(object);
             }
+            historial.setNumeroInforme(7);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
@@ -535,6 +540,7 @@ public class ControlHistorial {
                 object[2] = resul.getString(3);
                 tabla.addRow(object);
             }
+            historial.setNumeroInforme(8);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
