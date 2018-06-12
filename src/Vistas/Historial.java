@@ -48,6 +48,7 @@ public class Historial extends javax.swing.JDialog {
         this.setResizable(true);
         tipoAccion = true;
         numeroInforme = 0;
+        jLabel2Cargando.setVisible(false);
 
 //        ordenar();
 //        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -144,6 +145,7 @@ public class Historial extends javax.swing.JDialog {
         JPFiltro = new javax.swing.JPanel();
         JCBFiltro = new javax.swing.JComboBox<>();
         JTxFFiltro = new javax.swing.JTextField();
+        jLabel2Cargando = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -218,6 +220,8 @@ public class Historial extends javax.swing.JDialog {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
+        jLabel2Cargando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cargando.gif"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -225,17 +229,22 @@ public class Historial extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(JPFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2Cargando, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(93, 93, 93))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(JPFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JPFiltro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2Cargando, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10))
@@ -245,19 +254,37 @@ public class Historial extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBSubirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSubirActionPerformed
-        if (tipoAccion) {
-            if (accesoBD.guardarAsociados(archivo)) {
-                JOptionPane.showMessageDialog(this, "Se cargaron todos los datos a la BD", "Proceso exitoso", JOptionPane.INFORMATION_MESSAGE);
-                this.setVisible(false);
+
+        Thread hilo = new Thread() {
+            @Override
+            public void run() {
+
+                if (tipoAccion) {
+                    jLabel2Cargando.setVisible(true);
+                    if (accesoBD.guardarAsociados(archivo)) {
+
+                        jLabel2Cargando.setVisible(false);
+                        JOptionPane.showMessageDialog(Historial.this, "Se cargaron todos los datos a la BD", "Proceso exitoso", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                    }
+                } else {
+
+                    jLabel2Cargando.setVisible(true);
+
+                    if (generarArchivo()) {
+                        //JOptionPane.showMessageDialog(this, "Archivo generado con éxito.");
+                        // this.setVisible(false);
+                    } else {
+                        JOptionPane.showMessageDialog(Historial.this, "No se pudo generar el archivo.", "Error de operación", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
-        } else {
-            if (generarArchivo()) {
-                //JOptionPane.showMessageDialog(this, "Archivo generado con éxito.");
-                // this.setVisible(false);
-            } else {
-                JOptionPane.showMessageDialog(this, "No se pudo generar el archivo.", "Error de operación", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+
+        };
+
+        hilo.start();
+
+
     }//GEN-LAST:event_JBSubirActionPerformed
 
     private void JTxFFiltroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFFiltroKeyTyped
@@ -284,7 +311,7 @@ public class Historial extends javax.swing.JDialog {
     public boolean generarArchivo() {
         ControlArchivos control = new ControlArchivos();
         try {
-            return control.generarArchivo(JTHistorial, numeroInforme, this.getTitle(), JCBFiltro.getSelectedItem().toString(), JTxFFiltro.getText());
+            return control.generarArchivo(JTHistorial, numeroInforme, this.getTitle(), JCBFiltro.getSelectedItem().toString(), JTxFFiltro.getText(), jLabel2Cargando);
         } catch (JRException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -311,6 +338,7 @@ public class Historial extends javax.swing.JDialog {
     private javax.swing.JPanel JPFiltro;
     private javax.swing.JTable JTHistorial;
     private javax.swing.JTextField JTxFFiltro;
+    private javax.swing.JLabel jLabel2Cargando;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables

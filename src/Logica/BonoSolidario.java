@@ -43,13 +43,7 @@ public class BonoSolidario {
 //                UIManager.setLookAndFeel("UpperEssential.UpperEssentialLookAndFeel");
                 //Plastic3DLookAndFeel.setPlasticTheme(new DarkStar());
                 UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticLookAndFeel");
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(BonoSolidario.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InstantiationException ex) {
-                Logger.getLogger(BonoSolidario.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(BonoSolidario.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedLookAndFeelException ex) {
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
                 Logger.getLogger(BonoSolidario.class.getName()).log(Level.SEVERE, null, ex);
             }
 

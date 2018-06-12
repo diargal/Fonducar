@@ -17,8 +17,8 @@ public class Carga extends javax.swing.JDialog {
      * Creates new form Carga
      */
     public Carga(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-//        setUndecorated(true);
+//        super(parent, modal);
+////        setUndecorated(true);
         initComponents();
 //        setBackground(new Color(0, 0, 0, 0));
 //        setOpacity(0.6f);

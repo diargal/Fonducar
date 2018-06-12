@@ -1,64 +1,43 @@
 package Vistas.Controlador;
 
-import Vistas.Controlador.Informes.NumeroActuales;
 import static Logica.Mensajes.ERRORBDC;
 import static Logica.Mensajes.MENSAJE;
 import Vistas.Informe.Informe;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import static jdk.nashorn.internal.objects.NativeRegExp.source;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JRDesignViewer;
 import net.sf.jasperreports.view.JRViewer;
 import net.sf.jasperreports.view.JasperViewer;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
  * @author Diego García
  */
 public class ControlArchivos {
-
+    
     public ControlHistorial control;
     public static Informe ventanaInfo;
-
+    
     public ControlArchivos() {
         control = new ControlHistorial();
         ventanaInfo = new Informe(null, true);
@@ -72,15 +51,15 @@ public class ControlArchivos {
         try {
             File archivo;
             JFileChooser selecArchivo = new JFileChooser();
-
+            
             JOptionPane.showMessageDialog(null, MENSAJE, "Información importante", JOptionPane.INFORMATION_MESSAGE);
-
+            
             selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xls)", "xls"));
             selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xlsx)", "xlsx"));
             selecArchivo.showDialog(null, "Seleccionar archivo");
-
+            
             archivo = selecArchivo.getSelectedFile();
-
+            
             if (archivo.getName().endsWith("xls") || archivo.getName().endsWith("xlsx")) {
                 JOptionPane.showMessageDialog(null, "Importación exitosa");
                 cambiarApariencia(false);
@@ -94,15 +73,15 @@ public class ControlArchivos {
         }
         cambiarApariencia(false);
     }
-
-    public boolean generarArchivo(JTable tablita, int numero, String nombre, String item, String filtro) throws JRException {
+    
+    public boolean generarArchivo(JTable tablita, int numero, String nombre, String item, String filtro, JLabel label) throws JRException {
         DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
         Map map = new HashMap();
         DefaultTableModel tabla = new DefaultTableModel();
         Object[] columnas = new Object[tablita.getColumnCount()];
         JasperReport jasperReport = null;
-
+        
         map.put("Titulo", String.valueOf(nombre));
         if (!filtro.isEmpty()) {
             map.put("Subtitulo", "Filtrado por " + item + ", con valor de " + filtro);
@@ -148,27 +127,29 @@ public class ControlArchivos {
             case 7:
                 jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vistas/Informe/Administrador.jrxml"));
                 break;
-
+            
         }
 
 //        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vistas/Informe/NumerosActuales.jrxml"));
         try {
             DefaultTableModel model = (DefaultTableModel) tablita.getModel();
             JasperPrint jPrint;
-
+            
             jPrint = JasperFillManager.fillReport(jasperReport, map, new JRTableModelDataSource(tabla));
 //            jPrint = JasperFillManager.fillReport(jasperReport, map, new JRBeanCollectionDataSource(numero));
 //            JasperViewer.viewReport(jPrint, true);
-            JRViewer jv = new JRViewer(jPrint);
 
+            JRViewer jv = new JRViewer(jPrint);
+            label.setVisible(false);
             ventanaInfo.setContentPane(jv);
             ventanaInfo.setVisible(true);
-
+            
         } catch (JRException ex) {
             Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("");
         return true;
-
+        
     }
 //        cambiarApariencia(true);
 //        javax.swing.JFileChooser fileChooser = new JFileChooser();

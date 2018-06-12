@@ -22,7 +22,7 @@ import org.apache.commons.codec.digest.DigestUtils;
  * @author Diego García
  */
 public class AccesControl extends javax.swing.JDialog {
-    
+
     private final String pass;
     private final long cedula;
     private final MainControl controlPrincipal;
@@ -34,7 +34,7 @@ public class AccesControl extends javax.swing.JDialog {
     public AccesControl(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setIconImage (new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
+        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
         this.setResizable(false);
         this.setLocationRelativeTo(this);
         pass = "";
@@ -43,7 +43,7 @@ public class AccesControl extends javax.swing.JDialog {
         controlPrincipal = new MainControl();
         cerrarVentana();
     }
-    
+
     public void cerrarVentana() {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -52,7 +52,7 @@ public class AccesControl extends javax.swing.JDialog {
             }
         });
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -210,7 +210,7 @@ public class AccesControl extends javax.swing.JDialog {
     }
     private void JTxfPassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxfPassKeyPressed
         ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
-        
+
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             this.JBLoginActionPerformed(jd);
         }

@@ -58,7 +58,6 @@ public class ControlHistorial {
         historial = new Historial(null, true);
         historial.setArchivo(file);
         archivo = file;
-        historial.getJBSubir().setText("Subir a la BD");
         Workbook wb;
 
         aspectosGenerales("Anexo de asociados", true);
@@ -170,7 +169,7 @@ public class ControlHistorial {
             historial.setNumeroInforme(1);
             historial.getJTHistorial().setModel(tabla);
             accesoBD.guardarOperacion(A_HNS);
-            historial.getJBSubir().setText("Descargar archivo");
+//            historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
@@ -242,7 +241,7 @@ public class ControlHistorial {
             historial.setNumeroInforme(2);
             historial.getJTHistorial().setModel(tabla);
             accesoBD.guardarOperacion(A_REPORTESORTEOS);
-            historial.getJBSubir().setText("Descargar archivo");
+//            historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
 
         } catch (SQLException ex) {
@@ -294,7 +293,7 @@ public class ControlHistorial {
             }
             historial.setNumeroInforme(3);
             historial.getJTHistorial().setModel(tabla);
-            historial.getJBSubir().setText("Descargar archivo");
+//            historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
 //            accesoBD.desconectar();
         } catch (SQLException ex) {
@@ -345,7 +344,7 @@ public class ControlHistorial {
             historial.setNumeroInforme(4);
             historial.getJTHistorial().setModel(tabla);
             accesoBD.guardarOperacion(A_HOPERACIONES);
-            historial.getJBSubir().setText("Descargar archivo");
+//            historial.getJBSubir().setText("Generar archivo");
             historial.getJBSubir().setEnabled(true);
 //            accesoBD.desconectar();
 
@@ -404,7 +403,7 @@ public class ControlHistorial {
             historial.setNumeroInforme(5);
             historial.getJTHistorial().setModel(tabla);
             accesoBD.guardarOperacion(A_RACTUALES);
-            historial.getJBSubir().setText("Descargar archivo");
+//            historial.getJBSubir().setText("Generar archivo");
             historial.getJBSubir().setEnabled(true);
 
         } catch (SQLException ex) {
@@ -455,7 +454,7 @@ public class ControlHistorial {
             }
             historial.setNumeroInforme(6);
             historial.getJTHistorial().setModel(tabla);
-            historial.getJBSubir().setText("Descargar archivo");
+//             historial.getJBSubir().setText("Generar archivo");
             historial.getJBSubir().setEnabled(true);
 //            accesoBD.desconectar();
 
@@ -497,7 +496,7 @@ public class ControlHistorial {
             }
             historial.setNumeroInforme(0);
             historial.getJTHistorial().setModel(tabla);
-            historial.getJBSubir().setText("Descargar archivo");
+//            historial.getJBSubir().setText("Generar archivo");
             historial.getJBSubir().setEnabled(true);
 //            accesoBD.desconectar();
 
@@ -542,7 +541,6 @@ public class ControlHistorial {
             }
             historial.setNumeroInforme(7);
             historial.getJTHistorial().setModel(tabla);
-            historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
 //            accesoBD.desconectar();
 
@@ -564,6 +562,11 @@ public class ControlHistorial {
         historial.getJPFiltro().setEnabled(!valor);
         historial.getJCBFiltro().setEnabled(!valor);
         historial.getJTxFFiltro().setEnabled(!valor);
+        if (valor) {
+            historial.getJBSubir().setText("Subir a la BD");
+        } else {
+            historial.getJBSubir().setText("Generar archivo");
+        }
     }
 
     /*
