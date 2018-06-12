@@ -103,7 +103,7 @@ public class ControlArchivos {
         Object[] columnas = new Object[tablita.getColumnCount()];
         JasperReport jasperReport = null;
 
-        map.put("Titulo", nombre);
+        map.put("Titulo", String.valueOf(nombre));
         if (!filtro.isEmpty()) {
             map.put("Subtitulo", "Filtrado por " + item + ", con valor de " + filtro);
         } else {
@@ -146,6 +146,7 @@ public class ControlArchivos {
                 jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vistas/Informe/HistorialEXAS.jrxml"));
                 break;
             case 7:
+                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vistas/Informe/Administrador.jrxml"));
                 break;
 
         }

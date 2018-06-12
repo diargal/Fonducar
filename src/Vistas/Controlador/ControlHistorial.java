@@ -511,7 +511,7 @@ public class ControlHistorial {
 
     public void verAdministradores(ResultSet resul) {
         historial = new Historial(null, true);
-        aspectosGenerales("Administradores activos", false);
+        aspectosGenerales("Administradores registrados", false);
 
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
@@ -523,14 +523,14 @@ public class ControlHistorial {
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
 
-        tabla.addColumn("Nombre administrador");
-        tabla.addColumn("Cédula administrador");
-        tabla.addColumn("Activo");
+        tabla.addColumn("NOMBRE ADMINISTRADOR");
+        tabla.addColumn("CEDULA ADMINISTRADOR");
+        tabla.addColumn("ACTIVO");
         Object[] object = new Object[3];
         array = new ArrayList<>();
-        array.add("Nombre administrador");
-        array.add("Cédula administrador");
-        array.add("Activo");
+        array.add("NOMBRE ADMINISTRADOR");
+        array.add("CEDULA ADMINISTRADOR");
+        array.add("ACTIVO");
         llenarComboBox();
 
         try {

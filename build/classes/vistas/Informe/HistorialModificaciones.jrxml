@@ -84,7 +84,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="63" splitType="Stretch">
+		<band height="48" splitType="Stretch">
 			<textField>
 				<reportElement x="13" y="0" width="118" height="20"/>
 				<textElement textAlignment="Center"/>
@@ -101,7 +101,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{CEDULA ADMINISTRADOR}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="402" y="0" width="141" height="62"/>
+				<reportElement x="402" y="0" width="141" height="48"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{DETALLE OPERACION}]]></textFieldExpression>
 			</textField>

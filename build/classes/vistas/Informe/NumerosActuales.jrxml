@@ -19,16 +19,17 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="116" splitType="Stretch">
-			<textField>
-				<reportElement x="170" y="0" width="362" height="104"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font fontName="Baskerville Old Face" size="24" isBold="false"/>
+		<band height="131" splitType="Stretch">
+			<textField pattern="">
+				<reportElement x="180" y="3" width="352" height="128"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None">
+					<font fontName="Baskerville Old Face" size="24" isBold="false" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{Titulo}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="0" y="0" width="170" height="116"/>
+				<reportElement x="0" y="3" width="147" height="128"/>
 				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Win10\\Desktop\\Bono Solidario\\Bono Solidarip\\src\\Imagenes\\Logo.png"]]></imageExpression>
 			</image>
 		</band>
