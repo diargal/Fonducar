@@ -125,7 +125,7 @@ public class ControlHistorial {
     /*
     Carga el historial de los números asignados a todos los asociados a lo largo del tiempo
      */
-    public void historialNumeros(ResultSet resul) {
+    public void historialNumeros(ResultSet resul) { //1
 
         historial = new Historial(null, true);
         aspectosGenerales("Información del historial de los números asignados a cada asociado", false);
@@ -198,20 +198,20 @@ public class ControlHistorial {
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
 
-        tabla.addColumn("Nombre Ganador");
-        tabla.addColumn("Cédula Ganador");
-        tabla.addColumn("Fecha Sorteo");
-        tabla.addColumn("Número Ganador");
-        tabla.addColumn("Premio (Pesos)");
-        tabla.addColumn("Tipo de Sorteo");
+        tabla.addColumn("NOMBRE");
+        tabla.addColumn("CEDULA");
+        tabla.addColumn("FECHA");
+        tabla.addColumn("NUMERO");
+        tabla.addColumn("PREMIO (PESOS)");
+        tabla.addColumn("TIPO PREMIO");
         Object[] object = new Object[6];
         array = new ArrayList<>();
-        array.add("Nombre Ganador");
-        array.add("Cédula Ganador");
-        array.add("Fecha sorteo (DD/MM/AAAA)");
-        array.add("Número Ganador");
-        array.add("Premio (Pesos)");
-        array.add("Tipo de Sorteo");
+        array.add("NOMBRE");
+        array.add("CEDULA");
+        array.add("FECHA");
+        array.add("NUMERO");
+        array.add("PREMIO");
+        array.add("TIPO");
         llenarComboBox();
 
         try {
@@ -267,16 +267,16 @@ public class ControlHistorial {
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
 
-        tabla.addColumn("Nombre Asociado");
-        tabla.addColumn("Cédula Asociado");
-        tabla.addColumn("Fecha inhabilitación");
-        tabla.addColumn("Razón");
+        tabla.addColumn("NOMBRE ASOCIADO");
+        tabla.addColumn("CEDULA ASOCIADO");
+        tabla.addColumn("FECHA INHABILITACION");
+        tabla.addColumn("RAZON");
         Object[] object = new Object[4];
         array = new ArrayList<>();
-        array.add("Nombre Asociado");
-        array.add("Cédula Asociado");
-        array.add("Fecha inhabilitación");
-        array.add("Razón");
+        array.add("NOMBRE ASOCIADO");
+        array.add("CEDULA ASOCIADO");
+        array.add("FECHA INHABILITACION");
+        array.add("RAZON");
         llenarComboBox();
 
         try {
@@ -310,7 +310,7 @@ public class ControlHistorial {
     public void historialModificaciones(ResultSet resul) {
 
         historial = new Historial(null, true);
-        aspectosGenerales("Historial de moficaciones", false);
+        aspectosGenerales("Historial de operaciones y movimientos", false);
 
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
@@ -322,16 +322,16 @@ public class ControlHistorial {
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
 
-        tabla.addColumn("Hora y Fecha Realización");
-        tabla.addColumn("Cédula Administrador");
-        tabla.addColumn("Nombre Administrador");
-        tabla.addColumn("Detalle Operación");
+        tabla.addColumn("FECHA REALIZACION");
+        tabla.addColumn("NOMBRE ADMINISTRADOR");
+        tabla.addColumn("CEDULA ADMINISTRADOR");
+        tabla.addColumn("DETALLE OPERACION");
         Object[] object = new Object[4];
         array = new ArrayList<>();
-        array.add("Hora y Fecha Realización");
-        array.add("Cédula Administrador");
-        array.add("Nombre Administrador");
-        array.add("Detalle Operación");
+        array.add("FECHA DE REALIZACION");
+        array.add("CEDULA ADMINISTRADOR");
+        array.add("NOMBRE ADMINISTRADOR");
+        array.add("DETALLE OPERACION");
         llenarComboBox();
 
         try {
@@ -361,7 +361,7 @@ public class ControlHistorial {
      */
     public void numerosActuales(ResultSet resul) {
         historial = new Historial(null, true);
-        aspectosGenerales("Lista de los números actuales de cada asociado y ex-asocaiado con participación", false);
+        aspectosGenerales("Informe de los números actuales de cada asociado y ex-asociado con participación", false);
 
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
@@ -428,16 +428,16 @@ public class ControlHistorial {
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
 
-        tabla.addColumn("Nombre Asociado");
-        tabla.addColumn("Cédula Asociado");
-        tabla.addColumn("Fecha inhabilitación");
-        tabla.addColumn("Razón");
+        tabla.addColumn("NOMBRE ASOCIADO");
+        tabla.addColumn("CEDULA ASOCIADO");
+        tabla.addColumn("FECHA INHABILITACION");
+        tabla.addColumn("RAZON");
         Object[] object = new Object[4];
         array = new ArrayList<>();
-        array.add("Nombre Asociado");
-        array.add("Cédula Asociado");
-        array.add("Fecha inhabilitación");
-        array.add("Razón");
+        array.add("NOMBRE ASOCIADO");
+        array.add("CEDULA ASOCIADO");
+        array.add("FECHA INHABILITACION");
+        array.add("RAZON");
         llenarComboBox();
 
         try {
@@ -495,7 +495,7 @@ public class ControlHistorial {
                 object[1] = resul.getLong(2);
                 tabla.addRow(object);
             }
-            historial.setNumeroInforme(7);
+            historial.setNumeroInforme(0);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
@@ -540,7 +540,7 @@ public class ControlHistorial {
                 object[2] = resul.getString(3);
                 tabla.addRow(object);
             }
-            historial.setNumeroInforme(8);
+            historial.setNumeroInforme(7);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);

@@ -107,21 +107,21 @@ public class ControlArchivos {
         if (!filtro.isEmpty()) {
             map.put("Subtitulo", "Filtrado por " + item + ", con valor de " + filtro);
         } else {
-            map.put("Subtitulo", "Tabla original sin filtro");
+            map.put("Subtitulo", "Tabla original sin filtro aplicado");
         }
         map.put("Fecha", fecha.format(date));
 
         //Creo las columnas de la nueva tabla
         for (int c = 0; c < tablita.getColumnCount(); c++) {
             tabla.addColumn(tablita.getColumnName(c));
+            System.out.println("Nombre Columna: " + tablita.getColumnName(c));
         }
 
-        //Lleno la nueva tabla que cree
+        //Lleno la nueva tabla que creé
         for (int f = 0; f < tablita.getRowCount(); f++) {
-            columnas[0] = tablita.getValueAt(f, 0);
-            columnas[1] = String.valueOf(tablita.getValueAt(f, 1));
-            columnas[2] = tablita.getValueAt(f, 2);
-            columnas[3] = tablita.getValueAt(f, 3);
+            for (int c = 0; c < tablita.getColumnCount(); c++) {
+                columnas[c] = String.valueOf(tablita.getValueAt(f, c));
+            }
             tabla.addRow(columnas);
         }
 
@@ -130,20 +130,22 @@ public class ControlArchivos {
             case 1:
                 jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vistas/Informe/historialNumeros.jrxml"));
                 break;
-            case 2:;
+            case 2:
+                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vistas/Informe/HistorialSorteos.jrxml"));
                 break;
             case 3:
+                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vistas/Informe/HistorialEXAS.jrxml"));
                 break;
             case 4:
+                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vistas/Informe/HistorialModificaciones.jrxml"));
                 break;
             case 5:
                 jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vistas/Informe/NumerosActuales.jrxml"));
                 break;
             case 6:
+                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vistas/Informe/HistorialEXAS.jrxml"));
                 break;
             case 7:
-                break;
-            case 8:
                 break;
 
         }

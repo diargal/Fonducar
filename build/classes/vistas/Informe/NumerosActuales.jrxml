@@ -21,8 +21,8 @@
 	<title>
 		<band height="116" splitType="Stretch">
 			<textField>
-				<reportElement x="187" y="15" width="345" height="83"/>
-				<textElement textAlignment="Center">
+				<reportElement x="170" y="0" width="362" height="104"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font fontName="Baskerville Old Face" size="24" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{Titulo}]]></textFieldExpression>
@@ -49,7 +49,7 @@
 			</staticText>
 			<textField>
 				<reportElement x="18" y="11" width="403" height="40"/>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Justified">
 					<font fontName="Bahnschrift" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{Subtitulo}]]></textFieldExpression>

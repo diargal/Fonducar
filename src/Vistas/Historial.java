@@ -253,7 +253,7 @@ public class Historial extends javax.swing.JDialog {
         } else {
             if (generarArchivo()) {
                 //JOptionPane.showMessageDialog(this, "Archivo generado con éxito.");
-                this.setVisible(false);
+                // this.setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo generar el archivo.", "Error de operación", JOptionPane.ERROR_MESSAGE);
             }
