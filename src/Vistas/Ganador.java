@@ -5,8 +5,13 @@
  */
 package Vistas;
 
+import static Imagenes.ControlImagenes.BOMBA;
+import static Imagenes.ControlImagenes.DERECHA;
+import static Imagenes.ControlImagenes.IZQUIERDA;
 import java.awt.Color;
 import javax.swing.JLabel;
+import org.jvnet.substance.SubstanceLookAndFeel;
+import org.jvnet.substance.watermark.SubstanceImageWatermark;
 
 /**
  *
@@ -19,10 +24,12 @@ public class Ganador extends javax.swing.JDialog {
      */
     public Ganador(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        setUndecorated(true);
+//        setUndecorated(true);
         initComponents();
-        setBackground(new Color(0, 0, 0, 0));
-        setOpacity(0.6f);
+        setLocationRelativeTo(this);
+        setResizable(false);
+//        setBackground(new Color(0, 0, 0, 0));
+//        setOpacity(0.6f);
 //        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     }
 
@@ -35,72 +42,60 @@ public class Ganador extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        JLNombreGanador = new javax.swing.JLabel();
+        JLPremio = new javax.swing.JLabel();
         JL1 = new javax.swing.JLabel();
-        JLGanador = new javax.swing.JLabel();
         JL2 = new javax.swing.JLabel();
+        JLBomba = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        JLGanador.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 48)); // NOI18N
-        JLGanador.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        JLNombreGanador.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 48)); // NOI18N
+        JLNombreGanador.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(JLNombreGanador, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 840, 60));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(JL2)
-                .addGap(51, 51, 51))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addComponent(JL1)
-                .addGap(39, 39, 39)
-                .addComponent(JLGanador, javax.swing.GroupLayout.PREFERRED_SIZE, 675, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(78, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(73, 73, 73)
-                .addComponent(JL1)
-                .addGap(123, 123, 123)
-                .addComponent(JLGanador, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(JL2)
-                .addContainerGap(96, Short.MAX_VALUE))
-        );
+        JLPremio.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 48)); // NOI18N
+        JLPremio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(JLPremio, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 840, 70));
+
+        JL1.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 48)); // NOI18N
+        getContentPane().add(JL1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 420, 280));
+        getContentPane().add(JL2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 20, 420, 280));
+
+        JLBomba.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(JLBomba, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 580, 310));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public JLabel getJL1() {
-        return JL1;
-    }
-
-    public void setJL1(JLabel JL1) {
-        this.JL1 = JL1;
-    }
-
-    public JLabel getJL2() {
-        return JL2;
-    }
-
-    public void setJL2(JLabel JL2) {
-        this.JL2 = JL2;
-    }
-
     public JLabel getJLGanador() {
-        return JLGanador;
+        return JLNombreGanador;
     }
-
+    
     public void setJLGanador(JLabel JLGanador) {
-        this.JLGanador = JLGanador;
+        this.JLNombreGanador = JLGanador;
+    }
+    
+    public JLabel getJLPremio() {
+        return JLPremio;
+    }
+    
+    public void setJLPremio(JLabel JLPremio) {
+        this.JLPremio = JLPremio;
+    }
+    
+    public void vista() {
+        JL1.setIcon(IZQUIERDA);
+        JL2.setIcon(DERECHA);
+//        JLBomba.setIcon(BOMBA);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel JL1;
     private javax.swing.JLabel JL2;
-    private javax.swing.JLabel JLGanador;
+    private javax.swing.JLabel JLBomba;
+    private javax.swing.JLabel JLNombreGanador;
+    private javax.swing.JLabel JLPremio;
     // End of variables declaration//GEN-END:variables
 }

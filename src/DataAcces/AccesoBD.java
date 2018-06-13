@@ -130,7 +130,8 @@ public class AccesoBD {
      */
     private void guardarGanador(long idNumAso, float premio, int tipo) {
         conexion();
-
+        Date date = new Date();
+        fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String fecha2 = fechaCompleta.format(date);
 
         try {

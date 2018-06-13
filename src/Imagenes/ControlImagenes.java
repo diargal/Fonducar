@@ -20,4 +20,8 @@ public class ControlImagenes {
     public static final ImageIcon OCHO = new ImageIcon("src/Imagenes/pelotas/8.png");
     public static final ImageIcon NUEVE = new ImageIcon("src/Imagenes/pelotas/9.png");
 
+    public static final ImageIcon IZQUIERDA = new ImageIcon("src/Imagenes/Ganador/CCiz.gif");
+    public static final ImageIcon DERECHA = new ImageIcon("src/Imagenes/Ganador/CCde.gif");
+    public static final ImageIcon BOMBA = new ImageIcon("src/Imagenes/Ganador/3.gif");
+
 }

@@ -249,7 +249,7 @@ public class ValorSorteo extends javax.swing.JDialog {
                         tipo = 1;
                         JTxFValor.setText("");
                         JTxFConfirmacion1.setText("");
-                        this.setVisible(false);
+                        dispose();
                     } else {
                         error = true;
                         JOptionPane.showMessageDialog(this, "Debe seleccionar el tipo de premio.", "Criterios sin seleccionar", JOptionPane.ERROR_MESSAGE);
