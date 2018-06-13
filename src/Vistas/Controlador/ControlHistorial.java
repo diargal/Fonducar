@@ -209,7 +209,7 @@ public class ControlHistorial {
         array.add("CEDULA");
         array.add("FECHA");
         array.add("NUMERO");
-        array.add("PREMIO");
+        array.add("PREMIO (PESOS)");
         array.add("TIPO");
         llenarComboBox();
 

@@ -185,7 +185,7 @@ public class AccesControl extends javax.swing.JDialog {
                 } else {
                     controlPrincipal.getJMSuper().setEnabled(false);
                 }
-                controlPrincipal.verActivos();
+//                controlPrincipal.verActivos();
                 controlPrincipal.setVisible(true);
             } else {
                 ManagerError();

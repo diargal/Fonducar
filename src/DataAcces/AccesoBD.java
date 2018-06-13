@@ -30,6 +30,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 
@@ -65,7 +66,7 @@ public class AccesoBD {
         try {
             Class.forName(driver).newInstance();
             conexion = DriverManager.getConnection(url, login, password);
-            //System.out.println("Se acaba de acceder a la BD de fonducar!");
+            System.out.println("Se acaba de acceder a la BD de fonducar!");
         } catch (Exception exc) {
             System.out.println("Error al tratar de abrir la base de datos");
         }
@@ -75,16 +76,16 @@ public class AccesoBD {
         return conexion;
     }
 
-//    public void desconectar() {
-//        conexion = null;
-//        if (conexion == null) {
-//            System.out.println("Conexión finalizada.");
-//        }
-//    }
+    public void desconectar() {
+        conexion = null;
+        if (conexion == null) {
+            System.out.println("Conexión finalizada.");
+        }
+    }
 
     /* --------------------------------------------------------------------------------------------------------------------------- */
     private ResultSet resultadoConexion(String comando) throws SQLException {
-        //conexion();
+        conexion();
         Statement stmt = conexion.createStatement();
         return stmt.executeQuery(comando);
 
@@ -112,14 +113,14 @@ public class AccesoBD {
                     administrador.setNombre(resultado.getString(7));
                     administrador.setCedula(resultado.getLong(8));
                 }
-//                desconectar();
+                desconectar();
                 return true;
             }
 
         } catch (java.sql.SQLException er) {
             JOptionPane.showMessageDialog(null, "No se pudo realizar la consulta de Administrador", "Failed!", JOptionPane.ERROR_MESSAGE);
         }
-//        desconectar();
+        desconectar();
         return false;
     }
 
@@ -138,7 +139,7 @@ public class AccesoBD {
             prepar = conexion.prepareStatement(comandoSQL);
             prepar.execute();
 
-//            desconectar();
+            desconectar();
         } catch (java.sql.SQLException er) {
             JOptionPane.showMessageDialog(null, "No se pudo guardar el historial. " + er, "Failed!", JOptionPane.ERROR_MESSAGE);
 
@@ -160,12 +161,12 @@ public class AccesoBD {
 //            desconectar();
             return true;
         } catch (Exception e) {
-//            desconectar();
+            desconectar();
             return false;
         }
     }
 
-    public boolean guardarAsociados(File file) {
+    public boolean guardarAsociados(File file, JLabel label) {
         conexion();
         int id = 0;
         long cedula = 0;
@@ -240,8 +241,8 @@ public class AccesoBD {
 
             guardarOperacion(A_AGREGARASOCIADOS);
 
-            //conexion.close();
-//            desconectar();
+            desconectar();
+            label.setVisible(false);
             return true;
 
         } catch (IOException | InvalidFormatException ex) {
@@ -250,6 +251,7 @@ public class AccesoBD {
         } catch (IllegalStateException | InvalidOperationException de) {
             JOptionPane.showMessageDialog(null, ERRORBDC, "Error de lectura", JOptionPane.ERROR_MESSAGE);
         }
+        label.setVisible(false);
         return false;
     }
 
@@ -322,7 +324,7 @@ public class AccesoBD {
                 prepar.setDouble(1, cedula);
 
                 if (prepar.executeUpdate() == 0) {
-//                    desconectar();
+                    desconectar();
                     return false;
                 } else {
                     //busco el id del asociado que concuerda con la cédula ingresada
@@ -340,7 +342,7 @@ public class AccesoBD {
                             case 2:
                                 prepar.setInt(3, 0);
                                 prepar.execute();
-//                                desconectar();
+                                desconectar();
                                 if (numerosAsignados()) //hago todo el proceso sólo si hay números asignados
                                 { //modifico el estado del número, lo coloco en 0 que indica que el número está habilitado para sorteos
 
@@ -353,7 +355,7 @@ public class AccesoBD {
                             case 3:
                                 prepar.setInt(3, 1);
                                 prepar.execute();
-//                                desconectar();
+                                desconectar();
                                 //modifico el estado del número, lo coloco en 0 que indica que el número está inhabilitado para sorteos
                                 return modificarEstadoNumero(cedula, 1);
                         }
@@ -370,16 +372,18 @@ public class AccesoBD {
 
                     if (resultado.next()) {
                         int idAsociado = resultado.getInt(1);
-                        if (asociacionAnioActual(resultado.getInt(1))) {
+                        if (asociacionAnioActual(resultado.getInt(1))) { //si el asociado tiene asignado un número
                             modificarEstadoNumero(cedula, 0);
+                            return true;
                         } else {
                             return reingresarAsociado(idAsociado);
                         }
                     }
                 }
-//                desconectar();
+                desconectar();
             }
         } catch (SQLException e) {
+            System.out.println("Entro en excep");
             return false;
         }
         return false;
@@ -421,7 +425,7 @@ public class AccesoBD {
             prepar.setDouble(2, idAsociado);
             prepar.setDouble(3, cantidad);
             prepar.execute();
-//            desconectar();
+            desconectar();
         } catch (SQLException ex) {
             return false;
         }
@@ -435,21 +439,21 @@ public class AccesoBD {
             resultado = resultadoConexion("SELECT p.Nombre, a.idAsociado FROM `asociado` as a, persona as p "
                     + "WHERE a.estado = 0 and a.idPersona = p.idPersona and p.Cedula = '" + cedula + "'");
             if (resultado.next()) {
-//                desconectar();
+                desconectar();
                 return 1;
             }
             /*retorno si es ex-asociado con participación*/
             resultado = resultadoConexion("SELECT p.Nombre, p.cedula FROM `asociado` as a, persona as p, inhabilitacion as i "
                     + "WHERE a.estado = 1 and a.idPersona = p.idPersona and p.Cedula = '" + cedula + "' and i.idAsociado = a.idAsociado and i.estado=0");
             if (resultado.next()) {
-//                desconectar();
+                desconectar();
                 return 2;
             }
             /*retorno si es ex-asociado sin participación*/
             resultado = resultadoConexion("SELECT p.Nombre, p.cedula FROM `asociado` as a, persona as p, inhabilitacion as i "
                     + "WHERE a.estado = 1 and a.idPersona = p.idPersona and p.Cedula = '" + cedula + "' and i.idAsociado = a.idAsociado and i.estado=1");
             if (resultado.next()) {
-//                desconectar();
+                desconectar();
                 return 3;
             }
 
@@ -464,7 +468,7 @@ public class AccesoBD {
             prepar = conexion.prepareStatement("UPDATE `persona` as p SET `Nombre`=? WHERE p.Cedula = ?");
             prepar.setString(1, nombre);
             prepar.setLong(2, cedula);
-//            desconectar();
+            desconectar();
             if (prepar.executeUpdate() == 0) {
                 guardarOperacion(A_SETASOCIADO);
                 return false;
@@ -489,7 +493,7 @@ public class AccesoBD {
                     + "where a.usuario = '" + admin.getUsuario() + "'");
 
             if (resultado.next()) {
-//                desconectar();
+                desconectar();
                 return false;
             }
 
@@ -526,7 +530,7 @@ public class AccesoBD {
             prepar.setInt(3, idPersona);
             prepar.setInt(4, 0);
             prepar.execute();
-//            desconectar();
+            desconectar();
             guardarOperacion(ADD_ADMIN);
             return true;
         } catch (MySQLIntegrityConstraintViolationException er) {
@@ -534,7 +538,7 @@ public class AccesoBD {
         } catch (SQLException ex) {
             Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        desconectar();
+        desconectar();
         return false;
     }
 
@@ -594,12 +598,12 @@ public class AccesoBD {
         try {
             resultado = resultadoConexion("SELECT na.fecha FROM `numeroasociado` as na WHERE '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 )");
             if (resultado.next()) {
-//                desconectar();
+                desconectar();
                 return false;
             }
         } catch (SQLException es) {
         }
-//        desconectar();
+        desconectar();
         return true;
     }
 
@@ -624,13 +628,13 @@ public class AccesoBD {
             resultado = resultadoConexion("Select count(a.idAsociado) from asociado as a");
             if (resultado.next()) {
                 if (resultado.getInt(1) == 0) {
-//                    desconectar();
+                    desconectar();
                     return false;
                 }
             }
         } catch (SQLException ex) {
         }
-//        desconectar();
+        desconectar();
         return true;
     }
 
@@ -684,7 +688,7 @@ public class AccesoBD {
             prepar.setInt(2, cantidad);
             prepar.execute();
 
-//            desconectar();
+            desconectar();
         } catch (SQLException ex) {
             Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -701,7 +705,7 @@ public class AccesoBD {
             prepar.setDouble(3, idNumero);
             prepar.execute();
 
-//            desconectar();
+            desconectar();
             return true;
         } catch (java.sql.SQLException er) {
             return false;
@@ -730,7 +734,7 @@ public class AccesoBD {
             conexion();
             prepar = conexion.prepareStatement("UPDATE `numero` as n SET n.Estado = 0 WHERE n.estado = 1");
             prepar.executeUpdate();
-//            desconectar();
+            desconectar();
         } catch (SQLException ex) {
             return false;
         }
@@ -743,7 +747,7 @@ public class AccesoBD {
             prepar = conexion.prepareStatement("Insert into numero (idNumero, Estado) values (?," + 0 + ")");
             prepar.setInt(1, num);
             prepar.execute();
-//            desconectar();
+            desconectar();
         } catch (SQLException ex) {
             return false;
         }
@@ -756,7 +760,7 @@ public class AccesoBD {
             prepar = conexion.prepareStatement("UPDATE `numero` as n SET n.Estado = 0 WHERE n.idNumero = ?");
             prepar.setInt(1, numero);
             if (prepar.executeUpdate() != 0) {
-//                desconectar();
+                desconectar();
                 return true;
             }
         } catch (SQLException ex) {
@@ -793,14 +797,14 @@ public class AccesoBD {
             }
 
             if (resultado.next()) {
-//                desconectar();
+                desconectar();
                 return resultado.getInt(1);
             }
         } catch (java.sql.SQLException er) {
             JOptionPane.showMessageDialog(null, er, "Failed!", JOptionPane.ERROR_MESSAGE);
         }
 
-//        desconectar();
+        desconectar();
         return 0;
     }
 
@@ -836,7 +840,7 @@ public class AccesoBD {
         } catch (java.sql.SQLException er) {
             JOptionPane.showMessageDialog(null, "Error al saber el ganador" + er, "Failed!", JOptionPane.ERROR_MESSAGE);
         }
-//        desconectar();
+        desconectar();
         return "";
     }
 
@@ -846,7 +850,7 @@ public class AccesoBD {
         try {
             //conexion();
             resultado = resultadoConexion("SELECT count(*) FROM numero as n where n.Estado=0");
-//            desconectar();
+            desconectar();
             if (resultado.next()) {
                 return resultado.getInt(1);
             }
@@ -855,7 +859,7 @@ public class AccesoBD {
             JOptionPane.showMessageDialog(null, er, "Failed!", JOptionPane.ERROR_MESSAGE);
         }
 
-//        desconectar();
+        desconectar();
         return 0;
     }
 

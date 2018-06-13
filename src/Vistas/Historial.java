@@ -261,7 +261,7 @@ public class Historial extends javax.swing.JDialog {
 
                 if (tipoAccion) {
                     jLabel2Cargando.setVisible(true);
-                    if (accesoBD.guardarAsociados(archivo)) {
+                    if (accesoBD.guardarAsociados(archivo, jLabel2Cargando)) {
 
                         jLabel2Cargando.setVisible(false);
                         JOptionPane.showMessageDialog(Historial.this, "Se cargaron todos los datos a la BD", "Proceso exitoso", JOptionPane.INFORMATION_MESSAGE);

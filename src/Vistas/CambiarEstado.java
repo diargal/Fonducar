@@ -165,24 +165,26 @@ public class CambiarEstado extends javax.swing.JDialog {
 
     private void JBAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAceptarActionPerformed
         int opcion = 0;
-        if (JCBAccion.getSelectedItem().equals("Ex-Asociado SIN participación")) {
-            opcion = 3;
-        } else {
-            if (JCBAccion.getSelectedItem().equals("Ex-Asociado CON participación")) {
-                opcion = 2;
+        if (JCBAccion.isEnabled()) {
+            if (JCBAccion.getSelectedItem().equals("Ex-Asociado SIN participación")) {
+                opcion = 3;
             } else {
-                if (JCBAccion.getSelectedItem().equals("Asociado activo")) {
-                    opcion = 1;
+                if (JCBAccion.getSelectedItem().equals("Ex-Asociado CON participación")) {
+                    opcion = 2;
+                } else {
+                    if (JCBAccion.getSelectedItem().equals("Asociado activo")) {
+                        opcion = 1;
+                    }
                 }
             }
-        }
 
-        if (sorteo.cambiarEstado(Long.parseLong(JTxFCedula.getText()), opcion, JTxAObservacion.getText())) {
-            JOptionPane.showMessageDialog(null, MSG, "Operación exitosa!", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, RERROR, "Operación fallida!", JOptionPane.INFORMATION_MESSAGE);
+            if (sorteo.cambiarEstado(Long.parseLong(JTxFCedula.getText()), opcion, JTxAObservacion.getText())) {
+                JOptionPane.showMessageDialog(null, MSG, "Operación exitosa!", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, RERROR, "Operación fallida!", JOptionPane.INFORMATION_MESSAGE);
+            }
+            dispose();
         }
-        this.setVisible(false);
     }//GEN-LAST:event_JBAceptarActionPerformed
 
     private void JBBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBBuscarActionPerformed

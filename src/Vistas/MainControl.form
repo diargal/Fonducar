@@ -241,7 +241,8 @@
                   <Component id="jPanel4" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel2Cargando" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
+                      <Component id="JLGanador" min="-2" pref="800" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -258,9 +259,12 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
-              <Component id="jLabel2Cargando" min="-2" pref="77" max="-2" attributes="0"/>
-              <EmptySpace pref="45" max="32767" attributes="0"/>
+              <EmptySpace pref="73" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jLabel2Cargando" min="-2" pref="77" max="-2" attributes="0"/>
+                  <Component id="JLGanador" min="-2" pref="53" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -415,6 +419,11 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/Imagenes/cargando.gif"/>
         </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="JLGanador">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel1"/>
       </Properties>
     </Component>
   </SubComponents>
