@@ -244,7 +244,7 @@ public class ValorSorteo extends javax.swing.JDialog {
                         tipo = 0;
                         JTxFValor.setText("");
                         JTxFConfirmacion1.setText("");
-                        this.setVisible(false);
+                        dispose();
                     } else if (JRBMayor.isSelected()) {
                         tipo = 1;
                         JTxFValor.setText("");
@@ -296,7 +296,9 @@ public class ValorSorteo extends javax.swing.JDialog {
             JTxFValor.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyReleased(KeyEvent e) {
-                    valorSorteo = Long.parseLong(JTxFValor.getText());
+                    if (!JTxFValor.getText().isEmpty()) {
+                        valorSorteo = Long.parseLong(JTxFValor.getText());
+                    }
                 }
             });
         }

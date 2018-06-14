@@ -20,37 +20,36 @@
 	</background>
 	<title>
 		<band height="131" splitType="Stretch">
-			<textField pattern="">
-				<reportElement x="180" y="3" width="352" height="128"/>
-				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None">
-					<font fontName="Baskerville Old Face" size="24" isBold="false" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="1_1_2"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{Titulo}]]></textFieldExpression>
-			</textField>
 			<image>
 				<reportElement x="0" y="3" width="147" height="128"/>
 				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Win10\\Desktop\\Bono Solidario\\Bono Solidarip\\src\\Imagenes\\Logo.png"]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="161" y="15" width="381" height="103"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="24"/>
+				</textElement>
+				<text><![CDATA[Informe del número actual asignado a cada asociado y ex-asociado con participación]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="56" splitType="Stretch">
+		<band height="70" splitType="Stretch">
 			<textField>
-				<reportElement x="432" y="31" width="100" height="20"/>
-				<textElement textAlignment="Right">
-					<font size="14" isBold="true"/>
+				<reportElement x="442" y="31" width="100" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{Fecha}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="432" y="11" width="100" height="20"/>
+				<reportElement x="442" y="11" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Fecha realización:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="18" y="11" width="403" height="40"/>
-				<textElement textAlignment="Justified">
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Bahnschrift" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{Subtitulo}]]></textFieldExpression>
@@ -58,32 +57,32 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="60" splitType="Stretch">
+		<band height="47" splitType="Stretch">
 			<staticText>
 				<reportElement x="18" y="12" width="113" height="35"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre Asociado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="147" y="12" width="112" height="35"/>
+				<reportElement x="147" y="12" width="124" height="35"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cédula Asociado]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="283" y="12" width="114" height="35"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Número Asociado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="421" y="12" width="111" height="35"/>
+				<reportElement x="421" y="12" width="121" height="35"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Estado Asociado]]></text>
 			</staticText>
@@ -97,7 +96,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{NOMBRE}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="147" y="14" width="112" height="20"/>
+				<reportElement x="147" y="14" width="124" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{CEDULA}]]></textFieldExpression>
 			</textField>
@@ -107,7 +106,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{NUMERO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="421" y="14" width="111" height="20"/>
+				<reportElement x="421" y="14" width="121" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{ESTADO}]]></textFieldExpression>
 			</textField>

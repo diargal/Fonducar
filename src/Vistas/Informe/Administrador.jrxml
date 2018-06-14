@@ -19,9 +19,9 @@
 				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Win10\\Desktop\\Bono Solidario\\Bono Solidarip\\src\\Imagenes\\Logo.png"]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="143" y="0" width="401" height="106"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font fontName="Baskerville Old Face" size="24"/>
+				<reportElement x="143" y="22" width="401" height="84"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="24"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{Titulo}]]></textFieldExpression>
 			</textField>
@@ -38,7 +38,9 @@
 			</textField>
 			<textField>
 				<reportElement x="444" y="39" width="100" height="20"/>
-				<textElement/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{Fecha}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -51,23 +53,23 @@
 	<columnHeader>
 		<band height="40" splitType="Stretch">
 			<staticText>
-				<reportElement x="11" y="11" width="158" height="20"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+				<reportElement x="11" y="11" width="171" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre Administrador]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="226" y="11" width="170" height="20"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+				<reportElement x="195" y="11" width="218" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cédula Administrador]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="433" y="11" width="111" height="20"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Activo]]></text>
 			</staticText>
@@ -76,12 +78,12 @@
 	<detail>
 		<band height="34" splitType="Stretch">
 			<textField>
-				<reportElement x="11" y="14" width="158" height="20"/>
+				<reportElement x="11" y="14" width="171" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{NOMBRE ADMINISTRADOR}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="226" y="14" width="170" height="20"/>
+				<reportElement x="195" y="14" width="218" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{CEDULA ADMINISTRADOR}]]></textFieldExpression>
 			</textField>

@@ -322,8 +322,8 @@ public class ControlHistorial {
         historial.getJTHistorial().setModel(modelo2);
 
         tabla.addColumn("FECHA REALIZACION");
-        tabla.addColumn("NOMBRE ADMINISTRADOR");
         tabla.addColumn("CEDULA ADMINISTRADOR");
+        tabla.addColumn("NOMBRE ADMINISTRADOR");
         tabla.addColumn("DETALLE OPERACION");
         Object[] object = new Object[4];
         array = new ArrayList<>();
@@ -565,7 +565,7 @@ public class ControlHistorial {
         if (valor) {
             historial.getJBSubir().setText("Subir a la BD");
         } else {
-            historial.getJBSubir().setText("Generar archivo");
+            historial.getJBSubir().setText("Generar informe");
         }
     }
 

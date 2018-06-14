@@ -73,7 +73,7 @@
             </Menu>
             <MenuItem class="javax.swing.JMenuItem" name="JMIHAsociados">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Historial de n&#xfa;meros asignados a asociados"/>
+                <Property name="text" type="java.lang.String" value="Historial general de los n&#xfa;meros asignados a cada asociado"/>
               </Properties>
               <Events>
                 <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JMIHAsociadosMousePressed"/>
@@ -82,7 +82,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="JMIHSorteos">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Historial de los sorteos"/>
+                <Property name="text" type="java.lang.String" value="Historial general de los sorteos"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="JMIHSorteosMouseClicked"/>
@@ -93,7 +93,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="JMIHModificaciones">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Historial de operaciones y movimientos"/>
+                <Property name="text" type="java.lang.String" value="Historial de operaciones y movimientos realizados por administradores"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIHModificacionesActionPerformed"/>
@@ -101,7 +101,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="JMIActuales">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Informe del n&#xfa;mero actual de los asociados y ex-asociados h&#xe1;biles para sorteos"/>
+                <Property name="text" type="java.lang.String" value="Informe del n&#xfa;mero actual asignado a cada asociado y ex-asociado con participaci&#xf3;n"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIActualesActionPerformed"/>
@@ -253,9 +253,9 @@
                   <Component id="JLCuanto" min="-2" pref="47" max="-2" attributes="0"/>
                   <Component id="JLActivos" min="-2" pref="47" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
               <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="73" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
               <Component id="jLabel2Cargando" min="-2" pref="77" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -306,7 +306,7 @@
                       <Component id="JLBalota1" alignment="0" max="32767" attributes="0"/>
                       <Component id="JLBalota4" alignment="1" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

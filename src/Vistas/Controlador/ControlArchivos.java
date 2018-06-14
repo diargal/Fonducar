@@ -2,6 +2,7 @@ package Vistas.Controlador;
 
 import static Logica.Mensajes.ERRORBDC;
 import static Logica.Mensajes.MENSAJE;
+import Vistas.Historial;
 import Vistas.Informe.Informe;
 import java.io.File;
 import java.text.DateFormat;

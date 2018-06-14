@@ -21,8 +21,8 @@
 			</image>
 			<textField>
 				<reportElement x="155" y="0" width="388" height="111"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font fontName="Baskerville Old Face" size="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="24"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{Titulo}]]></textFieldExpression>
 			</textField>
@@ -56,28 +56,28 @@
 			<staticText>
 				<reportElement x="15" y="15" width="110" height="34"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre Asociado]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="155" y="15" width="100" height="34"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cédula Asociado]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="285" y="15" width="116" height="34"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha Inhabilitación]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="428" y="15" width="115" height="34"/>
 				<textElement verticalAlignment="Bottom">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Razón Inhabilitación]]></text>
 			</staticText>

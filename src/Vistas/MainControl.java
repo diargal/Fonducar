@@ -29,6 +29,8 @@ import static Logica.Mensajes.YGENERADOS;
 import Logica.Sorteo;
 import Vistas.Controlador.ControlArchivos;
 import Vistas.Controlador.ControlHistorial;
+import com.sun.j3d.utils.geometry.ColorCube;
+import com.sun.j3d.utils.universe.SimpleUniverse;
 import java.awt.Image;
 import java.io.File;
 import java.sql.SQLException;
@@ -36,6 +38,9 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -241,7 +246,7 @@ public class MainControl extends javax.swing.JFrame {
                     .addComponent(JLBalota2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(JLBalota1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(JLBalota4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         JLCuanto.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -292,7 +297,7 @@ public class MainControl extends javax.swing.JFrame {
 
         jMenu1.add(JMExAsociados);
 
-        JMIHAsociados.setText("Historial de números asignados a asociados");
+        JMIHAsociados.setText("Historial general de los números asignados a cada asociado");
         JMIHAsociados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 JMIHAsociadosMousePressed(evt);
@@ -305,7 +310,7 @@ public class MainControl extends javax.swing.JFrame {
         });
         jMenu1.add(JMIHAsociados);
 
-        JMIHSorteos.setText("Historial de los sorteos");
+        JMIHSorteos.setText("Historial general de los sorteos");
         JMIHSorteos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JMIHSorteosMouseClicked(evt);
@@ -326,7 +331,7 @@ public class MainControl extends javax.swing.JFrame {
         });
         jMenu1.add(JMIHSorteos);
 
-        JMIHModificaciones.setText("Historial de operaciones y movimientos");
+        JMIHModificaciones.setText("Historial de operaciones y movimientos realizados por administradores");
         JMIHModificaciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIHModificacionesActionPerformed(evt);
@@ -334,7 +339,7 @@ public class MainControl extends javax.swing.JFrame {
         });
         jMenu1.add(JMIHModificaciones);
 
-        JMIActuales.setText("Informe del número actual de los asociados y ex-asociados hábiles para sorteos");
+        JMIActuales.setText("Informe del número actual asignado a cada asociado y ex-asociado con participación");
         JMIActuales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIActualesActionPerformed(evt);
@@ -453,9 +458,9 @@ public class MainControl extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(JLCuanto, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JLActivos, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(42, 42, 42)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addGap(49, 49, 49)
                 .addComponent(jLabel2Cargando, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -511,6 +516,7 @@ public class MainControl extends javax.swing.JFrame {
     }//GEN-LAST:event_JMIAsignarAsoActionPerformed
 
     private void JBSorteoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSorteoActionPerformed
+        ValorSorteo valorSorteo = new ValorSorteo(MainControl.this, true);
         Thread hilo = new Thread() {
 
             @Override
@@ -528,7 +534,7 @@ public class MainControl extends javax.swing.JFrame {
                             JOptionPane.showMessageDialog(MainControl.this, SORTEOS_FINAL, MSG_SORTEO, JOptionPane.ERROR_MESSAGE);
                         } else {
                             double[] datosSorteo;
-                            ValorSorteo valorSorteo = new ValorSorteo(MainControl.this, true);
+
                             valorSorteo.visible(sorteosRealizados + 1);
                             datosSorteo = valorSorteo.valoresSorteo();
 
@@ -733,7 +739,7 @@ public class MainControl extends javax.swing.JFrame {
     }
 
     public void controlImagen(int num, JLabel label) {
-        double tiempo = (Math.random() * 7) + 4;
+        double tiempo = Math.floor(Math.random() * (7 - 4 + 1) + 4);
         label.setIcon(seleccionNumero(10));
         System.out.println("tiempo: " + tiempo);
         repaint();
@@ -746,9 +752,6 @@ public class MainControl extends javax.swing.JFrame {
     }
 
     public ImageIcon seleccionNumero(int numero) {
-        //imagen = new ImageIcon("src/Imagenes/Logo.png");
-//        icono = new ImageIcon(imagen.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_DEFAULT));
-//        jLabel1.setIcon(icono);
         switch (numero) {
             case 0:
                 return new ImageIcon(CERO.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
@@ -775,6 +778,7 @@ public class MainControl extends javax.swing.JFrame {
                 return new ImageIcon(ANIMACION.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
         }
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBSorteo1;

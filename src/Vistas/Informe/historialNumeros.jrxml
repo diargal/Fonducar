@@ -15,17 +15,17 @@
 	</background>
 	<title>
 		<band height="118" splitType="Stretch">
-			<textField>
-				<reportElement x="149" y="0" width="395" height="106"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font fontName="Baskerville Old Face" size="24"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{Titulo}]]></textFieldExpression>
-			</textField>
 			<image>
 				<reportElement x="0" y="0" width="135" height="118"/>
 				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Win10\\Desktop\\Bono Solidario\\Bono Solidarip\\src\\Imagenes\\Logo.png"]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="149" y="11" width="395" height="91"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="24"/>
+				</textElement>
+				<text><![CDATA[Informe del historial general de los números asignados a cada asociado]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
@@ -56,28 +56,28 @@
 			<staticText>
 				<reportElement x="14" y="2" width="135" height="20"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre Asociado]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="159" y="2" width="126" height="20"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cédula Asociado]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="304" y="2" width="124" height="20"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Número Asignado]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="444" y="2" width="111" height="20"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha Asignación]]></text>
 			</staticText>
