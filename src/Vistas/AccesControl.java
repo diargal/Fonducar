@@ -186,6 +186,8 @@ public class AccesControl extends javax.swing.JDialog {
                     controlPrincipal.getJMSuper().setEnabled(false);
                 }
 //                controlPrincipal.verActivos();
+                controlPrincipal.prepararAsociacion();
+                controlPrincipal.cerrarVentana();
                 controlPrincipal.setVisible(true);
             } else {
                 ManagerError();

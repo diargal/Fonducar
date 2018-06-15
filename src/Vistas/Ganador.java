@@ -42,6 +42,7 @@ public class Ganador extends javax.swing.JDialog {
         JLPremio = new javax.swing.JLabel();
         JL2 = new javax.swing.JLabel();
         JL1 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -55,13 +56,11 @@ public class Ganador extends javax.swing.JDialog {
         JLPremio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         JLPremio.setText("qqqqq");
         getContentPane().add(JLPremio, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 840, 70));
-
-        JL2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Ganador/CCde.gif"))); // NOI18N
         getContentPane().add(JL2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, -80, 423, 430));
 
         JL1.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 48)); // NOI18N
-        JL1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Ganador/CCiz.gif"))); // NOI18N
-        getContentPane().add(JL1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 320, 340));
+        getContentPane().add(JL1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 360, 340));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 10, 570, 320));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -93,5 +92,6 @@ public class Ganador extends javax.swing.JDialog {
     private javax.swing.JLabel JL2;
     private javax.swing.JLabel JLNombreGanador;
     private javax.swing.JLabel JLPremio;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
