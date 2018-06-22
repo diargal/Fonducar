@@ -5,17 +5,6 @@
  */
 package Vistas;
 
-import static Imagenes.ControlImagenes.ANIMACION;
-import static Imagenes.ControlImagenes.CERO;
-import static Imagenes.ControlImagenes.CINCO;
-import static Imagenes.ControlImagenes.CUATRO;
-import static Imagenes.ControlImagenes.DOS;
-import static Imagenes.ControlImagenes.NUEVE;
-import static Imagenes.ControlImagenes.OCHO;
-import static Imagenes.ControlImagenes.SEIS;
-import static Imagenes.ControlImagenes.SIETE;
-import static Imagenes.ControlImagenes.TRES;
-import static Imagenes.ControlImagenes.UNO;
 import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.numerodeSorteos;
 import static Logica.Mensajes.A_NUMEROS;
@@ -34,6 +23,8 @@ import java.io.File;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
@@ -65,28 +56,25 @@ public class MainControl extends javax.swing.JFrame {
     public MainControl() {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
-        this.setResizable(true);
-        this.setLocationRelativeTo(this);
-        this.repaint();
-        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        JCBPruebaSorteos.setSelected(false);
         agregarAdmin = new AddAdministrador(this, true);
         sorteosRealizados = 0;
         premio = 0;
         tipoPremio = 0;
         control = new ControlHistorial();
         cntrlArchivos = new ControlArchivos();
-        // valorSorteo = new ValorSorteo(this, true);
         numeroSorteos = new NumSorteos(this, true);
         sorteo = new Sorteo();
         historial = new Historial(this, true);
 
-        jLabel2Cargando.setVisible(false);
+        super.setSize(super.getToolkit().getScreenSize());
+        this.setResizable(true);
+        this.setLocationRelativeTo(this);
+        JCBPruebaSorteos.setSelected(false);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //prepararAsociacion();
-//        cerrarVentana();
+        jLabel2Cargando.setVisible(false);
         JLActivos.setText("Número de participantes para los sorteos: " + accesoBD.numeroAsociadosActivos());
-//        System.out.println("Dimensión: " + JLBalota1.getSize());
+//        fondo();
     }
 
     public void prepararAsociacion() {
@@ -137,7 +125,7 @@ public class MainControl extends javax.swing.JFrame {
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu4 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
-        jPanel4 = new javax.swing.JPanel();
+        JPanelBalotas = new javax.swing.JPanel();
         JBSorteo = new javax.swing.JButton();
         JLBalota2 = new javax.swing.JLabel();
         JLBalota3 = new javax.swing.JLabel();
@@ -146,6 +134,7 @@ public class MainControl extends javax.swing.JFrame {
         JLCuanto = new javax.swing.JLabel();
         JLActivos = new javax.swing.JLabel();
         jLabel2Cargando = new javax.swing.JLabel();
+        JLFondo = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         JM1 = new javax.swing.JMenu();
         JMExAsociados = new javax.swing.JMenu();
@@ -180,9 +169,15 @@ public class MainControl extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("FONDUCAR - Bono Solidario ");
+        setBackground(new java.awt.Color(102, 255, 0));
+        setMinimumSize(new java.awt.Dimension(1366, 768));
+        setPreferredSize(new java.awt.Dimension(1366, 768));
+        setResizable(false);
+        setSize(new java.awt.Dimension(1366, 768));
+        getContentPane().setLayout(null);
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel4.setOpaque(false);
+        JPanelBalotas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        JPanelBalotas.setOpaque(false);
 
         JBSorteo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         JBSorteo.setText("Iniciar Sorteo");
@@ -212,14 +207,14 @@ public class MainControl extends javax.swing.JFrame {
         JLBalota1.setAutoscrolls(true);
         JLBalota1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout JPanelBalotasLayout = new javax.swing.GroupLayout(JPanelBalotas);
+        JPanelBalotas.setLayout(JPanelBalotasLayout);
+        JPanelBalotasLayout.setHorizontalGroup(
+            JPanelBalotasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelBalotasLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(JPanelBalotasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(JPanelBalotasLayout.createSequentialGroup()
                         .addComponent(JLBalota1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
                         .addComponent(JLBalota2, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -227,18 +222,18 @@ public class MainControl extends javax.swing.JFrame {
                         .addComponent(JLBalota3, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                         .addComponent(JLBalota4, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGroup(JPanelBalotasLayout.createSequentialGroup()
                         .addComponent(JBSorteo, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        JPanelBalotasLayout.setVerticalGroup(
+            JPanelBalotasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JPanelBalotasLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(JBSorteo)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(JPanelBalotasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(JLBalota3, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JLBalota4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JLBalota1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -246,15 +241,30 @@ public class MainControl extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        getContentPane().add(JPanelBalotas);
+        JPanelBalotas.setBounds(110, 120, 1156, 337);
+
         JLCuanto.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         JLCuanto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         JLCuanto.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         JLCuanto.setOpaque(true);
+        getContentPane().add(JLCuanto);
+        JLCuanto.setBounds(1080, 10, 282, 47);
 
         JLActivos.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         JLActivos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        getContentPane().add(JLActivos);
+        JLActivos.setBounds(10, 10, 426, 47);
 
         jLabel2Cargando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cargando.gif"))); // NOI18N
+        getContentPane().add(jLabel2Cargando);
+        jLabel2Cargando.setBounds(590, 10, 287, 77);
+
+        JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondo.gif"))); // NOI18N
+        JLFondo.setMaximumSize(new java.awt.Dimension(1400, 800));
+        JLFondo.setMinimumSize(new java.awt.Dimension(1370, 760));
+        getContentPane().add(JLFondo);
+        JLFondo.setBounds(0, -26, 1370, 760);
 
         JM1.setText("Informes");
 
@@ -433,35 +443,6 @@ public class MainControl extends javax.swing.JFrame {
 
         setJMenuBar(jMenuBar1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(JLActivos, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(JLCuanto, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2Cargando))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JLCuanto, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JLActivos, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(42, 42, 42)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
-                .addComponent(jLabel2Cargando, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -518,7 +499,7 @@ public class MainControl extends javax.swing.JFrame {
 
             @Override
             public void run() {
-
+//                
                 if (!accesoBD.numerosAsignados()) {
                     JOptionPane.showMessageDialog(MainControl.this, NOHAY);
                 } else {
@@ -761,8 +742,8 @@ public class MainControl extends javax.swing.JFrame {
                 controlImagen(mil, JLBalota1);
             }
 
-            ga.getJLGanador().setText("Felicitaciones " + ganador);
-            ga.getJLPremio().setText("usted ha ganado " + nf.format(premio));
+            ga.getJLGanador().setText(ganador);
+            ga.getJLPremio().setText(nf.format(premio));
 //            ga.vista();
             ga.repaint();
             ga.setVisible(true);
@@ -792,28 +773,27 @@ public class MainControl extends javax.swing.JFrame {
     public ImageIcon seleccionNumero(int numero) {
         switch (numero) {
             case 0:
-                return new ImageIcon(CERO.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
+                return new ImageIcon(new ImageIcon(getClass().getResource("/Imagenes/Pelotas/0.png")).getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 1:
-                return new ImageIcon(UNO.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
+                return new ImageIcon(new ImageIcon(getClass().getResource("/Imagenes/Pelotas/1.png")).getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 2:
-                return new ImageIcon(DOS.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
+                return new ImageIcon(new ImageIcon(getClass().getResource("/Imagenes/Pelotas/2.png")).getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 3:
-                return new ImageIcon(TRES.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
+                return new ImageIcon(new ImageIcon(getClass().getResource("/Imagenes/Pelotas/3.png")).getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 4:
-                return new ImageIcon(CUATRO.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
+                return new ImageIcon(new ImageIcon(getClass().getResource("/Imagenes/Pelotas/4.png")).getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 5:
-                return new ImageIcon(CINCO.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
+                return new ImageIcon(new ImageIcon(getClass().getResource("/Imagenes/Pelotas/5.png")).getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 6:
-                return new ImageIcon(SEIS.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
+                return new ImageIcon(new ImageIcon(getClass().getResource("/Imagenes/Pelotas/6.png")).getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 7:
-                return new ImageIcon(SIETE.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
+                return new ImageIcon(new ImageIcon(getClass().getResource("/Imagenes/Pelotas/7.png")).getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 8:
-                return new ImageIcon(OCHO.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
+                return new ImageIcon(new ImageIcon(getClass().getResource("/Imagenes/Pelotas/8.png")).getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             case 9:
-                return new ImageIcon(NUEVE.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
+                return new ImageIcon(new ImageIcon(getClass().getResource("/Imagenes/Pelotas/9.png")).getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
             default:
-                System.out.println("mirame");
-                return new ImageIcon(ANIMACION.getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
+                return new ImageIcon(new ImageIcon(getClass().getResource("/Imagenes/Pelotas/Animacion.gif")).getImage().getScaledInstance(JLBalota1.getWidth(), JLBalota1.getHeight(), Image.SCALE_DEFAULT));
         }
     }
 
@@ -827,6 +807,7 @@ public class MainControl extends javax.swing.JFrame {
     private javax.swing.JLabel JLBalota3;
     private javax.swing.JLabel JLBalota4;
     private javax.swing.JLabel JLCuanto;
+    private javax.swing.JLabel JLFondo;
     private javax.swing.JMenu JM1;
     private javax.swing.JMenu JM2;
     private javax.swing.JMenu JM3;
@@ -846,6 +827,7 @@ public class MainControl extends javax.swing.JFrame {
     private javax.swing.JMenuItem JMIModificarDatos;
     private javax.swing.JMenuItem JMIReingreso;
     private javax.swing.JMenuItem JMIVerAdmins;
+    private javax.swing.JPanel JPanelBalotas;
     private javax.swing.JLabel jLabel2Cargando;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
@@ -854,6 +836,5 @@ public class MainControl extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JPanel jPanel4;
     // End of variables declaration//GEN-END:variables
 }

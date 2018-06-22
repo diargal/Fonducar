@@ -33,6 +33,7 @@ public class AddAdministrador extends javax.swing.JDialog {
         setResizable(false);
         setLocationRelativeTo(this);
         tipoOperacion = 0;
+        System.out.println("AddAdministrador: " + this.getSize());
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 

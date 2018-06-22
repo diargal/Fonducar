@@ -41,6 +41,7 @@ public class AccesControl extends javax.swing.JDialog {
         sorteo = new Sorteo();
         cedula = 0;
         controlPrincipal = new MainControl();
+        System.out.println("AccesControl: " + this.getSize());
         cerrarVentana();
     }
 
@@ -173,26 +174,33 @@ public class AccesControl extends javax.swing.JDialog {
     }//GEN-LAST:event_JTxFUsuarioActionPerformed
 
     private void JBLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBLoginActionPerformed
-        boolean error = true;
+
         if (new String(JTxfPass.getPassword()).isEmpty() || JTxFUsuario.getText().isEmpty()) { //Si dejan los campos en blanco.
             ManagerError(); //método para mostrar errores.
         } else {
             if (accesoBD.consultaAdmin(JTxFUsuario.getText(), new String(JTxfPass.getPassword()), true)) { //inmediatamente hago la consulta
-                this.setVisible(false);
+                AccesControl.this.dispose();
                 sorteo.actividad(A_SESION);
+                this.dispose();
+                Intro intro = new Intro();
                 if (BonoSolidario.administrador.getTipo() == 1) {
-                    controlPrincipal.getJMSuper().setEnabled(true);
+                    intro.control(true);
+//                    controlPrincipal.getJMSuper().setEnabled(true);
                 } else {
-                    controlPrincipal.getJMSuper().setEnabled(false);
+//                    controlPrincipal.getJMSuper().setEnabled(false);
+                    intro.control(false);
                 }
 //                controlPrincipal.verActivos();
-                controlPrincipal.prepararAsociacion();
-                controlPrincipal.cerrarVentana();
-                controlPrincipal.setVisible(true);
+//                ThreadIntro intro = new ThreadIntro();
+//                intro.setControlPrincipal(controlPrincipal);
+//                intro.run();
+
             } else {
                 ManagerError();
             }
         }
+
+
     }//GEN-LAST:event_JBLoginActionPerformed
     private String encriptation(String pass) {
         return DigestUtils.md5Hex(pass);

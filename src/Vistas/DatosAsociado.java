@@ -21,9 +21,10 @@ public class DatosAsociado extends javax.swing.JDialog {
     public DatosAsociado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setIconImage (new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
+        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
         setResizable(false);
         setLocationRelativeTo(this);
+        System.out.println("DatosAsociado: " + this.getSize());
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 

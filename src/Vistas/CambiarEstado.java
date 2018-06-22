@@ -23,6 +23,7 @@ public class CambiarEstado extends javax.swing.JDialog {
         JTxAObservacion.setLineWrap(true);
         this.setResizable(false);
         this.setLocationRelativeTo(this);
+        System.out.println("Cambiar estado: " + this.getSize());
         sorteo = new Sorteo();
     }
 

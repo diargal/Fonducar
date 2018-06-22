@@ -27,6 +27,7 @@ public class NumSorteos extends javax.swing.JDialog {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
         setLocationRelativeTo(this);
+        System.out.println("Numero sorteos"+ this.getSize());
         setResizable(false);
     }
 

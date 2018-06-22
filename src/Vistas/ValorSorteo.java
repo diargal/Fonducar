@@ -33,7 +33,7 @@ public class ValorSorteo extends javax.swing.JDialog {
     NumberFormatter dnFormat = new NumberFormatter(dispFormat);
     NumberFormatter enFormat = new NumberFormatter(editFormat);
     DefaultFormatterFactory currFactory = new DefaultFormatterFactory(dnFormat, dnFormat, enFormat);
-    
+
     public ValorSorteo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -45,6 +45,7 @@ public class ValorSorteo extends javax.swing.JDialog {
         enFormat.setAllowsInvalid(true);
         JTxFValor.setFormatterFactory(currFactory);
         JTxFConfirmacion1.setFormatterFactory(currFactory);
+        System.out.println("Valorsorteo: " + this.getSize());
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
@@ -230,7 +231,7 @@ public class ValorSorteo extends javax.swing.JDialog {
 
     private void JBAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAceptarActionPerformed
         boolean error = true;
-        
+
         try {
             if (valorSorteo <= 0 || JTxFValor.getText().isEmpty() || JTxFConfirmacion1.getText().isEmpty() || valorConfirmacion <= 0) {
                 JOptionPane.showMessageDialog(this, C_VALIDA, "Monto de premio no válido", JOptionPane.ERROR_MESSAGE);
@@ -291,7 +292,7 @@ public class ValorSorteo extends javax.swing.JDialog {
         if ((c < '0' || c > '9')) {
             evt.consume();
         } else {
-            
+
             JTxFValor.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyReleased(KeyEvent e) {
@@ -330,7 +331,7 @@ public class ValorSorteo extends javax.swing.JDialog {
     private void JTxFConfirmacion1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFConfirmacion1KeyPressed
 
     }//GEN-LAST:event_JTxFConfirmacion1KeyPressed
-    
+
     public void visible(int numero, boolean prueba) {
         if (prueba) {
             JLValores.setText("Datos para el sorteo de prueba");
@@ -343,7 +344,7 @@ public class ValorSorteo extends javax.swing.JDialog {
         JRBMayor.setSelected(false);
         JRBMenor.setSelected(false);
     }
-    
+
     public double[] valoresSorteo() {
         double[] valores = new double[2];
         valores[0] = valor;

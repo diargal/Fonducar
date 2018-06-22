@@ -38,16 +38,9 @@ public class BonoSolidario {
             entrada.setVisible(true);
         } else {
             try {
-//                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//                UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
-//                UIManager.setLookAndFeel("UpperEssential.UpperEssentialLookAndFeel");
-                //Plastic3DLookAndFeel.setPlasticTheme(new DarkStar());
                 UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticLookAndFeel");
                 JFrame.setDefaultLookAndFeelDecorated(true);
-//                SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.RavenGraphiteSkin");
                 SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.SaharaSkin");
-//                SubstanceLookAndFeel.setCurrentTheme("org.jvnet.substance.theme.SubstanceSteelBlueTheme");
-//                SubstanceLookAndFeel.setCurrentTheme("org.jvnet.substance.theme.SubstanceCremeTheme");
                 SubstanceLookAndFeel.setCurrentWatermark(new SubstanceImageWatermark("src/Imagenes/Logo blanco.png"));
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
                 Logger.getLogger(BonoSolidario.class.getName()).log(Level.SEVERE, null, ex);
