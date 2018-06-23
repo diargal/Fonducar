@@ -5,8 +5,12 @@
         <group>
             <file>file:/C:/Users/Win10/Desktop/Bono%20Solidario/Bono%20Solidarip/src/Vistas/AccesControl.java</file>
             <file>file:/C:/Users/Win10/Desktop/Bono%20Solidario/Bono%20Solidarip/src/Vistas/MainControl.java</file>
-            <file>file:/C:/Users/Win10/Desktop/Bono%20Solidario/Bono%20Solidarip/src/Vistas/Ganador.java</file>
-            <file>file:/C:/Users/Win10/Desktop/Bono%20Solidario/Bono%20Solidarip/src/Logica/Sorteo.java</file>
+            <file>file:/C:/Users/Win10/Desktop/Bono%20Solidario/Bono%20Solidarip/src/Vistas/CambiarEstado.java</file>
+            <file>file:/C:/Users/Win10/Desktop/Bono%20Solidario/Bono%20Solidarip/src/Vistas/DatosAsociado.java</file>
+            <file>file:/C:/Users/Win10/Desktop/Bono%20Solidario/Bono%20Solidarip/src/Vistas/AddAdministrador.java</file>
+            <file>file:/C:/Users/Win10/Desktop/Bono%20Solidario/Bono%20Solidarip/src/Vistas/NumSorteos.java</file>
+            <file>file:/C:/Users/Win10/Desktop/Bono%20Solidario/Bono%20Solidarip/src/Logica/BonoSolidario.java</file>
+            <file>file:/C:/Users/Win10/Desktop/Bono%20Solidario/Bono%20Solidarip/src/Vistas/ValorSorteo.java</file>
         </group>
     </open-files>
 </project-private>

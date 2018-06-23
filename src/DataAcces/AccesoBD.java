@@ -1,15 +1,15 @@
 package DataAcces;
 
-import Logica.Administrador;
-import static Logica.BonoSolidario.administrador;
-import static Logica.Mensajes.ADD_ADMIN;
-//import static Logica.BonoSolidario.asociados;
-import static Logica.Mensajes.A_AGREGARASOCIADOS;
-import static Logica.Mensajes.A_SETASOCIADO;
-import static Logica.Mensajes.DELETE_ADMIN;
-import static Logica.Mensajes.ERRORBDC;
-import static Logica.Mensajes.EXISTE;
-import static Logica.Mensajes.REI_ADMIN;
+import Modelo.Administrador;
+import static Modelo.BonoSolidario.administrador;
+import static Modelo.Mensajes.ADD_ADMIN;
+import static Modelo.Mensajes.A_AGREGARASOCIADOS;
+import static Modelo.Mensajes.A_SESION;
+import static Modelo.Mensajes.A_SETASOCIADO;
+import static Modelo.Mensajes.DELETE_ADMIN;
+import static Modelo.Mensajes.ERRORBDC;
+import static Modelo.Mensajes.EXISTE;
+import static Modelo.Mensajes.REI_ADMIN;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
@@ -45,9 +45,9 @@ public class AccesoBD {
     private final String login = "root";
     private final String password = "";
     private static Connection conexion = null;
-    private final Date date;
+    private Date date;
     private DateFormat fechaCompleta;
-    private final DateFormat fechaAnio;
+    private DateFormat fechaAnio;
     private ResultSet resultado;
     private String comandoSQL;
     private PreparedStatement prepar;
@@ -88,21 +88,20 @@ public class AccesoBD {
         conexion();
         Statement stmt = conexion.createStatement();
         return stmt.executeQuery(comando);
-
     }
 
     /* -------------------------------------------------------------------------------------------------------------------------- */
  /*
     Operaciones de login
      */
-    public boolean consultaAdmin(String usuario, String pass, boolean tipo) {
+    public boolean login(String usuario, String pass, boolean tipo) {
 
         try {
-            String password = DigestUtils.md5Hex(pass);
-//            System.out.println(password);
+            conexion();
+            String passw = DigestUtils.md5Hex(pass);
             resultado = resultadoConexion("SELECT A.*, P.nombre, P.cedula "
                     + "FROM `administrador` as A, persona as P "
-                    + "WHERE P.idPersona = A.idPersona and A.estado = 0 and A.Password='" + password + "' and A.Usuario='" + usuario + "'");
+                    + "WHERE P.idPersona = A.idPersona and A.estado = 0 and A.Password='" + passw + "' and A.Usuario='" + usuario + "'");
             if (resultado.next()) {
                 if (tipo) {
                     administrador.setIdAdmin(resultado.getInt(1));
@@ -113,6 +112,7 @@ public class AccesoBD {
                     administrador.setNombre(resultado.getString(7));
                     administrador.setCedula(resultado.getLong(8));
                 }
+                guardarOperacion(A_SESION);
                 desconectar();
                 return true;
             }
@@ -135,7 +135,6 @@ public class AccesoBD {
         String fecha2 = fechaCompleta.format(date);
 
         try {
-
             comandoSQL = "INSERT INTO `sorteo`(`idSorteo`, `Fecha`, `idNumeroAsociado`, `Premio`, `TipoSorteo`) VALUES (" + null + ",'" + fecha2 + "'," + idNumAso + "," + premio + "," + tipo + ")";
             prepar = conexion.prepareStatement(comandoSQL);
             prepar.execute();
@@ -143,12 +142,11 @@ public class AccesoBD {
             desconectar();
         } catch (java.sql.SQLException er) {
             JOptionPane.showMessageDialog(null, "No se pudo guardar el historial. " + er, "Failed!", JOptionPane.ERROR_MESSAGE);
-
         }
     }
 
     public boolean guardarOperacion(String tipo) {
-        conexion();
+//        conexion();
         try {
             Date date = new Date();
             fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -172,7 +170,7 @@ public class AccesoBD {
         conexion();
         int id = 0;
         long cedula = 0;
-        String nombre = "";
+        String nombre = "", apellido = "";
 
         try {
 
@@ -186,11 +184,13 @@ public class AccesoBD {
                 Row fila = sheet.getRow(f);
 
                 //Leo del archivo, y obtengo los valores de cada fila para crear una persona
-                prepar = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, cedula) VALUES(" + null + ",?,?)");
+                prepar = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, apellido, cedula) VALUES(" + null + ",?,?,?)");
                 nombre = fila.getCell(0).getStringCellValue();
                 prepar.setString(1, nombre);
-                cedula = (long) fila.getCell(1).getNumericCellValue();
-                prepar.setLong(2, cedula);
+                apellido = fila.getCell(1).getStringCellValue();
+                prepar.setString(2, apellido);
+                cedula = (long) fila.getCell(2).getNumericCellValue();
+                prepar.setLong(3, cedula);
                 prepar.execute();
 
                 // Selecciono el id de la persona recien creada, para poder crear un asociado
@@ -224,16 +224,14 @@ public class AccesoBD {
                         prepar.setDouble(1, numeroGuardar);
                         prepar.executeUpdate();
                     }
-                    
+
                 } else if (asociadosVacia()) {//no han sido asignados y está completamente vacía la tabla asociados
 
                     numeroGuardar = f;
                     nuevoNumero(numeroGuardar);
                 }
 
-                int cont = 0;
                 if (numeroGuardar != 0) {
-                    System.out.println("Veces que pasa: " + (cont++));
                     prepar = conexion.prepareStatement("Insert into numeroasociado (idNumeroAsociado, Fecha, idAsociado, idNumero) values (" + null + ",?,?,?)");
                     prepar.setString(1, fechaCompleta.format(date) + "");
                     prepar.setDouble(2, id);
@@ -263,45 +261,45 @@ public class AccesoBD {
     Historiales y opciones mostradas en la vista principal
      */
     public ResultSet historialSorteos() throws SQLException {
-        return resultadoConexion("SELECT P.Nombre, P.Cedula, S.Fecha, NA.idNumero, S.Premio, S.TipoSorteo "
+        return resultadoConexion("SELECT P.Nombre, P.Apellido, P.Cedula, S.Fecha, NA.idNumero, S.Premio, S.TipoSorteo "
                 + "FROM `sorteo` as S, asociado as A, persona as P, numeroasociado as NA "
                 + "WHERE S.idNumeroAsociado = NA.idNumeroAsociado and NA.idAsociado = A.idAsociado and A.idPersona = P.idPersona order by S.Fecha desc");
     }
 
     public ResultSet historialModificaciones() throws SQLException {
-        return resultadoConexion("SELECT P.Nombre, P.Cedula, M.Fecha, M.Detalle FROM movimiento as M, persona as P, administrador as A "
+        return resultadoConexion("SELECT P.Nombre, P.Apellido, P.Cedula, M.Fecha, M.Detalle FROM movimiento as M, persona as P, administrador as A "
                 + "WHERE M.idAdministrador = A.idAdministrador and A.idPersona = P.idPersona order by M.Fecha desc");
     }
 
     public ResultSet historialNumeros() throws SQLException {
-        return resultadoConexion("SELECT P.Nombre, P.Cedula, NA.idNumero, NA.Fecha "
+        return resultadoConexion("SELECT P.Nombre, P.Apellido, P.Cedula, NA.idNumero, NA.Fecha "
                 + "FROM `numeroasociado` as NA, asociado as A, persona as P "
                 + "WHERE NA.idAsociado = A.idAsociado and A.idPersona = P.idPersona order by P.Nombre, NA.Fecha");
     }
 
     public ResultSet numerosActuales() throws SQLException {
         String fecha2 = fechaAnio.format(date);
-        return resultadoConexion("SELECT p.nombre, p.cedula, na.idnumero, IF(a.estado = 0, \"Asociado\", \"Ex-asociado con participación\") as estado "
+        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, na.idnumero, IF(a.estado = 0, \"Asociado\", \"Ex-asociado con participación\") as estado "
                 + "FROM `numeroasociado` as na, numero as n, persona as p, asociado as a "
                 + "WHERE n.estado = 0 and n.idNumero = na.idNumero and '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) "
                 + "and na.idAsociado = a.idAsociado and a.idPersona = p.idPersona ORDER BY `p`.`Nombre` ASC");
     }
 
     public ResultSet historialEACON() throws SQLException {
-        return resultadoConexion("SELECT p.nombre, p.cedula, i.fecha, i.razon "
+        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, i.fecha, i.razon "
                 + "FROM `inhabilitacion` as i, persona as p, asociado as a "
                 + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 0 order by i.fecha desc");
     }
 
     public ResultSet historialEASIN() throws SQLException {
-        return resultadoConexion("SELECT p.nombre, p.cedula, i.fecha, i.razon "
+        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, i.fecha, i.razon "
                 + "FROM `inhabilitacion` as i, persona as p, asociado as a "
                 + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 1 order by i.fecha desc");
     }
 
     public ResultSet historialInhabilitadosActuales() throws SQLException {
         String fecha2 = fechaAnio.format(date);
-        return resultadoConexion("SELECT p.nombre, p.cedula, i.fecha, i.razon "
+        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, i.fecha, i.razon "
                 + "FROM inhabilitacion as i, persona as p, asociado as a "
                 + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 1 and '" + fecha2 + "' = "
                 + "substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 )order by i.fecha");
@@ -309,7 +307,7 @@ public class AccesoBD {
 
     public ResultSet historialHabilitadosActuales() throws SQLException {
         String fecha2 = fechaAnio.format(date);
-        return resultadoConexion("SELECT p.nombre, p.cedula, i.fecha, i.razon "
+        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, i.fecha, i.razon "
                 + "FROM inhabilitacion as i, persona as p, asociado as a "
                 + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 0 and '" + fecha2 + "' = "
                 + "substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 )order by i.fecha");
@@ -465,12 +463,13 @@ public class AccesoBD {
         return 0;
     }
 
-    public boolean modificarAsociado(String nombre, long cedula) {
+    public boolean modificarAsociado(String nombre, String apellido, long cedula) {
         try {
             conexion();
-            prepar = conexion.prepareStatement("UPDATE `persona` as p SET `Nombre`=? WHERE p.Cedula = ?");
+            prepar = conexion.prepareStatement("UPDATE `persona` as p SET `Nombre`=?, Apellido = ? WHERE p.Cedula = ?");
             prepar.setString(1, nombre);
-            prepar.setLong(2, cedula);
+            prepar.setString(2, apellido);
+            prepar.setLong(3, cedula);
             desconectar();
             if (prepar.executeUpdate() == 0) {
                 guardarOperacion(A_SETASOCIADO);
@@ -503,9 +502,10 @@ public class AccesoBD {
             /*
             Ingreso una nueva persona.
              */
-            prepar = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, cedula) VALUES(" + null + ",?,?)");
+            prepar = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, apellido, cedula) VALUES(" + null + ",?,?,?)");
             prepar.setString(1, admin.getNombre());
-            prepar.setLong(2, cedula);
+            prepar.setString(2, admin.getApellido());
+            prepar.setLong(3, cedula);
             try {
                 prepar.execute();
             } catch (SQLException ee) {
@@ -589,7 +589,7 @@ public class AccesoBD {
     }
 
     public ResultSet verAdministradores() throws SQLException {
-        return resultadoConexion("SELECT p.nombre, p.cedula, if(a.estado=0,\"SI\",\"NO\") as Activo FROM `administrador` as a, persona as p WHERE a.idPersona = p.idPersona and a.tipo = 0");
+        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, if(a.estado=0,\"SI\",\"NO\") as Activo FROM `administrador` as a, persona as p WHERE a.idPersona = p.idPersona and a.tipo = 0");
     }
 
     /* ------------------------------------------------------------------------------------------------------------------------ */
@@ -815,7 +815,7 @@ public class AccesoBD {
         try {
             if (tipo == 0) {// si el premio es menor, busco que el número no haya ganado otro en el mismo año.
                 /*
-        Aquí busco si el número ya sido ganador de un premio menor a lo largo del año
+        Aquí busco si el número ya ha sido ganador de un premio menor a lo largo del año
                  */
                 resultado = resultadoConexion("Select na2.idNumero from numeroasociado as na2 where na2.idNumero "
                         + "= " + numero + " and na2.idNumero in ( SELECT na.idNumero FROM `sorteo` as s, numeroasociado as na"
@@ -829,16 +829,16 @@ public class AccesoBD {
             /*
             luego busco al ganador a partir del número que tiene asociado y que es igual al número que salió en el sorteo
              */
-            resultado = resultadoConexion("select p.nombre, p.cedula, na.idnumero, na.idnumeroasociado "
+            resultado = resultadoConexion("select p.nombre, p.apellido, p.cedula, na.idnumero, na.idnumeroasociado "
                     + "from numeroasociado as na, numero as n, asociado as a, persona as p "
                     + "where n.estado = 0 and n.idnumero = na.idnumero and '" + fechaAnio.format(date) + "' = "
                     + "substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) and na.idasociado = a.idasociado "
                     + "and a.idpersona = p.idpersona and na.idnumero = " + numero + "");
             if (resultado.next()) {
                 if (!prueba) {
-                    guardarGanador(resultado.getInt(4), premio, tipo);
+                    guardarGanador(resultado.getInt(5), premio, tipo);
                 }
-                return resultado.getString(1);
+                return resultado.getString(1) + " " + resultado.getString(2);
             }
         } catch (java.sql.SQLException er) {
             JOptionPane.showMessageDialog(null, "Error al saber el ganador" + er, "Failed!", JOptionPane.ERROR_MESSAGE);

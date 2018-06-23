@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="Titulo" class="java.lang.String"/>
+	<parameter name="Subtitulo" class="java.lang.String"/>
+	<parameter name="Fecha" class="java.lang.String"/>
+	<parameter name="parameter4" class="java.lang.String"/>
+	<field name="NOMBRE" class="java.lang.String"/>
+	<field name="CEDULA" class="java.lang.String"/>
+	<field name="FECHA" class="java.lang.String"/>
+	<field name="NUMERO" class="java.lang.String"/>
+	<field name="PREMIO (PESOS)" class="java.lang.String"/>
+	<field name="TIPO PREMIO" class="java.lang.String"/>
+	<field name="APELLIDO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="121" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="159" height="121"/>
+				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Win10\\Desktop\\Bono Solidario\\Bono Solidarip\\src\\Imagenes\\Logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="171" y="16" width="373" height="89"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="24"/>
+				</textElement>
+				<text><![CDATA[Informe del historial general de los sorteos realizados]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="70" splitType="Stretch">
+			<textField>
+				<reportElement x="12" y="13" width="381" height="50"/>
+				<textElement>
+					<font fontName="Bahnschrift" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{Subtitulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="444" y="43" width="100" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{Fecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="444" y="23" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Fecha Realización:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="55" splitType="Stretch">
+			<staticText>
+				<reportElement x="12" y="12" width="80" height="39"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre Ganador]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="124" y="12" width="75" height="39"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cédula Ganador]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="233" y="12" width="71" height="39"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Sorteo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="334" y="12" width="59" height="39"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número Ganador]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="405" y="12" width="63" height="39"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Premio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="491" y="12" width="53" height="39"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Premio]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="31" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="11" width="106" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NOMBRE}.concat(" ").concat( $F{APELLIDO} )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="124" y="11" width="75" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{CEDULA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="213" y="11" width="108" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{FECHA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="334" y="11" width="59" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NUMERO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="405" y="11" width="63" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PREMIO (PESOS)}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="491" y="11" width="64" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TIPO PREMIO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="37" splitType="Stretch">
+			<textField>
+				<reportElement x="455" y="16" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
