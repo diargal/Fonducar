@@ -43,14 +43,14 @@ public class Ganador extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        JLNombreGanador.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 48)); // NOI18N
+        JLNombreGanador.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 36)); // NOI18N
         JLNombreGanador.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        JLNombreGanador.setText("dddd");
-        getContentPane().add(JLNombreGanador, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 160, 560, 70));
+        JLNombreGanador.setText("Diego Armando García Altamiranda");
+        getContentPane().add(JLNombreGanador, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 160, 690, 70));
 
-        JLPremio.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 48)); // NOI18N
+        JLPremio.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 36)); // NOI18N
         JLPremio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        JLPremio.setText("qqqqq");
+        JLPremio.setText("$10.000.000,00");
         getContentPane().add(JLPremio, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, 600, 70));
 
         JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Ganador/Felicitaciones.gif"))); // NOI18N

@@ -6,6 +6,7 @@ package Vista;
 
 import static Modelo.Mensajes.MSG;
 import static Modelo.Mensajes.RERROR;
+import Modelo.Peticiones;
 import Modelo.Sorteo;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -16,6 +17,7 @@ import javax.swing.JOptionPane;
 public class CambiarEstado extends javax.swing.JDialog {
 
     private final Sorteo sorteo;
+    private Peticiones peticion;
 
     public CambiarEstado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -25,35 +27,33 @@ public class CambiarEstado extends javax.swing.JDialog {
         this.setLocationRelativeTo(this);
         System.out.println("Cambiar estado: " + this.getSize());
         sorteo = new Sorteo();
+        peticion = new Peticiones();
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        JLCedula = new javax.swing.JLabel();
-        JTxFCedula = new javax.swing.JTextField();
+        JBAceptar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         JTxAObservacion = new javax.swing.JTextArea();
-        jLabel1 = new javax.swing.JLabel();
-        JLAccion = new javax.swing.JLabel();
-        JCBAccion = new javax.swing.JComboBox<>();
         JBBuscar = new javax.swing.JButton();
-        JBAceptar = new javax.swing.JButton();
+        JTxFCedula = new javax.swing.JTextField();
+        JCBAccion = new javax.swing.JComboBox<>();
+        JLFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Modificación del estado del asociado");
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        JLCedula.setText("Cédula del asociado o ex-asociado: ");
-
-        JTxFCedula.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTxFCedulaKeyTyped(evt);
+        JBAceptar.setBackground(new java.awt.Color(125, 202, 62));
+        JBAceptar.setText("Aceptar");
+        JBAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBAceptarActionPerformed(evt);
             }
         });
+        getContentPane().add(JBAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 330, 110, 40));
 
         JTxAObservacion.setColumns(20);
         JTxAObservacion.setRows(5);
@@ -65,9 +65,22 @@ public class CambiarEstado extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(JTxAObservacion);
 
-        jLabel1.setText("Observación:");
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 460, 100));
 
-        JLAccion.setText("Cambiar a...");
+        JBBuscar.setText("Buscar");
+        JBBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBBuscarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(JBBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 100, 110, 30));
+
+        JTxFCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                JTxFCedulaKeyTyped(evt);
+            }
+        });
+        getContentPane().add(JTxFCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, 210, 40));
 
         JCBAccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ex asociado CON participación", "Ex asociado SIN participacion", "Habilitar como ASOCIADO" }));
         JCBAccion.setEnabled(false);
@@ -77,89 +90,11 @@ public class CambiarEstado extends javax.swing.JDialog {
                 JCBAccionKeyPressed(evt);
             }
         });
+        getContentPane().add(JCBAccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 140, 220, -1));
 
-        JBBuscar.setText("Buscar");
-        JBBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JBBuscarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(JLAccion, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(JLCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(JCBAccion, 0, 215, Short.MAX_VALUE)
-                            .addComponent(JTxFCedula)))
-                    .addComponent(jScrollPane1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(JBBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JTxFCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JLCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(JBBuscar)
-                .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JCBAccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JLAccion, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        JBAceptar.setText("Aceptar");
-        JBAceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JBAceptarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(JBAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(JBAceptar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        JLFondo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondos/estadoAsociado.jpg"))); // NOI18N
+        getContentPane().add(JLFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -179,7 +114,7 @@ public class CambiarEstado extends javax.swing.JDialog {
                 }
             }
 
-            if (sorteo.cambiarEstado(Long.parseLong(JTxFCedula.getText()), opcion, JTxAObservacion.getText())) {
+            if (peticion.cambiarEstado(Long.parseLong(JTxFCedula.getText()), opcion, JTxAObservacion.getText())) {
                 JOptionPane.showMessageDialog(null, MSG, "Operación exitosa!", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, RERROR, "Operación fallida!", JOptionPane.INFORMATION_MESSAGE);
@@ -192,7 +127,7 @@ public class CambiarEstado extends javax.swing.JDialog {
         if (JTxFCedula.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ingrese la cédula del asociado o ex-asociado", "Campo vacío", JOptionPane.ERROR_MESSAGE);
         } else {
-            int estado = sorteo.estadoAsociado(Long.parseLong(JTxFCedula.getText()));
+            int estado = peticion.estadoAsociado(Long.parseLong(JTxFCedula.getText()));
             JComboBox nuevo = new JComboBox();
             JCBAccion.setModel(nuevo.getModel());
             switch (estado) {
@@ -259,12 +194,9 @@ public class CambiarEstado extends javax.swing.JDialog {
     private javax.swing.JButton JBAceptar;
     private javax.swing.JButton JBBuscar;
     private javax.swing.JComboBox<String> JCBAccion;
-    private javax.swing.JLabel JLAccion;
-    private javax.swing.JLabel JLCedula;
+    private javax.swing.JLabel JLFondo;
     private javax.swing.JTextArea JTxAObservacion;
     private javax.swing.JTextField JTxFCedula;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

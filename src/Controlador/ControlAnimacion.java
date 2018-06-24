@@ -5,9 +5,9 @@
  */
 package Controlador;
 
-import static Modelo.BonoSolidario.accesoBD;
 import static Modelo.BonoSolidario.numerodeSorteos;
 import static Modelo.Mensajes.A_RIFA;
+import Modelo.Peticiones;
 import Modelo.Sorteo;
 import Vista.Ganador;
 import Vista.MainControl;
@@ -28,11 +28,13 @@ public class ControlAnimacion {
     private MainControl main;
     private Ganador ganador;
     private Sorteo sorteo;
+    private Peticiones peticion;
 
     public ControlAnimacion(MainControl main) {
         this.main = main;
         ganador = new Ganador(main, true);
         sorteo = new Sorteo();
+        peticion = new Peticiones();
     }
 
     public void generarAnimacion(int numero) {
@@ -63,7 +65,7 @@ public class ControlAnimacion {
             int dec = ((numero % 1000) % 100) / 10;
             int uni = numero % 10;
 
-            if (accesoBD.numeroAsociadosActivos() > 1000) {
+            if (peticion.numeroAsociadosActivos() > 1000) {
                 main.JLBalota1.setIcon(null);
             } else {
                 main.JLBalota1.setIcon(seleccionNumero(0));
@@ -85,12 +87,13 @@ public class ControlAnimacion {
             controlImagen(dec, main.JLBalota3);
             controlImagen(cent, main.JLBalota2);
 
-            if (accesoBD.numeroAsociadosActivos() > 1000) {
+            if (peticion.numeroAsociadosActivos() > 1000) {
                 controlImagen(mil, main.JLBalota1);
             }
 
             this.ganador.getJLGanador().setText(ganador);
             this.ganador.getJLPremio().setText(nf.format(main.premio));
+            this.ganador.getJLPremio().setAutoscrolls(true);
             this.ganador.repaint();
             this.ganador.setVisible(true);
 

@@ -8,6 +8,7 @@ package Vista;
 import static Modelo.BonoSolidario.numerodeSorteos;
 import static Modelo.Mensajes.COINCIDENCIA;
 import static Modelo.Mensajes.I_SORTEO;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import static java.awt.image.ImageObserver.WIDTH;
@@ -25,9 +26,10 @@ public class NumSorteos extends javax.swing.JDialog {
     public NumSorteos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
+        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/icono.png")).getImage());
+        System.out.println("Tamaño: " + JLFondo.getSize());
+        JLFondo.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/Imagenes/Fondos/numSorteos.jpg")).getImage().getScaledInstance(JLFondo.getWidth(), JLFondo.getHeight(), Image.SCALE_DEFAULT)));
         setLocationRelativeTo(this);
-        System.out.println("Numero sorteos"+ this.getSize());
         setResizable(false);
     }
 
@@ -47,12 +49,17 @@ public class NumSorteos extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Datos de entrada para los sorteos del día de hoy");
-        setPreferredSize(new java.awt.Dimension(496, 397));
+        setBackground(new java.awt.Color(125, 202, 62));
+        setMaximumSize(new java.awt.Dimension(49335, 39339));
+        setMinimumSize(new java.awt.Dimension(500, 412));
+        setPreferredSize(new java.awt.Dimension(495, 399));
         setResizable(false);
-        getContentPane().setLayout(null);
+        setSize(new java.awt.Dimension(495, 399));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         JTxFNumero.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         JTxFNumero.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        JTxFNumero.setBorder(null);
         JTxFNumero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JTxFNumeroActionPerformed(evt);
@@ -66,11 +73,11 @@ public class NumSorteos extends javax.swing.JDialog {
                 JTxFNumeroKeyTyped(evt);
             }
         });
-        getContentPane().add(JTxFNumero);
-        JTxFNumero.setBounds(70, 100, 350, 50);
+        getContentPane().add(JTxFNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 420, 80));
 
         JTxFConfirmacion.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         JTxFConfirmacion.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        JTxFConfirmacion.setBorder(null);
         JTxFConfirmacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JTxFConfirmacionActionPerformed(evt);
@@ -84,9 +91,9 @@ public class NumSorteos extends javax.swing.JDialog {
                 JTxFConfirmacionKeyTyped(evt);
             }
         });
-        getContentPane().add(JTxFConfirmacion);
-        JTxFConfirmacion.setBounds(70, 230, 360, 50);
+        getContentPane().add(JTxFConfirmacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 420, 80));
 
+        JBAceptar.setBackground(new java.awt.Color(125, 202, 62));
         JBAceptar.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         JBAceptar.setText("Aceptar");
         JBAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -94,12 +101,14 @@ public class NumSorteos extends javax.swing.JDialog {
                 JBAceptarActionPerformed(evt);
             }
         });
-        getContentPane().add(JBAceptar);
-        JBAceptar.setBounds(160, 310, 170, 50);
+        getContentPane().add(JBAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 310, 170, 60));
 
+        JLFondo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondos/numSorteos.jpg"))); // NOI18N
-        getContentPane().add(JLFondo);
-        JLFondo.setBounds(0, 0, 500, 400);
+        JLFondo.setMaximumSize(new java.awt.Dimension(490, 400));
+        JLFondo.setMinimumSize(new java.awt.Dimension(490, 400));
+        JLFondo.setPreferredSize(new java.awt.Dimension(490, 400));
+        getContentPane().add(JLFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 400));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

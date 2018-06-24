@@ -1,14 +1,5 @@
 package Controlador;
 
-import static Modelo.BonoSolidario.accesoBD;
-import static Modelo.Mensajes.A_HABILACTUALES;
-import static Modelo.Mensajes.A_HACON;
-import static Modelo.Mensajes.A_HASIN;
-import static Modelo.Mensajes.A_HNS;
-import static Modelo.Mensajes.A_HOPERACIONES;
-import static Modelo.Mensajes.A_INHABILACTUALES;
-import static Modelo.Mensajes.A_RACTUALES;
-import static Modelo.Mensajes.A_REPORTESORTEOS;
 import Vista.Historial;
 import java.io.File;
 import java.io.FileInputStream;
@@ -171,8 +162,6 @@ public class ControlHistorial {
             }
             historial.setNumeroInforme(1);
             historial.getJTHistorial().setModel(tabla);
-            accesoBD.guardarOperacion(A_HNS);
-//            historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
@@ -246,8 +235,6 @@ public class ControlHistorial {
             }
             historial.setNumeroInforme(2);
             historial.getJTHistorial().setModel(tabla);
-            accesoBD.guardarOperacion(A_REPORTESORTEOS);
-//            historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
 
         } catch (SQLException ex) {
@@ -257,7 +244,7 @@ public class ControlHistorial {
         historial.setVisible(true);
     }
 
-    public void historialExA(ResultSet resul, boolean tipo) {
+    public void historialExA(ResultSet resul) {
 
         historial = new Historial(null, true);
         aspectosGenerales("Historial de los ex-asociados SIN participación", false);
@@ -295,16 +282,9 @@ public class ControlHistorial {
                 object[4] = resul.getString(5);
                 tabla.addRow(object);
             }
-            if (tipo) {
-                accesoBD.guardarOperacion(A_HACON);
-            } else {
-                accesoBD.guardarOperacion(A_HASIN);
-            }
             historial.setNumeroInforme(3);
             historial.getJTHistorial().setModel(tabla);
-//            historial.getJBSubir().setText("Descargar archivo");
             historial.getJBSubir().setEnabled(true);
-//            accesoBD.desconectar();
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -356,7 +336,6 @@ public class ControlHistorial {
             }
             historial.setNumeroInforme(4);
             historial.getJTHistorial().setModel(tabla);
-            accesoBD.guardarOperacion(A_HOPERACIONES);
 //            historial.getJBSubir().setText("Generar archivo");
             historial.getJBSubir().setEnabled(true);
 //            accesoBD.desconectar();
@@ -418,8 +397,6 @@ public class ControlHistorial {
             }
             historial.setNumeroInforme(5);
             historial.getJTHistorial().setModel(tabla);
-            accesoBD.guardarOperacion(A_RACTUALES);
-//            historial.getJBSubir().setText("Generar archivo");
             historial.getJBSubir().setEnabled(true);
 
         } catch (SQLException ex) {
@@ -429,7 +406,7 @@ public class ControlHistorial {
         historial.setVisible(true);
     }
 
-    public void historialInhabilitadosActuales(ResultSet resul, boolean tipo) {
+    public void historialInhabilitadosActuales(ResultSet resul) {
         historial = new Historial(null, true);
         aspectosGenerales("Inhabilitados actuales", false);
 
@@ -465,11 +442,6 @@ public class ControlHistorial {
                 object[3] = resul.getString(4);
                 object[4] = resul.getString(5);
                 tabla.addRow(object);
-            }
-            if (tipo) {
-                accesoBD.guardarOperacion(A_HABILACTUALES);
-            } else {
-                accesoBD.guardarOperacion(A_INHABILACTUALES);
             }
             historial.setNumeroInforme(6);
             historial.getJTHistorial().setModel(tabla);

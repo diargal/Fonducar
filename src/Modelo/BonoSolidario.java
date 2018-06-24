@@ -17,7 +17,6 @@ import java.net.ServerSocket;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.jvnet.substance.SubstanceLookAndFeel;
-import org.jvnet.substance.watermark.SubstanceImageWatermark;
 
 /**
  *
@@ -27,11 +26,12 @@ public class BonoSolidario {
 
     public static Administrador administrador = new Administrador();
     public static int numerodeSorteos = 0;
-    public static AccesoBD accesoBD = new AccesoBD();
+//    public static AccesoBD accesoBD = new AccesoBD();
     private static ServerSocket SERVER_SOCKET;
 //    public static final List<Asociado> asociados = new ArrayList<Asociado>();
 
     public static void main(String[] args) {
+        AccesoBD accesoBD = new AccesoBD();
 
         if (accesoBD.getConnect() == null) {
             ErrorBD entrada = new ErrorBD(null, true);
@@ -41,7 +41,7 @@ public class BonoSolidario {
                 UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticLookAndFeel");
                 JFrame.setDefaultLookAndFeelDecorated(true);
                 SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.SaharaSkin");
-                SubstanceLookAndFeel.setCurrentWatermark(new SubstanceImageWatermark("src/Imagenes/Logo blanco.png"));
+//                SubstanceLookAndFeel.setCurrentWatermark(new SubstanceImageWatermark("src/Imagenes/Logo blanco.png"));
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
                 Logger.getLogger(BonoSolidario.class.getName()).log(Level.SEVERE, null, ex);
             }

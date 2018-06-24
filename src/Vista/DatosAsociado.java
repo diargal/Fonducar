@@ -1,7 +1,7 @@
 package Vista;
 
-import static Modelo.BonoSolidario.accesoBD;
 import static Modelo.BonoSolidario.administrador;
+import Modelo.Peticiones;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import static java.awt.image.ImageObserver.WIDTH;
@@ -18,13 +18,15 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class DatosAsociado extends javax.swing.JDialog {
 
+    private Peticiones peticion;
+
     public DatosAsociado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
         setResizable(false);
         setLocationRelativeTo(this);
-        System.out.println("DatosAsociado: " + this.getSize());
+        peticion = new Peticiones();
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
@@ -32,29 +34,52 @@ public class DatosAsociado extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        JPAsociado = new javax.swing.JPanel();
-        JLNombre = new javax.swing.JLabel();
-        JLCedula = new javax.swing.JLabel();
-        JTxFNombre = new javax.swing.JTextField();
-        JTxFCedula = new javax.swing.JTextField();
-        JLApellido = new javax.swing.JLabel();
-        JTxFApellido = new javax.swing.JTextField();
-        JPAdmin = new javax.swing.JPanel();
-        JLUsuario = new javax.swing.JLabel();
-        JTxFUsuario = new javax.swing.JTextField();
-        JLPass = new javax.swing.JLabel();
-        JTxFPass = new javax.swing.JPasswordField();
         JBModificar = new javax.swing.JButton();
         JBCancelar = new javax.swing.JButton();
+        JTxFPass = new javax.swing.JPasswordField();
+        JTxFUsuario = new javax.swing.JTextField();
+        JTxFApellido = new javax.swing.JTextField();
+        JTxFCedula = new javax.swing.JTextField();
+        JTxFNombre = new javax.swing.JTextField();
+        JLFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Modificación datos del Asociado");
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        JPAsociado.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del Asociado"));
+        JBModificar.setBackground(new java.awt.Color(125, 202, 62));
+        JBModificar.setText("Modificar");
+        JBModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBModificarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(JBModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 250, 130, 30));
 
-        JLNombre.setText("Nombre :");
+        JBCancelar.setBackground(new java.awt.Color(125, 202, 62));
+        JBCancelar.setText("Cancelar");
+        JBCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBCancelarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(JBCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, 140, 30));
 
-        JLCedula.setText("Cédula:");
+        JTxFPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JTxFPassKeyPressed(evt);
+            }
+        });
+        getContentPane().add(JTxFPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 270, -1));
+        getContentPane().add(JTxFUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 270, -1));
+        getContentPane().add(JTxFApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 270, -1));
+
+        JTxFCedula.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                JTxFCedulaFocusGained(evt);
+            }
+        });
+        getContentPane().add(JTxFCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 190, -1));
 
         JTxFNombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -64,136 +89,11 @@ public class DatosAsociado extends javax.swing.JDialog {
                 JTxFNombreKeyTyped(evt);
             }
         });
+        getContentPane().add(JTxFNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 270, -1));
 
-        JTxFCedula.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                JTxFCedulaFocusGained(evt);
-            }
-        });
-
-        JLApellido.setText("Apellido:");
-
-        javax.swing.GroupLayout JPAsociadoLayout = new javax.swing.GroupLayout(JPAsociado);
-        JPAsociado.setLayout(JPAsociadoLayout);
-        JPAsociadoLayout.setHorizontalGroup(
-            JPAsociadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JPAsociadoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(JPAsociadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(JLApellido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(JLNombre, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                    .addComponent(JLCedula, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(JPAsociadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(JTxFNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
-                    .addComponent(JTxFCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JTxFApellido))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        JPAsociadoLayout.setVerticalGroup(
-            JPAsociadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JPAsociadoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(JPAsociadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JLNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JTxFNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(JPAsociadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JLApellido)
-                    .addComponent(JTxFApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addGroup(JPAsociadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JLCedula)
-                    .addComponent(JTxFCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        JPAdmin.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del Administrador"));
-
-        JLUsuario.setText("Usuario:");
-
-        JLPass.setText("Contraseña:");
-
-        JTxFPass.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                JTxFPassKeyPressed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout JPAdminLayout = new javax.swing.GroupLayout(JPAdmin);
-        JPAdmin.setLayout(JPAdminLayout);
-        JPAdminLayout.setHorizontalGroup(
-            JPAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JPAdminLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(JPAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(JLPass, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
-                    .addComponent(JLUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(38, 38, 38)
-                .addGroup(JPAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(JTxFUsuario)
-                    .addComponent(JTxFPass, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        JPAdminLayout.setVerticalGroup(
-            JPAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JPAdminLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(JPAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JLUsuario)
-                    .addComponent(JTxFUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
-                .addGroup(JPAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JLPass)
-                    .addComponent(JTxFPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        JBModificar.setText("Modificar");
-        JBModificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JBModificarActionPerformed(evt);
-            }
-        });
-
-        JBCancelar.setText("Cancelar");
-        JBCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JBCancelarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(JPAsociado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(JPAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(JBCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(JBModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(JPAsociado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(JPAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JBModificar)
-                    .addComponent(JBCancelar))
-                .addGap(28, 28, 28))
-        );
+        JLFondo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondos/datosAsociado.jpg"))); // NOI18N
+        getContentPane().add(JLFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 460, 290));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -226,52 +126,46 @@ public class DatosAsociado extends javax.swing.JDialog {
     }//GEN-LAST:event_JTxFPassKeyPressed
 
     private void JBModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBModificarActionPerformed
-        if (vacio(JPAsociado) || vacio(JPAdmin)) {
-            JOptionPane.showMessageDialog(this, "Debe diligenciar todo el formulario.", "Existen campos vacios", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            String password = DigestUtils.md5Hex(new String(JTxFPass.getPassword()));
-            if ((JTxFUsuario.getText().equals(administrador.getUsuario())) && (administrador.getPass().equals(password))) {
-                if (!accesoBD.modificarAsociado(JTxFNombre.getText(), JTxFApellido.getText(), Long.parseLong(JTxFCedula.getText()))) {
-                    JOptionPane.showMessageDialog(this, "La cédula del asociado no se encuentra en la base de datos.", "Operación fallida", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Se han modificado los datos del asociado.", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
-                    this.setVisible(false);
-                }
+//        if (vacio()) {
+        JOptionPane.showMessageDialog(this, "Debe diligenciar todo el formulario.", "Existen campos vacios", JOptionPane.INFORMATION_MESSAGE);
+//        } else {
+        String password = DigestUtils.md5Hex(new String(JTxFPass.getPassword()));
+        if ((JTxFUsuario.getText().equals(administrador.getUsuario())) && (administrador.getPass().equals(password))) {
+            if (!peticion.modificarAsociado(JTxFNombre.getText(), JTxFApellido.getText(), Long.parseLong(JTxFCedula.getText()))) {
+                JOptionPane.showMessageDialog(this, "La cédula del asociado no se encuentra en la base de datos.", "Operación fallida", JOptionPane.ERROR_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, "Los datos del administrador no son correctos, verifique.", "Operación fallida", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Se han modificado los datos del asociado.", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
+                this.setVisible(false);
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Los datos del administrador no son correctos, verifique.", "Operación fallida", JOptionPane.ERROR_MESSAGE);
         }
+//        }
     }//GEN-LAST:event_JBModificarActionPerformed
 
-    public boolean vacio(JPanel jpa) {
-        for (int i = 0; i < jpa.getComponentCount(); i++) {
-            if (jpa.getComponent(i) instanceof JTextField) {
-                JTextField jt = (JTextField) jpa.getComponent(i);
-                if (jt.getText().isEmpty()) {
-                    return true;
-                }
-            } else {
-                if (jpa.getComponent(i) instanceof JPasswordField) {
-                    JPasswordField jp = (JPasswordField) jpa.getComponent(i);
-                    if (jp.getText().isEmpty()) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+//    public boolean vacio() {
+//        for (int i = 0; i < this.getComponentCount(); i++) {
+//            if (this.getComponent(i) instanceof JTextField) {
+//                JTextField jt = (JTextField) this.getComponent(i);
+//                if (jt.getText().isEmpty()) {
+//                    return true;
+//                }
+//            } else {
+//                if (this.getComponent(i) instanceof JPasswordField) {
+//                    JPasswordField jp = (JPasswordField) this.getComponent(i);
+//                    if (jp.getText().isEmpty()) {
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBCancelar;
     private javax.swing.JButton JBModificar;
-    private javax.swing.JLabel JLApellido;
-    private javax.swing.JLabel JLCedula;
-    private javax.swing.JLabel JLNombre;
-    private javax.swing.JLabel JLPass;
-    private javax.swing.JLabel JLUsuario;
-    private javax.swing.JPanel JPAdmin;
-    private javax.swing.JPanel JPAsociado;
+    private javax.swing.JLabel JLFondo;
     private javax.swing.JTextField JTxFApellido;
     private javax.swing.JTextField JTxFCedula;
     private javax.swing.JTextField JTxFNombre;

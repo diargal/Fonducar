@@ -596,20 +596,6 @@ public class AccesoBD {
  /*
     Operaciones para la asignación de los números a cada asociado
      */
-    public boolean verificarFecha() {
-        String fecha2 = fechaAnio.format(date);
-        try {
-            resultado = resultadoConexion("SELECT na.fecha FROM `numeroasociado` as na WHERE '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 )");
-            if (resultado.next()) {
-                desconectar();
-                return false;
-            }
-        } catch (SQLException es) {
-        }
-        desconectar();
-        return true;
-    }
-
     public boolean numerosAsignados() {
         String fecha2 = fechaAnio.format(date);
         try {

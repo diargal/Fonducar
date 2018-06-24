@@ -62,8 +62,7 @@ public class ControlArchivos {
 
             if (archivo.getName().endsWith("xls") || archivo.getName().endsWith("xlsx")) {
                 JOptionPane.showMessageDialog(null, "Importación exitosa");
-//                cambiarApariencia(false);
-                control.Importar(archivo);
+                cntrl.Importar(archivo);
             } else {
                 JOptionPane.showMessageDialog(null, "Elija un formato válido");
             }
@@ -71,7 +70,6 @@ public class ControlArchivos {
             JOptionPane.showMessageDialog(null, ERRORBDC, "Error de lectura", JOptionPane.ERROR_MESSAGE);
         } catch (NullPointerException exc) {
         }
-//        cambiarApariencia(false);
     }
 
     public boolean generarArchivo(JTable tablita, int numero, String nombre, String item, String filtro, JLabel label) throws JRException {

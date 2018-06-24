@@ -5,8 +5,8 @@
  */
 package Vista;
 
-import static Modelo.BonoSolidario.accesoBD;
 import Controlador.ControlArchivos;
+import Modelo.Peticiones;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -39,6 +39,7 @@ public class Historial extends javax.swing.JDialog {
     private NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
     private TableRowSorter trsFiltro;
     public int numeroInforme;
+    private Peticiones peticion;
 
     public Historial(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -48,6 +49,7 @@ public class Historial extends javax.swing.JDialog {
         this.setResizable(true);
         tipoAccion = true;
         numeroInforme = 0;
+        peticion = new Peticiones();
         jLabel2Cargando.setVisible(false);
 
 //        ordenar();
@@ -261,7 +263,7 @@ public class Historial extends javax.swing.JDialog {
 
                 if (tipoAccion) {
                     jLabel2Cargando.setVisible(true);
-                    if (accesoBD.guardarAsociados(archivo, jLabel2Cargando)) {
+                    if (peticion.guardarAsociados(archivo, jLabel2Cargando)) {
 
                         jLabel2Cargando.setVisible(false);
                         JOptionPane.showMessageDialog(Historial.this, "Se cargaron todos los datos a la BD", "Proceso exitoso", JOptionPane.INFORMATION_MESSAGE);

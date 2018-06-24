@@ -6,6 +6,7 @@
 package Vista;
 
 import java.awt.Color;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 /**
@@ -24,6 +25,7 @@ public class Intro extends javax.swing.JFrame {
         setLocationRelativeTo(this);
         main = new MainControl();
         setBackground(new Color(0, 0, 0, 0));
+        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/icono.png")).getImage());
 //        setOpacity(0.6f);
 
     }
@@ -43,17 +45,11 @@ public class Intro extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(JLIntro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(JLIntro, javax.swing.GroupLayout.DEFAULT_SIZE, 1418, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(JLIntro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(10, 10, 10))
+            .addComponent(JLIntro, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
         );
 
         pack();

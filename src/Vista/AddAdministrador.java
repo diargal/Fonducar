@@ -6,14 +6,13 @@
 package Vista;
 
 import Modelo.Administrador;
-import static Modelo.BonoSolidario.accesoBD;
 import static Modelo.BonoSolidario.administrador;
+import Modelo.Peticiones;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import static java.awt.image.ImageObserver.WIDTH;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -25,6 +24,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class AddAdministrador extends javax.swing.JDialog {
 
     public int tipoOperacion;
+    private Peticiones peticion;
 
     public AddAdministrador(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -33,8 +33,9 @@ public class AddAdministrador extends javax.swing.JDialog {
         setResizable(false);
         setLocationRelativeTo(this);
         tipoOperacion = 0;
-        System.out.println("AddAdministrador: " + this.getSize());
+        peticion = new Peticiones();
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        JPFondo.setOpaque(false);
     }
 
     public int isTipoOperacion() {
@@ -54,201 +55,79 @@ public class AddAdministrador extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        JPNuevoAdmin = new javax.swing.JPanel();
-        JLNombre = new javax.swing.JLabel();
-        JLCedula = new javax.swing.JLabel();
-        JLUsuario = new javax.swing.JLabel();
-        JLPass = new javax.swing.JLabel();
-        JLConfiPass = new javax.swing.JLabel();
+        JPFondo = new javax.swing.JPanel();
+        JTxFSUUsuario = new javax.swing.JTextField();
+        JBAceptar = new javax.swing.JButton();
+        JBCancelar = new javax.swing.JButton();
+        JTxFSUPass = new javax.swing.JPasswordField();
         JTxFNombre = new javax.swing.JTextField();
         JTxFCedula = new javax.swing.JTextField();
         JTxFUsuario = new javax.swing.JTextField();
         JTxFPass = new javax.swing.JPasswordField();
         JTxFConfiPass = new javax.swing.JPasswordField();
         JTxFApellidos = new javax.swing.JTextField();
-        JLApellido = new javax.swing.JLabel();
-        JPSU = new javax.swing.JPanel();
-        JLSUUsuario = new javax.swing.JLabel();
-        JTxFSUUsuario = new javax.swing.JTextField();
-        JLSUPass = new javax.swing.JLabel();
-        JTxFSUPass = new javax.swing.JPasswordField();
-        JBAceptar = new javax.swing.JButton();
-        JBCancelar = new javax.swing.JButton();
+        JLFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        JPNuevoAdmin.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        JPFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        JPFondo.add(JTxFSUUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 210, -1));
 
-        JLNombre.setText("Nombre:");
-
-        JLCedula.setText("Cédula:");
-
-        JLUsuario.setText("Usuario:");
-
-        JLPass.setText("Password:");
-
-        JLConfiPass.setText("Confirmar password:");
-
-        JTxFNombre.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTxFNombreKeyTyped(evt);
-            }
-        });
-
-        JTxFCedula.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                JTxFCedulaKeyTyped(evt);
-            }
-        });
-
-        JTxFApellidos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JTxFApellidosActionPerformed(evt);
-            }
-        });
-
-        JLApellido.setText("Apellido:");
-
-        javax.swing.GroupLayout JPNuevoAdminLayout = new javax.swing.GroupLayout(JPNuevoAdmin);
-        JPNuevoAdmin.setLayout(JPNuevoAdminLayout);
-        JPNuevoAdminLayout.setHorizontalGroup(
-            JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JPNuevoAdminLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JLNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(JLCedula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(JLUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(JLPass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(JLConfiPass, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
-                    .addComponent(JLApellido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(JTxFNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
-                    .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(JTxFConfiPass, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(JTxFPass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
-                        .addComponent(JTxFUsuario, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(JTxFCedula, javax.swing.GroupLayout.Alignment.LEADING))
-                    .addComponent(JTxFApellidos))
-                .addContainerGap())
-        );
-        JPNuevoAdminLayout.setVerticalGroup(
-            JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JPNuevoAdminLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JLNombre)
-                    .addComponent(JTxFNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JTxFApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JLApellido))
-                .addGap(18, 18, 18)
-                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JLCedula)
-                    .addComponent(JTxFCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JLUsuario)
-                    .addComponent(JTxFUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JLPass)
-                    .addComponent(JTxFPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(JPNuevoAdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JLConfiPass)
-                    .addComponent(JTxFConfiPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        JPSU.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del Super Usuario"));
-
-        JLSUUsuario.setText("Usuario:");
-
-        JLSUPass.setText("Password:");
-
-        JTxFSUPass.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                JTxFSUPassKeyPressed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout JPSULayout = new javax.swing.GroupLayout(JPSU);
-        JPSU.setLayout(JPSULayout);
-        JPSULayout.setHorizontalGroup(
-            JPSULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JPSULayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(JPSULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JLSUUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JTxFSUUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(67, 67, 67)
-                .addGroup(JPSULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(JPSULayout.createSequentialGroup()
-                        .addComponent(JLSUPass, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 41, Short.MAX_VALUE))
-                    .addComponent(JTxFSUPass))
-                .addContainerGap())
-        );
-        JPSULayout.setVerticalGroup(
-            JPSULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JPSULayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(JPSULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JLSUUsuario)
-                    .addComponent(JLSUPass))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(JPSULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JTxFSUUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JTxFSUPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
+        JBAceptar.setBackground(new java.awt.Color(125, 202, 62));
         JBAceptar.setText("Aceptar");
         JBAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBAceptarActionPerformed(evt);
             }
         });
+        JPFondo.add(JBAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 340, 128, -1));
 
+        JBCancelar.setBackground(new java.awt.Color(125, 202, 62));
         JBCancelar.setText("Cancelar");
         JBCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBCancelarActionPerformed(evt);
             }
         });
+        JPFondo.add(JBCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(213, 340, 130, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(JBCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(JBAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(JPNuevoAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(JPSU, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(45, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(JPNuevoAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(JPSU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JBAceptar)
-                    .addComponent(JBCancelar))
-                .addGap(24, 24, 24))
-        );
+        JTxFSUPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JTxFSUPassKeyPressed(evt);
+            }
+        });
+        JPFondo.add(JTxFSUPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 310, 230, -1));
+
+        JTxFNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                JTxFNombreKeyTyped(evt);
+            }
+        });
+        JPFondo.add(JTxFNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, 270, -1));
+
+        JTxFCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                JTxFCedulaKeyTyped(evt);
+            }
+        });
+        JPFondo.add(JTxFCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 110, 200, -1));
+        JPFondo.add(JTxFUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 270, -1));
+        JPFondo.add(JTxFPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 190, 200, -1));
+        JPFondo.add(JTxFConfiPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 230, 200, -1));
+
+        JTxFApellidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JTxFApellidosActionPerformed(evt);
+            }
+        });
+        JPFondo.add(JTxFApellidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, 270, -1));
+
+        JLFondo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondos/addAdmin.jpg"))); // NOI18N
+        JPFondo.add(JLFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 370));
+
+        getContentPane().add(JPFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 370));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -262,16 +141,17 @@ public class AddAdministrador extends javax.swing.JDialog {
             if (administrador.getTipo() == 1 && administrador.getUsuario().equals(JTxFSUUsuario.getText()) && administrador.getPass().equals(password)) {
 
                 password = DigestUtils.md5Hex(new String(JTxFPass.getPassword()));
-                Administrador admin = new Administrador(JTxFNombre.getText(), JTxFApellidos.getText(), Long.parseLong(JTxFCedula.getText()), password, JTxFUsuario.getText(), 0);
-                boolean exito = true;
+                Administrador admin;
+                boolean exito = false;
                 String mensaje = "";
 
                 switch (tipoOperacion) {
                     case 1:
-                        if (vacio(JPSU) || vacio(JPNuevoAdmin)) {
+                        if (vacio()) {
                             JOptionPane.showMessageDialog(this, "Debe diligenciar todo el formulario.", "Existen campos vacíos.", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            if (accesoBD.guardarAdministrador(admin)) {
+                            admin = new Administrador(JTxFNombre.getText(), JTxFApellidos.getText(), Long.parseLong(JTxFCedula.getText()), password, JTxFUsuario.getText(), 0);
+                            if (peticion.guardarAdministrador(admin)) {
                                 exito = true;
                                 mensaje = "Administrador creado con éxito.";
                             } else {
@@ -285,7 +165,8 @@ public class AddAdministrador extends javax.swing.JDialog {
                             JOptionPane.showMessageDialog(this, "Debe diligenciar la cédula del administrador.", "Existen campos vacíos.", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             //aquí llamaré al método para eliminar al admin
-                            if (accesoBD.deleteAdmin(admin)) {
+                            admin = new Administrador(JTxFNombre.getText(), JTxFApellidos.getText(), Long.parseLong(JTxFCedula.getText()), password, JTxFUsuario.getText(), 0);
+                            if (peticion.deleteAdmin(admin)) {
                                 exito = true;
                                 mensaje = "Administrador eliminado con éxito.";
 
@@ -300,7 +181,8 @@ public class AddAdministrador extends javax.swing.JDialog {
                             JOptionPane.showMessageDialog(this, "Debe diligenciar la cédula del administrador.", "Existen campos vacíos.", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             //aquí llamaré al método para reingresar al administrador 
-                            if (accesoBD.reingresarAdmin(admin)) {
+                            admin = new Administrador(JTxFNombre.getText(), JTxFApellidos.getText(), Long.parseLong(JTxFCedula.getText()), password, JTxFUsuario.getText(), 0);
+                            if (peticion.reingresarAdmin(admin)) {
                                 exito = true;
                                 mensaje = "Administrador reingresado con éxito.";
                             } else {
@@ -314,11 +196,10 @@ public class AddAdministrador extends javax.swing.JDialog {
                 if (exito) {
 
                     JOptionPane.showMessageDialog(this, mensaje, "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
-                    vaciar(JPSU);
-                    vaciar(JPNuevoAdmin);
-                    this.setVisible(false);
+                    vaciar();
+                    dispose();
 
-                } else {
+                } else if (!mensaje.isEmpty()) {
 
                     JOptionPane.showMessageDialog(this, mensaje, "Verificar", JOptionPane.ERROR_MESSAGE);
 
@@ -332,9 +213,8 @@ public class AddAdministrador extends javax.swing.JDialog {
     }//GEN-LAST:event_JBAceptarActionPerformed
 
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
-        vaciar(JPSU);
-        vaciar(JPNuevoAdmin);
-        this.setVisible(false);
+        vaciar();
+        dispose();
     }//GEN-LAST:event_JBCancelarActionPerformed
 
     private void JTxFCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFCedulaKeyTyped
@@ -363,20 +243,20 @@ public class AddAdministrador extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_JTxFApellidosActionPerformed
 
-    public boolean vacio(JPanel jpa) {
-        for (int i = 0; i < jpa.getComponentCount(); i++) {
-            if (jpa.getComponent(i) instanceof JTextField) {
-                JTextField jt = (JTextField) jpa.getComponent(i);
+    public boolean vacio() {
+        for (int i = 0; i < JPFondo.getComponentCount(); i++) {
+            if (JPFondo.getComponent(i) instanceof JTextField) {
+                JTextField jt = (JTextField) JPFondo.getComponent(i);
                 if (jt.getText().isEmpty()) {
                     return true;
                 }
-            } else {
-                if (jpa.getComponent(i) instanceof JPasswordField) {
-                    JPasswordField jp = (JPasswordField) jpa.getComponent(i);
-                    if (jp.getPassword().length == 0) {
-                        return true;
-                    }
+
+            } else if (JPFondo.getComponent(i) instanceof JPasswordField) {
+                JPasswordField jt = (JPasswordField) JPFondo.getComponent(i);
+                if (jt.getPassword().toString().isEmpty()) {
+                    return true;
                 }
+
             }
         }
         return false;
@@ -384,42 +264,28 @@ public class AddAdministrador extends javax.swing.JDialog {
 
     public void enabled(boolean q) {
         JTxFNombre.setEnabled(q);
-        JLNombre.setEnabled(q);
-        JLUsuario.setEnabled(q);
+        JTxFApellidos.setEnabled(q);
         JTxFUsuario.setEnabled(q);
-        JLPass.setEnabled(q);
         JTxFPass.setEnabled(q);
-        JLConfiPass.setEnabled(q);
         JTxFConfiPass.setEnabled(q);
     }
 
-    public void vaciar(JPanel jpa) {
-        for (int i = 0; i < jpa.getComponentCount(); i++) {
-            if (jpa.getComponent(i) instanceof JTextField) {
-                JTextField jt = (JTextField) jpa.getComponent(i);
-                jt.setText("");
-            } else {
-                if (jpa.getComponent(i) instanceof JPasswordField) {
-                    JPasswordField jp = (JPasswordField) jpa.getComponent(i);
-                    jp.setText("");
-                }
-            }
-        }
+    public void vaciar() {
+        JTxFApellidos.setText("");
+        JTxFCedula.setText("");
+        JTxFConfiPass.setText("");
+        JTxFNombre.setText("");
+        JTxFPass.setText("");
+        JTxFSUPass.setText("");
+        JTxFSUUsuario.setText("");
+        JTxFUsuario.setText("");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBAceptar;
     private javax.swing.JButton JBCancelar;
-    private javax.swing.JLabel JLApellido;
-    private javax.swing.JLabel JLCedula;
-    private javax.swing.JLabel JLConfiPass;
-    private javax.swing.JLabel JLNombre;
-    private javax.swing.JLabel JLPass;
-    private javax.swing.JLabel JLSUPass;
-    private javax.swing.JLabel JLSUUsuario;
-    private javax.swing.JLabel JLUsuario;
-    private javax.swing.JPanel JPNuevoAdmin;
-    private javax.swing.JPanel JPSU;
+    private javax.swing.JLabel JLFondo;
+    private javax.swing.JPanel JPFondo;
     private javax.swing.JTextField JTxFApellidos;
     private javax.swing.JTextField JTxFCedula;
     private javax.swing.JPasswordField JTxFConfiPass;
