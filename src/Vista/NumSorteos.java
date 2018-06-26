@@ -27,7 +27,6 @@ public class NumSorteos extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/Imagenes/icono.png")).getImage());
-        System.out.println("Tamaño: " + JLFondo.getSize());
         JLFondo.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/Imagenes/Fondos/numSorteos.jpg")).getImage().getScaledInstance(JLFondo.getWidth(), JLFondo.getHeight(), Image.SCALE_DEFAULT)));
         setLocationRelativeTo(this);
         setResizable(false);

@@ -45,7 +45,6 @@ public class ValorSorteo extends javax.swing.JDialog {
         enFormat.setAllowsInvalid(true);
         JTxFValor.setFormatterFactory(currFactory);
         JTxFConfirmacion1.setFormatterFactory(currFactory);
-        System.out.println("Valorsorteo: " + this.getSize());
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
@@ -243,9 +242,6 @@ public class ValorSorteo extends javax.swing.JDialog {
     }//GEN-LAST:event_JTxFValorKeyTyped
 
     private void JTxFValorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_JTxFValorFocusLost
-//
-//        JTxFValor.setFormatterFactory(currFactory);
-//        System.out.println("sssojjskms");
     }//GEN-LAST:event_JTxFValorFocusLost
 
     private void JTxFValorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFValorKeyPressed
@@ -260,7 +256,11 @@ public class ValorSorteo extends javax.swing.JDialog {
             JTxFConfirmacion1.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyReleased(KeyEvent e) {
-                    valorConfirmacion = Long.parseLong(JTxFConfirmacion1.getText());
+                    try {
+                        valorConfirmacion = Long.parseLong(JTxFConfirmacion1.getText());
+                    } catch (NumberFormatException x) {
+
+                    }
                 }
             });
         }

@@ -82,7 +82,7 @@ public class MainControl extends javax.swing.JFrame {
     }
 
     public void prepararAsociacion() {
-        if (!peticion.numerosAsignados()) {
+        if (!peticion.numerosAsignados()) {//si no hay números asignados en el año actual, se prepara para una nueva asociación
             if (peticion.prepararAsociacion()) {
             }
         }
@@ -152,12 +152,13 @@ public class MainControl extends javax.swing.JFrame {
         JMIActuales = new javax.swing.JMenuItem();
         JM2 = new javax.swing.JMenu();
         JMIAsignarAso = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
         JMAAsociados = new javax.swing.JMenuItem();
         JMIModificar = new javax.swing.JMenuItem();
         JMIModificarDatos = new javax.swing.JMenuItem();
-        JMIAddAdmin = new javax.swing.JMenuItem();
         JM3 = new javax.swing.JMenu();
         JMGestionAdmins = new javax.swing.JMenu();
+        JMIAddAdmin = new javax.swing.JMenuItem();
         JMIDeleteAdmin = new javax.swing.JMenuItem();
         JMIReingreso = new javax.swing.JMenuItem();
         JMIVerAdmins = new javax.swing.JMenuItem();
@@ -368,29 +369,39 @@ public class MainControl extends javax.swing.JFrame {
         });
         JM2.add(JMIAsignarAso);
 
+        jMenu1.setText("Operaciones sobre el Asociado");
+
         JMAAsociados.setText("Agregar asociados");
         JMAAsociados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMAAsociadosActionPerformed(evt);
             }
         });
-        JM2.add(JMAAsociados);
+        jMenu1.add(JMAAsociados);
 
-        JMIModificar.setText("Modificar estado de asociado");
+        JMIModificar.setText("Modificar estado del asociado");
         JMIModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIModificarActionPerformed(evt);
             }
         });
-        JM2.add(JMIModificar);
+        jMenu1.add(JMIModificar);
 
-        JMIModificarDatos.setText("Modificar datos asociado");
+        JMIModificarDatos.setText("Modificar datos del asociado");
         JMIModificarDatos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIModificarDatosActionPerformed(evt);
             }
         });
-        JM2.add(JMIModificarDatos);
+        jMenu1.add(JMIModificarDatos);
+
+        JM2.add(jMenu1);
+
+        jMenuBar1.add(JM2);
+
+        JM3.setText("Super Usuario");
+
+        JMGestionAdmins.setText("Gestionar administradores");
 
         JMIAddAdmin.setText("Agregar administrador");
         JMIAddAdmin.addActionListener(new java.awt.event.ActionListener() {
@@ -398,13 +409,7 @@ public class MainControl extends javax.swing.JFrame {
                 JMIAddAdminActionPerformed(evt);
             }
         });
-        JM2.add(JMIAddAdmin);
-
-        jMenuBar1.add(JM2);
-
-        JM3.setText("Super Usuario");
-
-        JMGestionAdmins.setText("Gestionar administradores");
+        JMGestionAdmins.add(JMIAddAdmin);
 
         JMIDeleteAdmin.setText("Eliminar administrador");
         JMIDeleteAdmin.addActionListener(new java.awt.event.ActionListener() {
@@ -717,6 +722,7 @@ public class MainControl extends javax.swing.JFrame {
     public javax.swing.JMenuItem JMIVerAdmins;
     public javax.swing.JPanel JPanelBalotas;
     public javax.swing.JLabel jLabel2Cargando;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;

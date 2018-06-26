@@ -109,7 +109,6 @@ public class ControlAnimacion {
     public void controlImagen(int num, JLabel label) {
         double tiempo = Math.floor(Math.random() * (7 - 4 + 1) + 4);
         label.setIcon(seleccionNumero(10));
-        System.out.println("tiempo: " + tiempo);
         main.repaint();
         try {
             Thread.sleep((long) (tiempo * 1000));

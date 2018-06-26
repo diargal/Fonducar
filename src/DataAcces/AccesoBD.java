@@ -66,9 +66,9 @@ public class AccesoBD {
         try {
             Class.forName(driver).newInstance();
             conexion = DriverManager.getConnection(url, login, password);
-            System.out.println("Se acaba de acceder a la BD de fonducar!");
+//            System.out.println("Se acaba de acceder a la BD de fonducar!");
         } catch (Exception exc) {
-            System.out.println("Error al tratar de abrir la base de datos");
+//            System.out.println("Error al tratar de abrir la base de datos");
         }
     }
 
@@ -79,7 +79,7 @@ public class AccesoBD {
     public void desconectar() {
         conexion = null;
         if (conexion == null) {
-            System.out.println("Conexión finalizada.");
+//            System.out.println("Conexión finalizada.");
         }
     }
 
@@ -384,7 +384,6 @@ public class AccesoBD {
                 desconectar();
             }
         } catch (SQLException e) {
-            System.out.println("Entro en excep");
             return false;
         }
         return false;
@@ -470,11 +469,14 @@ public class AccesoBD {
             prepar.setString(1, nombre);
             prepar.setString(2, apellido);
             prepar.setLong(3, cedula);
-            desconectar();
             if (prepar.executeUpdate() == 0) {
                 guardarOperacion(A_SETASOCIADO);
+
+                desconectar();
                 return false;
             } else {
+
+                desconectar();
                 return true;
             }
         } catch (SQLException e) {
@@ -627,19 +629,16 @@ public class AccesoBD {
         return true;
     }
 
+    /*
+    Para asignar los números a cada asociado, necesito el id de cada uno 
+     */
     public ArrayList<Integer> idsAsociados() {
         ArrayList<Integer> array = new ArrayList<>();
         try {
-//            resultado = resultadoConexion("SELECT p.nombre, a.idAsociado, na.idnumero "
-//                    + "FROM numero as n, numeroasociado as na, asociado as a, persona as p "
-//                    + "WHERE n.estado = 0 and n.idnumero = na.idnumero and '2018' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) "
-//                    + "and na.idasociado = a.idasociado and a.idpersona = p.idpersona ORDER BY `p`.`Nombre` ASC");
-
             resultado = resultadoConexion("SELECT a.idasociado FROM `asociado` as a WHERE a.estado=0 ORDER BY `a`.`idAsociado` ASC");
             while (resultado.next()) {
                 array.add(resultado.getInt(1));
             }
-//            return array;
         } catch (SQLException e) {
         }
 
@@ -650,7 +649,10 @@ public class AccesoBD {
         try {
             resultado = verificarsihayInhabilitados();
             while (resultado.next()) {
-                //Registro todos los asociados, con estado 1 a la tabla inhabilitados para que representen ex-asociados sin participación 
+                /*
+                Registro todos los asociados con estado 1 en la tabla Asociado, en la tabla inhabilitados para que representen 
+                ex-asociados sin participación.
+                 */
                 prepar = conexion.prepareStatement("INSERT INTO `inhabilitacion`(`idInhabilitacion`, `Razon`, `Fecha`, `Estado`, `idAsociado`) VALUES(" + null + ",?,?,?,?)");
                 prepar.setString(1, "No pidió reingreso y se procedió a deshabilitarlo por completo.");
                 prepar.setString(2, fechaCompleta.format(date));
@@ -658,7 +660,7 @@ public class AccesoBD {
                 prepar.setInt(4, resultado.getInt(3));
                 prepar.execute();
 
-                //ahora cambio el estado a 1 del número que cada uno de ellos tenía.
+                //ahora cambio el estado a 1 del número que cada uno de ellos tenía anteriormente.
                 modificarEstadoNumeroAnioPasado(resultado.getLong(2), 1);
             }
 
@@ -677,6 +679,7 @@ public class AccesoBD {
             prepar.setInt(2, cantidad);
             prepar.execute();
 
+            //todo esto, deja igual cantidad de números hábiles, como de asociados hábiles listos para relacionar entre sí
             desconectar();
         } catch (SQLException ex) {
             Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
@@ -780,13 +783,20 @@ public class AccesoBD {
 
         try {
             if (!habilitado) {
+                /*
+                Cantidad de asociados que me permite generar el nùmero ganador
+                 */
                 resultado = resultadoConexion("SELECT count(*) FROM asociado");
             } else {
+                /*
+                Me permite saber la cantidad de asociado hàbiles para los sorteos, y me ayuda a asignarle cada 
+                número a cada asociado
+                 */
                 resultado = resultadoConexion("SELECT count(*) FROM asociado as a WHERE a.estado = 0");
             }
 
+            desconectar();
             if (resultado.next()) {
-                desconectar();
                 return resultado.getInt(1);
             }
         } catch (java.sql.SQLException er) {
@@ -799,7 +809,7 @@ public class AccesoBD {
 
     public String ganador(int numero, float premio, int tipo, boolean prueba) {
         try {
-            if (tipo == 0) {// si el premio es menor, busco que el número no haya ganado otro en el mismo año.
+            if (tipo == 0) {// si el premio es menor, busco que el número no haya salido antes ganador otro en el mismo año.
                 /*
         Aquí busco si el número ya ha sido ganador de un premio menor a lo largo del año
                  */
@@ -822,9 +832,9 @@ public class AccesoBD {
                     + "and a.idpersona = p.idpersona and na.idnumero = " + numero + "");
             if (resultado.next()) {
                 if (!prueba) {
-                    guardarGanador(resultado.getInt(5), premio, tipo);
+                    guardarGanador(resultado.getInt(5), premio, tipo); // guardo al ganador
                 }
-                return resultado.getString(1) + " " + resultado.getString(2);
+                return resultado.getString(1) + " " + resultado.getString(2); // retorno el nombre del ganador
             }
         } catch (java.sql.SQLException er) {
             JOptionPane.showMessageDialog(null, "Error al saber el ganador" + er, "Failed!", JOptionPane.ERROR_MESSAGE);

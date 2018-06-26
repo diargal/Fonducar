@@ -75,13 +75,6 @@ public class Ganador extends javax.swing.JDialog {
         this.JLPremio = JLPremio;
     }
 
-//    public void vista() {
-//        JL1.setIcon(IZQUIERDA);
-//        JL2.setIcon(DERECHA);
-//        JLBomba.setIcon(BOMBA);
-//        System.out.println(JLFondo.getSize());
-//        JLFondo.setIcon(new ImageIcon(GANADOR.getImage().getScaledInstance(JLFondo.getWidth(), JLFondo.getHeight(), Image.SCALE_DEFAULT)));
-//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel JLFondo;

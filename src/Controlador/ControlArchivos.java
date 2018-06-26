@@ -91,7 +91,6 @@ public class ControlArchivos {
         //Creo las columnas de la nueva tabla
         for (int c = 0; c < tablita.getColumnCount(); c++) {
             tabla.addColumn(tablita.getColumnName(c));
-            System.out.println("Nombre Columna: " + tablita.getColumnName(c));
         }
 
         //Lleno la nueva tabla que creé
@@ -145,7 +144,6 @@ public class ControlArchivos {
         } catch (JRException ex) {
             Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("");
         return true;
 
     }

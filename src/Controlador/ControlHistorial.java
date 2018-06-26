@@ -94,7 +94,6 @@ public class ControlHistorial {
                                     listaColumna[indiceColumna] = celda.getDateCellValue();
                                     break;
                             }
-                            //  System.out.println("col" + indiceColumna + " valor: true - " + celda + ".");
                         }
                     }
                 }

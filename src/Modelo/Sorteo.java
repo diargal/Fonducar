@@ -47,15 +47,20 @@ public class Sorteo {
         this.cantidadAsociados = cantidadAsociados;
     }
 
+    /*
+    Crea un aleatorio que indica el número ganador.
+     */
     public int generarSorteo() {
-        Random r1 = new Random(System.currentTimeMillis());
-        cantidadAsociados = accesoBD.numerodeAsociados(false);
-        random = r1.nextInt(cantidadAsociados);
-//        random = Integer.parseInt(JOptionPane.showInputDialog(this, "Ingrese nùmero: "));
-        // System.out.println("Número ganador generado: " + random);
+        cantidadAsociados = accesoBD.numerodeAsociados(false);//Obtengo la cantidad de asociados existentes para los sorteos.
+
+        random = (int) Math.floor(Math.random() * (cantidadAsociados - 1 + 1) + 1);// me regresa un nùmero presente en el rango de 1 hasta la cantidad de asociados.
+
         return random;
     }
 
+    /*
+    Encuentro el ganador a partir de una serie de conidiciones
+     */
     public String ganador(int numero, float premio, int tipo, boolean prueba) {
         return accesoBD.ganador(numero, premio, tipo, prueba);
     }

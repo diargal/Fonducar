@@ -150,7 +150,7 @@ public class Peticiones {
     }
 
     public boolean modificarAsociado(String n, String m, Long k) {
-        return acces.modificarAsociado(m, m, k);
+        return acces.modificarAsociado(n, m, k);
     }
 
     public boolean guardarAdministrador(Administrador admin) {
