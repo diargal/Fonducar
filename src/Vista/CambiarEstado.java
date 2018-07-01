@@ -15,10 +15,10 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 public class CambiarEstado extends javax.swing.JDialog {
-
+    
     private final Sorteo sorteo;
     private Peticiones peticion;
-
+    
     public CambiarEstado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -28,7 +28,7 @@ public class CambiarEstado extends javax.swing.JDialog {
         sorteo = new Sorteo();
         peticion = new Peticiones();
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -39,6 +39,7 @@ public class CambiarEstado extends javax.swing.JDialog {
         JBBuscar = new javax.swing.JButton();
         JTxFCedula = new javax.swing.JTextField();
         JCBAccion = new javax.swing.JComboBox<>();
+        JTxFNombre = new javax.swing.JTextField();
         JLFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -79,7 +80,7 @@ public class CambiarEstado extends javax.swing.JDialog {
                 JTxFCedulaKeyTyped(evt);
             }
         });
-        getContentPane().add(JTxFCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, 210, 40));
+        getContentPane().add(JTxFCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, 210, 30));
 
         JCBAccion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ex asociado CON participación", "Ex asociado SIN participacion", "Habilitar como ASOCIADO" }));
         JCBAccion.setEnabled(false);
@@ -90,6 +91,9 @@ public class CambiarEstado extends javax.swing.JDialog {
             }
         });
         getContentPane().add(JCBAccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 140, 220, -1));
+
+        JTxFNombre.setEnabled(false);
+        getContentPane().add(JTxFNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 270, -1));
 
         JLFondo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondos/estadoAsociado.jpg"))); // NOI18N
@@ -112,7 +116,7 @@ public class CambiarEstado extends javax.swing.JDialog {
                     }
                 }
             }
-
+            
             if (peticion.cambiarEstado(Long.parseLong(JTxFCedula.getText()), opcion, JTxAObservacion.getText())) {
                 JOptionPane.showMessageDialog(null, MSG, "Operación exitosa!", JOptionPane.INFORMATION_MESSAGE);
             } else {
@@ -129,6 +133,7 @@ public class CambiarEstado extends javax.swing.JDialog {
             int estado = peticion.estadoAsociado(Long.parseLong(JTxFCedula.getText()));
             JComboBox nuevo = new JComboBox();
             JCBAccion.setModel(nuevo.getModel());
+            JTxFNombre.setText(peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())));
             switch (estado) {
                 case 1:
                     JCBAccion.addItem("Ex-Asociado CON participación");
@@ -168,7 +173,7 @@ public class CambiarEstado extends javax.swing.JDialog {
 
     private void JTxAObservacionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxAObservacionKeyPressed
         ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
-
+        
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             this.JBAceptarActionPerformed(jd);
         }
@@ -179,7 +184,7 @@ public class CambiarEstado extends javax.swing.JDialog {
 
     private void JCBAccionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JCBAccionKeyPressed
         ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
-
+        
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             this.JBAceptarActionPerformed(jd);
         }
@@ -196,6 +201,7 @@ public class CambiarEstado extends javax.swing.JDialog {
     private javax.swing.JLabel JLFondo;
     private javax.swing.JTextArea JTxAObservacion;
     private javax.swing.JTextField JTxFCedula;
+    private javax.swing.JTextField JTxFNombre;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

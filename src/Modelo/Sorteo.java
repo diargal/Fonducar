@@ -6,7 +6,6 @@
 package Modelo;
 
 import DataAcces.AccesoBD;
-import java.util.Random;
 
 /**
  *

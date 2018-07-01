@@ -390,7 +390,7 @@ public class AccesoBD {
     }
 
     public ResultSet idAsociado(long cedula) throws SQLException {
-        return resultado = resultadoConexion("SELECT a.idAsociado FROM `asociado` as a, persona as p "
+        return resultado = resultadoConexion("SELECT a.idAsociado, p.nombre, p.apellido FROM `asociado` as a, persona as p "
                 + "WHERE a.idPersona = p.idPersona and p.Cedula ='" + cedula + "'");
     }
 
@@ -588,6 +588,10 @@ public class AccesoBD {
             Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
         }
         return true;
+    }
+
+    public ResultSet nombreAdmin(long cedula) throws SQLException {
+        return resultadoConexion("Select p.nombre, p.apellido from persona as p, administrador as a where a.idpersona = p.idpersona and p.cedula = " + cedula);
     }
 
     public ResultSet verAdministradores() throws SQLException {

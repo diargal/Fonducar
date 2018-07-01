@@ -405,9 +405,9 @@ public class ControlHistorial {
         historial.setVisible(true);
     }
 
-    public void historialInhabilitadosActuales(ResultSet resul) {
+    public void historialInhabilitadosActuales(ResultSet resul, String titulo) {
         historial = new Historial(null, true);
-        aspectosGenerales("Inhabilitados actuales", false);
+        aspectosGenerales("Ex-asociados " + titulo + " participación en los sorteos de este año", false);
 
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override

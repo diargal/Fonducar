@@ -77,7 +77,6 @@ public class AccesControl extends javax.swing.JDialog {
         JTxFUsuario.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.light"));
         JTxFUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         JTxFUsuario.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        JTxFUsuario.setText("sofimanotas");
         JTxFUsuario.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         JTxFUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -109,7 +108,6 @@ public class AccesControl extends javax.swing.JDialog {
         JTxfPass.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.light"));
         JTxfPass.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         JTxfPass.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        JTxfPass.setText("manotas");
         JTxfPass.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         JTxfPass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {

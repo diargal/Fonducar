@@ -45,7 +45,7 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="JMIInhabilitadosActual">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Inhabilitados para los sorteos de este a&#xf1;o"/>
+                    <Property name="text" type="java.lang.String" value="SIN participaci&#xf3;n para los sorteos de este a&#xf1;o"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIInhabilitadosActualActionPerformed"/>
@@ -56,7 +56,7 @@
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="JMIHabilitadosActual">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Habilitados para los sorteos de este a&#xf1;o"/>
+                    <Property name="text" type="java.lang.String" value="CON participaci&#xf3;n para los sorteos de este a&#xf1;o"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIHabilitadosActualActionPerformed"/>

@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import static java.awt.image.ImageObserver.WIDTH;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -22,10 +23,10 @@ import org.apache.commons.codec.digest.DigestUtils;
  * @author Diego García
  */
 public class AddAdministrador extends javax.swing.JDialog {
-
+    
     public int tipoOperacion;
     private Peticiones peticion;
-
+    
     public AddAdministrador(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -37,13 +38,37 @@ public class AddAdministrador extends javax.swing.JDialog {
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         JPFondo.setOpaque(false);
     }
-
+    
     public int isTipoOperacion() {
         return tipoOperacion;
     }
-
+    
     public void setTipoOperacion(int tipoOperacion) {
         this.tipoOperacion = tipoOperacion;
+    }
+    
+    public JButton getJBIr() {
+        return JBIr;
+    }
+    
+    public void setJBIr(JButton JBIr) {
+        this.JBIr = JBIr;
+    }
+    
+    public JPasswordField getJTxFSUPass() {
+        return JTxFSUPass;
+    }
+    
+    public void setJTxFSUPass(JPasswordField JTxFSUPass) {
+        this.JTxFSUPass = JTxFSUPass;
+    }
+    
+    public JTextField getJTxFSUUsuario() {
+        return JTxFSUUsuario;
+    }
+    
+    public void setJTxFSUUsuario(JTextField JTxFSUUsuario) {
+        this.JTxFSUUsuario = JTxFSUUsuario;
     }
 
     /**
@@ -66,6 +91,7 @@ public class AddAdministrador extends javax.swing.JDialog {
         JTxFPass = new javax.swing.JPasswordField();
         JTxFConfiPass = new javax.swing.JPasswordField();
         JTxFApellidos = new javax.swing.JTextField();
+        JBIr = new javax.swing.JButton();
         JLFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -123,6 +149,14 @@ public class AddAdministrador extends javax.swing.JDialog {
         });
         JPFondo.add(JTxFApellidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, 270, -1));
 
+        JBIr.setText("Ir");
+        JBIr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBIrActionPerformed(evt);
+            }
+        });
+        JPFondo.add(JBIr, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 110, 50, -1));
+
         JLFondo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondos/addAdmin.jpg"))); // NOI18N
         JPFondo.add(JLFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 370));
@@ -137,14 +171,14 @@ public class AddAdministrador extends javax.swing.JDialog {
             //if (BonoSolidario.accesoBD.consultaAdmin(JTxFSUUsuario.getText(), JTxFSUPass.getText(), false)) {
 
             String password = DigestUtils.md5Hex(new String(JTxFSUPass.getPassword()));
-
+            
             if (administrador.getTipo() == 1 && administrador.getUsuario().equals(JTxFSUUsuario.getText()) && administrador.getPass().equals(password)) {
-
+                
                 password = DigestUtils.md5Hex(new String(JTxFPass.getPassword()));
                 Administrador admin;
                 boolean exito = false;
                 String mensaje = "";
-
+                
                 switch (tipoOperacion) {
                     case 1:
                         if (vacio()) {
@@ -169,7 +203,7 @@ public class AddAdministrador extends javax.swing.JDialog {
                             if (peticion.deleteAdmin(admin)) {
                                 exito = true;
                                 mensaje = "Administrador eliminado con éxito.";
-
+                                
                             } else {
                                 exito = false;
                                 mensaje = "Los datos del administrador no son correctos.";
@@ -192,17 +226,17 @@ public class AddAdministrador extends javax.swing.JDialog {
                         }
                         break;
                 }
-
+                
                 if (exito) {
-
+                    
                     JOptionPane.showMessageDialog(this, mensaje, "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
                     vaciar();
                     dispose();
-
+                    
                 } else if (!mensaje.isEmpty()) {
-
+                    
                     JOptionPane.showMessageDialog(this, mensaje, "Verificar", JOptionPane.ERROR_MESSAGE);
-
+                    
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Los datos del Super Usuario no son válidos. Verifique.", "Verificar.", JOptionPane.ERROR_MESSAGE);
@@ -233,7 +267,7 @@ public class AddAdministrador extends javax.swing.JDialog {
 
     private void JTxFSUPassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFSUPassKeyPressed
         ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
-
+        
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             this.JBAceptarActionPerformed(jd);
         }
@@ -243,6 +277,13 @@ public class AddAdministrador extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_JTxFApellidosActionPerformed
 
+    private void JBIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBIrActionPerformed
+        JTxFNombre.setText(peticion.nombreAdmin(Long.parseLong(JTxFCedula.getText())).get(0));
+        JTxFApellidos.setText(peticion.nombreAdmin(Long.parseLong(JTxFCedula.getText())).get(1));
+        JTxFSUPass.setEnabled(true);
+        JTxFSUUsuario.setEnabled(true);
+    }//GEN-LAST:event_JBIrActionPerformed
+    
     public boolean vacio() {
         for (int i = 0; i < JPFondo.getComponentCount(); i++) {
             if (JPFondo.getComponent(i) instanceof JTextField) {
@@ -250,18 +291,18 @@ public class AddAdministrador extends javax.swing.JDialog {
                 if (jt.getText().isEmpty()) {
                     return true;
                 }
-
+                
             } else if (JPFondo.getComponent(i) instanceof JPasswordField) {
                 JPasswordField jt = (JPasswordField) JPFondo.getComponent(i);
                 if (jt.getPassword().toString().isEmpty()) {
                     return true;
                 }
-
+                
             }
         }
         return false;
     }
-
+    
     public void enabled(boolean q) {
         JTxFNombre.setEnabled(q);
         JTxFApellidos.setEnabled(q);
@@ -269,7 +310,7 @@ public class AddAdministrador extends javax.swing.JDialog {
         JTxFPass.setEnabled(q);
         JTxFConfiPass.setEnabled(q);
     }
-
+    
     public void vaciar() {
         JTxFApellidos.setText("");
         JTxFCedula.setText("");
@@ -284,6 +325,7 @@ public class AddAdministrador extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBAceptar;
     private javax.swing.JButton JBCancelar;
+    private javax.swing.JButton JBIr;
     private javax.swing.JLabel JLFondo;
     private javax.swing.JPanel JPFondo;
     private javax.swing.JTextField JTxFApellidos;

@@ -273,7 +273,7 @@ public class MainControl extends javax.swing.JFrame {
 
         JMExAsociados.setText("Ex-Asociados");
 
-        JMIInhabilitadosActual.setText("Inhabilitados para los sorteos de este año");
+        JMIInhabilitadosActual.setText("SIN participación para los sorteos de este año");
         JMIInhabilitadosActual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIInhabilitadosActualActionPerformed(evt);
@@ -281,7 +281,7 @@ public class MainControl extends javax.swing.JFrame {
         });
         JMExAsociados.add(JMIInhabilitadosActual);
 
-        JMIHabilitadosActual.setText("Habilitados para los sorteos de este año");
+        JMIHabilitadosActual.setText("CON participación para los sorteos de este año");
         JMIHabilitadosActual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMIHabilitadosActualActionPerformed(evt);
@@ -624,8 +624,7 @@ public class MainControl extends javax.swing.JFrame {
 
     private void JMIInhabilitadosActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIInhabilitadosActualActionPerformed
         try {
-            controlHistorial.historialInhabilitadosActuales(peticion.historialInhabilitadosActuales(A_INHABILACTUALES));
-
+            controlHistorial.historialInhabilitadosActuales(peticion.historialInhabilitadosActuales(A_INHABILACTUALES), "SIN");
         } catch (SQLException ex) {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -633,7 +632,7 @@ public class MainControl extends javax.swing.JFrame {
 
     private void JMIHabilitadosActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIHabilitadosActualActionPerformed
         try {
-            controlHistorial.historialInhabilitadosActuales(peticion.historialHabilitadosActuales(A_HABILACTUALES));
+            controlHistorial.historialInhabilitadosActuales(peticion.historialHabilitadosActuales(A_HABILACTUALES), "CON");
 
         } catch (SQLException ex) {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
@@ -643,6 +642,9 @@ public class MainControl extends javax.swing.JFrame {
     private void JMIDeleteAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIDeleteAdminActionPerformed
         agregarAdmin.setTipoOperacion(2);
         agregarAdmin.enabled(false);
+        agregarAdmin.getJBIr().setVisible(true);
+        agregarAdmin.getJTxFSUPass().setEnabled(false);
+        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
         agregarAdmin.setTitle("Formulario para eliminar un administrador");
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMIDeleteAdminActionPerformed
@@ -650,6 +652,9 @@ public class MainControl extends javax.swing.JFrame {
     private void JMIAddAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIAddAdminActionPerformed
         agregarAdmin.setTipoOperacion(1);
         agregarAdmin.enabled(true);
+        agregarAdmin.getJBIr().setVisible(false);
+        agregarAdmin.getJTxFSUPass().setEnabled(true);
+        agregarAdmin.getJTxFSUUsuario().setEnabled(true);
         agregarAdmin.setTitle("Formulario para agregar un administrador");
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMIAddAdminActionPerformed
@@ -682,6 +687,9 @@ public class MainControl extends javax.swing.JFrame {
     private void JMIReingresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIReingresoActionPerformed
         agregarAdmin.setTipoOperacion(3);
         agregarAdmin.enabled(false);
+        agregarAdmin.getJBIr().setVisible(false);
+        agregarAdmin.getJTxFSUPass().setEnabled(true);
+        agregarAdmin.getJTxFSUUsuario().setEnabled(true);
         agregarAdmin.setTitle("Formulario para reingresar un administrador");
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMIReingresoActionPerformed

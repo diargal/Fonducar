@@ -2,9 +2,12 @@ package Modelo;
 
 import DataAcces.AccesoBD;
 import java.io.File;
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 
 /**
@@ -147,6 +150,31 @@ public class Peticiones {
 
     public int estadoAsociado(long cedula) {
         return acces.estadoAsociado(cedula);
+    }
+
+    public String nombreAsociado(long cedula) {
+        try {
+            ResultSet resultado = acces.idAsociado(cedula);
+//            acces.desconectar();
+            if (resultado.next()) {
+                return resultado.getString(2) + " " + resultado.getString(3);
+            }
+        } catch (SQLException ex) {
+        }
+        return "";
+    }
+
+    public ArrayList<String> nombreAdmin(long cedula) {
+        ArrayList<String> datos = new ArrayList<>();
+        try {
+            ResultSet resultado = acces.nombreAdmin(cedula);
+            if (resultado.next()) {
+                datos.add(resultado.getString(1));
+                datos.add(resultado.getString(2));
+            }
+        } catch (SQLException ex) {
+        }
+        return datos;
     }
 
     public boolean modificarAsociado(String n, String m, Long k) {
