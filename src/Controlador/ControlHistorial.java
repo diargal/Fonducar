@@ -243,10 +243,10 @@ public class ControlHistorial {
         historial.setVisible(true);
     }
 
-    public void historialExA(ResultSet resul) {
+    public void historialExA(ResultSet resul, String titulo) {
 
         historial = new Historial(null, true);
-        aspectosGenerales("Historial de los ex-asociados SIN participación", false);
+        aspectosGenerales("Historial de los ex-asociados " + titulo + " participación", false);
 
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override

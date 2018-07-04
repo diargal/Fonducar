@@ -608,7 +608,7 @@ public class MainControl extends javax.swing.JFrame {
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         try {
-            controlHistorial.historialExA(peticion.historialEASIN(A_HASIN));
+            controlHistorial.historialExA(peticion.historialEASIN(A_HASIN), "SIN");
         } catch (SQLException ex) {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -616,7 +616,7 @@ public class MainControl extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         try {
-            controlHistorial.historialExA(peticion.historialEACON(A_HACON));
+            controlHistorial.historialExA(peticion.historialEACON(A_HACON), "CON");
         } catch (SQLException ex) {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -687,9 +687,9 @@ public class MainControl extends javax.swing.JFrame {
     private void JMIReingresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIReingresoActionPerformed
         agregarAdmin.setTipoOperacion(3);
         agregarAdmin.enabled(false);
-        agregarAdmin.getJBIr().setVisible(false);
-        agregarAdmin.getJTxFSUPass().setEnabled(true);
-        agregarAdmin.getJTxFSUUsuario().setEnabled(true);
+        agregarAdmin.getJBIr().setVisible(true);
+        agregarAdmin.getJTxFSUPass().setEnabled(false);
+        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
         agregarAdmin.setTitle("Formulario para reingresar un administrador");
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMIReingresoActionPerformed

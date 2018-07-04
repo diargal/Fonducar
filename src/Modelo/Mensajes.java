@@ -41,7 +41,7 @@ public class Mensajes {
     public static final String ERRORBDC = "El formato requerido no es correcto. Recuerde que es: NOMBRE, CEDULA, NUMERO respectivamente y con su tipo de dato correspondiente.";
     public static final String ERROR_LOGIN = "Error de inicio de sesión.";
     public static final String PREMIO = "Ingrese valor del premio.";
-    public static final String REXITOSO = "Todos los números fueron asignados a todos los empleados habilitados.";
+    public static final String REXITOSO = "Todos los números fueron asignados a todos los asociados habilitados para los sorteos.";
     public static final String YGENERADOS = "Ya este año han sido generados los números.";
     public static final String NOHAY = "No hay números asignados a los asociados para este año. Vaya a operaciones > asignar números.";
     public static final String EXISTE = "Ya existe una persona registrada con la cédula ";
