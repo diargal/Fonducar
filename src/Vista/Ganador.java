@@ -38,6 +38,7 @@ public class Ganador extends javax.swing.JDialog {
 
         JLNombreGanador = new javax.swing.JLabel();
         JLPremio = new javax.swing.JLabel();
+        JLNumGanador = new javax.swing.JLabel();
         JLFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -53,7 +54,13 @@ public class Ganador extends javax.swing.JDialog {
         JLPremio.setText("$10.000.000,00");
         getContentPane().add(JLPremio, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, 600, 70));
 
+        JLNumGanador.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 36)); // NOI18N
+        JLNumGanador.setText("Número ganador: ");
+        getContentPane().add(JLNumGanador, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 390, 40));
+
+        JLFondo.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
         JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Ganador/Felicitaciones.gif"))); // NOI18N
+        JLFondo.setText("Número ganador: ");
         getContentPane().add(JLFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 970, 460));
 
         pack();
@@ -65,6 +72,14 @@ public class Ganador extends javax.swing.JDialog {
 
     public void setJLGanador(JLabel JLGanador) {
         this.JLNombreGanador = JLGanador;
+    }
+
+    public JLabel getJLNumGanador() {
+        return JLNumGanador;
+    }
+
+    public void setJLNumGanador(JLabel JLNumGanador) {
+        this.JLNumGanador = JLNumGanador;
     }
 
     public JLabel getJLPremio() {
@@ -79,6 +94,7 @@ public class Ganador extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel JLFondo;
     private javax.swing.JLabel JLNombreGanador;
+    private javax.swing.JLabel JLNumGanador;
     private javax.swing.JLabel JLPremio;
     // End of variables declaration//GEN-END:variables
 }
