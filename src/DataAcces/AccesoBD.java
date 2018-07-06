@@ -41,9 +41,9 @@ import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 public class AccesoBD {
 
     private final String driver = "com.mysql.jdbc.Driver";
-    private final String url = "jdbc:mysql://localhost/fonducar";
+    private final String url = "jdbc:mysql://localhost/fonducarbs";
     private final String login = "root";
-    private final String password = "";
+    private final String password = "Fonducar**BonoSolidario2018*";
     private static Connection conexion = null;
     private Date date;
     private DateFormat fechaCompleta;

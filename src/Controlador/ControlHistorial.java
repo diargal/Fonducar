@@ -14,7 +14,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.RowSorter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -150,7 +153,7 @@ public class ControlHistorial {
                 object[2] = resul.getLong(3);
 //                object[2] = resul.getInt(3);
                 if ((resul.getInt(4) < 1000) && (resul.getInt(4) >= 100)) {
-                    object[3] = "0" + resul.getInt(3);
+                    object[3] = "0" + resul.getInt(4);
                 } else if ((resul.getInt(4) < 100) && (resul.getInt(4) >= 10)) {
                     object[3] = "00" + resul.getInt(4);
                 } else if (resul.getInt(4) < 10) {
@@ -159,6 +162,9 @@ public class ControlHistorial {
                 object[4] = resul.getString(5);
                 tabla.addRow(object);
             }
+
+            RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
+            historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(1);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setEnabled(true);
@@ -232,6 +238,9 @@ public class ControlHistorial {
                 }
                 tabla.addRow(object);
             }
+            RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
+            historial.getJTHistorial().setRowSorter(sorter);
+//            historial.getJTHistorial().getRowSorter().toggleSortOrder(0);
             historial.setNumeroInforme(2);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setEnabled(true);
@@ -281,6 +290,9 @@ public class ControlHistorial {
                 object[4] = resul.getString(5);
                 tabla.addRow(object);
             }
+
+            RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
+            historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(3);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setEnabled(true);
@@ -333,6 +345,9 @@ public class ControlHistorial {
                 object[4] = resul.getString(5);
                 tabla.addRow(object);
             }
+
+            RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
+            historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(4);
             historial.getJTHistorial().setModel(tabla);
 //            historial.getJBSubir().setText("Generar archivo");
@@ -394,6 +409,9 @@ public class ControlHistorial {
                 object[4] = resul.getString(5);
                 tabla.addRow(object);
             }
+
+            RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
+            historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(5);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setEnabled(true);
@@ -442,6 +460,9 @@ public class ControlHistorial {
                 object[4] = resul.getString(5);
                 tabla.addRow(object);
             }
+
+            RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
+            historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(6);
             historial.getJTHistorial().setModel(tabla);
 //             historial.getJBSubir().setText("Generar archivo");
@@ -487,6 +508,9 @@ public class ControlHistorial {
                 object[2] = resul.getLong(3);
                 tabla.addRow(object);
             }
+
+            RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
+            historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(0);
             historial.getJTHistorial().setModel(tabla);
 //            historial.getJBSubir().setText("Generar archivo");
@@ -535,6 +559,9 @@ public class ControlHistorial {
                 object[3] = resul.getString(4);
                 tabla.addRow(object);
             }
+
+            RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
+            historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(7);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setEnabled(true);
