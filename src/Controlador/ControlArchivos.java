@@ -72,7 +72,7 @@ public class ControlArchivos {
         }
     }
 
-    public boolean generarArchivo(JTable tablita, int numero, String nombre, String item, String filtro, JLabel label) throws JRException {
+    public boolean generarArchivo(JTable tablita, int numero, String nombre, String item, String filtro, JLabel label) throws Exception {
         DateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
         Map map = new HashMap();

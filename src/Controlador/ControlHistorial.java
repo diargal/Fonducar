@@ -218,24 +218,30 @@ public class ControlHistorial {
                 object[1] = resul.getString(2);
                 object[2] = resul.getLong(3);
                 object[3] = resul.getString(4);
-                if (resul.getInt(5) < 1000 && resul.getInt(5) >= 100) {
-                    object[4] = "0" + resul.getInt(5);
+
+                if (resul.getInt(5) >= 1000) {
+                    object[4] = resul.getInt(5);
                 } else {
-                    if ((resul.getInt(5) < 100) && (resul.getInt(5) >= 10)) {
-                        object[4] = "00" + resul.getInt(5);
+                    if (resul.getInt(5) < 1000 && resul.getInt(5) >= 100) {
+                        object[4] = "0" + resul.getInt(5);
                     } else {
-                        if (resul.getInt(5) < 10) {
-                            object[4] = "000" + resul.getInt(5);
+                        if ((resul.getInt(5) < 100) && (resul.getInt(5) >= 10)) {
+                            object[4] = "00" + resul.getInt(5);
+                        } else {
+                            if (resul.getInt(5) < 10) {
+                                object[4] = "000" + resul.getInt(5);
+                            }
                         }
                     }
-
-                    object[5] = nf.format(resul.getLong(6));
-                    if (resul.getInt(7) == 0) {
-                        object[6] = "Premio menor";
-                    } else if (resul.getInt(7) == 1) {
-                        object[6] = "Premio mayor";
-                    }
                 }
+
+                object[5] = nf.format(resul.getLong(6));
+                if (resul.getInt(7) == 0) {
+                    object[6] = "Premio menor";
+                } else if (resul.getInt(7) == 1) {
+                    object[6] = "Premio mayor";
+                }
+
                 tabla.addRow(object);
             }
             RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
