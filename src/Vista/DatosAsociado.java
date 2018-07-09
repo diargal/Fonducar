@@ -42,6 +42,7 @@ public class DatosAsociado extends javax.swing.JDialog {
         JTxFNombre = new javax.swing.JTextField();
         JTxFCedula = new javax.swing.JTextField();
         JBModificar = new javax.swing.JButton();
+        JBIr = new javax.swing.JButton();
         JLFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -50,6 +51,7 @@ public class DatosAsociado extends javax.swing.JDialog {
 
         JPFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        JTxFPass.setEnabled(false);
         JTxFPass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 JTxFPassKeyPressed(evt);
@@ -65,9 +67,14 @@ public class DatosAsociado extends javax.swing.JDialog {
             }
         });
         JPFondo.add(JBCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, 140, 30));
+
+        JTxFUsuario.setEnabled(false);
         JPFondo.add(JTxFUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 270, -1));
+
+        JTxFApellido.setEnabled(false);
         JPFondo.add(JTxFApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 270, -1));
 
+        JTxFNombre.setEnabled(false);
         JTxFNombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 JTxFNombreKeyPressed(evt);
@@ -87,12 +94,22 @@ public class DatosAsociado extends javax.swing.JDialog {
 
         JBModificar.setBackground(new java.awt.Color(125, 202, 62));
         JBModificar.setText("Modificar");
+        JBModificar.setEnabled(false);
         JBModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBModificarActionPerformed(evt);
             }
         });
         JPFondo.add(JBModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 250, 130, 30));
+
+        JBIr.setText("Ir");
+        JBIr.setEnabled(false);
+        JBIr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBIrActionPerformed(evt);
+            }
+        });
+        JPFondo.add(JBIr, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 120, -1, -1));
 
         JLFondo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondos/datosAsociado.jpg"))); // NOI18N
@@ -148,6 +165,10 @@ public class DatosAsociado extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_JBModificarActionPerformed
 
+    private void JBIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBIrActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JBIrActionPerformed
+
     public boolean vacio() {
         for (int i = 0; i < JPFondo.getComponentCount(); i++) {
             if (JPFondo.getComponent(i) instanceof JTextField) {
@@ -169,6 +190,7 @@ public class DatosAsociado extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBCancelar;
+    private javax.swing.JButton JBIr;
     private javax.swing.JButton JBModificar;
     private javax.swing.JLabel JLFondo;
     private javax.swing.JPanel JPFondo;
