@@ -3,7 +3,6 @@ package Controlador;
 /*
 Esta clase fue hecha para controlar el JDialog Intro y luego mostrar el JDialog MainControl
  */
-
 import static Modelo.BonoSolidario.administrador;
 import Vista.Intro;
 import Vista.MainControl;
@@ -35,6 +34,7 @@ public class ControlIntro {
                 intro.dispose();
                 main.getJMSuper().setEnabled(enabled);
                 main.cerrarVentana();
+                main.prepararAsociacion();
                 main.setVisible(true);
             }
         };

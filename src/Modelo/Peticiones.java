@@ -76,6 +76,7 @@ public class Peticiones {
         /*
         Primero verificaré y haré que haya el mismo número de personas habilitadas y de números habilitados
          */
+        acces.conexion();
         int cantidadHabilitados = acces.numerodeAsociados(true);
         int cantidadNumerosHabiles = acces.cantidadNumerosHabiles(true);
         int cantidadTotal = acces.cantidadNumerosHabiles(false);

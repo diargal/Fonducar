@@ -276,13 +276,15 @@ public class ControlHistorial {
         tabla.addColumn("NOMBRE ASOCIADO");
         tabla.addColumn("APELLIDO ASOCIADO");
         tabla.addColumn("CEDULA ASOCIADO");
+        tabla.addColumn("NUMERO ASOCIADO");
         tabla.addColumn("FECHA INHABILITACION");
         tabla.addColumn("RAZON");
-        Object[] object = new Object[5];
+        Object[] object = new Object[6];
         array = new ArrayList<>();
         array.add("NOMBRE ASOCIADO");
         array.add("APELLIDO ASOCIADO");
         array.add("CEDULA ASOCIADO");
+        array.add("NUMERO ASOCIADO");
         array.add("FECHA INHABILITACION");
         array.add("RAZON");
         llenarComboBox();
@@ -292,8 +294,20 @@ public class ControlHistorial {
                 object[0] = resul.getString(1);
                 object[1] = resul.getString(2);
                 object[2] = resul.getLong(3);
-                object[3] = resul.getString(4);
+
+                int numero = resul.getInt(4);
+                if (numero >= 1000) {
+                    object[3] = numero;
+                } else if (numero >= 100) {
+                    object[3] = "0" + numero;
+                } else if (numero >= 10) {
+                    object[3] = "00" + numero;
+                } else {
+                    object[3] = "000" + numero;
+                }
+
                 object[4] = resul.getString(5);
+                object[5] = resul.getString(6);
                 tabla.addRow(object);
             }
 
@@ -446,13 +460,15 @@ public class ControlHistorial {
         tabla.addColumn("NOMBRE ASOCIADO");
         tabla.addColumn("APELLIDO ASOCIADO");
         tabla.addColumn("CEDULA ASOCIADO");
+        tabla.addColumn("NUMERO ASOCIADO");
         tabla.addColumn("FECHA INHABILITACION");
         tabla.addColumn("RAZON");
-        Object[] object = new Object[5];
+        Object[] object = new Object[6];
         array = new ArrayList<>();
         array.add("NOMBRE ASOCIADO");
         array.add("APELLIDO ASOCIADO");
         array.add("CEDULA ASOCIADO");
+        array.add("NUMERO ASOCIADO");
         array.add("FECHA INHABILITACION");
         array.add("RAZON");
         llenarComboBox();
@@ -462,8 +478,19 @@ public class ControlHistorial {
                 object[0] = resul.getString(1);
                 object[1] = resul.getString(2);
                 object[2] = resul.getLong(3);
-                object[3] = resul.getString(4);
+
+                int numero = resul.getInt(4);
+                if (numero >= 1000) {
+                    object[3] = numero;
+                } else if (numero >= 100) {
+                    object[3] = "0" + numero;
+                } else if (numero >= 10) {
+                    object[3] = "00" + numero;
+                } else {
+                    object[3] = "000" + numero;
+                }
                 object[4] = resul.getString(5);
+                object[5] = resul.getString(6);
                 tabla.addRow(object);
             }
 

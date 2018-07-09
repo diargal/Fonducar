@@ -48,13 +48,13 @@ public class AccesoBD {
     private Date date;
     private DateFormat fechaCompleta;
     private DateFormat fechaAnio;
-    private ResultSet resultado;
+//    private ResultSet resultado;
     private String comandoSQL;
     private PreparedStatement prepar;
 
     public AccesoBD() {
         this.conexion();
-        resultado = null;
+//        resultado = null;
         comandoSQL = "";
         prepar = null;
         date = new Date();
@@ -99,7 +99,7 @@ public class AccesoBD {
         try {
             conexion();
             String passw = DigestUtils.md5Hex(pass);
-            resultado = resultadoConexion("SELECT A.*, P.nombre, P.cedula "
+            ResultSet resultado = resultadoConexion("SELECT A.*, P.nombre, P.cedula "
                     + "FROM `administrador` as A, persona as P "
                     + "WHERE P.idPersona = A.idPersona and A.estado = 0 and A.Password='" + passw + "' and A.Usuario='" + usuario + "'");
             if (resultado.next()) {
@@ -194,7 +194,7 @@ public class AccesoBD {
                 prepar.execute();
 
                 // Selecciono el id de la persona recien creada, para poder crear un asociado
-                resultado = resultadoConexion("SELECT P.idPersona FROM persona as P WHERE P.Cedula = '" + cedula + "'");
+                ResultSet resultado = resultadoConexion("SELECT P.idPersona FROM persona as P WHERE P.Cedula = '" + cedula + "'");
                 if (resultado.next()) {
                     id = resultado.getInt(1);
                 }
@@ -286,31 +286,37 @@ public class AccesoBD {
     }
 
     public ResultSet historialEACON() throws SQLException {
-        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, i.fecha, i.razon "
-                + "FROM `inhabilitacion` as i, persona as p, asociado as a "
-                + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 0 order by i.fecha desc");
+        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, na.idnumero, i.fecha, i.razon "
+                + "FROM `inhabilitacion` as i, persona as p, asociado as a, numeroasociado as na "
+                + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 0 and i.razon != 'Asociado deshabilitado por cambio de año' and a.idasociado = na.idasociado "
+                + "and substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) = substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 ) "
+                + "order by i.fecha desc");
     }
 
     public ResultSet historialEASIN() throws SQLException {
-        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, i.fecha, i.razon "
-                + "FROM `inhabilitacion` as i, persona as p, asociado as a "
-                + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 1 order by i.fecha desc");
+        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, na.idnumero, i.fecha, i.razon "
+                + "FROM `inhabilitacion` as i, persona as p, asociado as a, numeroasociado as na "
+                + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 1 and i.razon != 'Asociado deshabilitado por cambio de año' and a.idasociado = na.idasociado "
+                + "and substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) = substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 ) "
+                + "order by i.fecha desc");
     }
 
     public ResultSet historialInhabilitadosActuales() throws SQLException {
         String fecha2 = fechaAnio.format(date);
-        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, i.fecha, i.razon "
-                + "FROM inhabilitacion as i, persona as p, asociado as a "
-                + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 1 and '" + fecha2 + "' = "
-                + "substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 )order by i.fecha");
+        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, na.idnumero, i.fecha, i.razon "
+                + "FROM inhabilitacion as i, persona as p, asociado as a, numeroasociado as na "
+                + "WHERE p.idPersona = a.idPersona and a.estado =1 and a.idAsociado = i.idAsociado and i.estado = 1 and "
+                + "'" + fecha2 + "' = substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 ) and na.idasociado = a.idasociado "
+                + "and '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) ORDER BY `i`.`Fecha` DESC");
     }
 
     public ResultSet historialHabilitadosActuales() throws SQLException {
         String fecha2 = fechaAnio.format(date);
-        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, i.fecha, i.razon "
-                + "FROM inhabilitacion as i, persona as p, asociado as a "
-                + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 0 and '" + fecha2 + "' = "
-                + "substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 )order by i.fecha");
+        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, na.idnumero, i.fecha, i.razon "
+                + "FROM inhabilitacion as i, persona as p, asociado as a, numeroasociado as na "
+                + "WHERE p.idPersona = a.idPersona and a.estado =1 and a.idAsociado = i.idAsociado and i.estado = 0 and "
+                + "'" + fecha2 + "' = substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 ) and na.idasociado = a.idasociado "
+                + "and '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) ORDER BY `i`.`Fecha` DESC");
     }
 
     public boolean cambiarEstado(long cedula, int tipo, String razon) {
@@ -329,7 +335,7 @@ public class AccesoBD {
                     return false;
                 } else {
                     //busco el id del asociado que concuerda con la cédula ingresada
-                    resultado = idAsociado(cedula);
+                    ResultSet resultado = idAsociado(cedula);
                     if (resultado.next()) {
                         //agrego el id del asociado a la tabla de inhabilitación
                         prepar = conexion.prepareStatement("INSERT INTO `inhabilitacion`(`idInhabilitacion`, `Razon`, `Fecha`, `Estado`, `idAsociado`) "
@@ -369,7 +375,7 @@ public class AccesoBD {
                 prepar.executeUpdate();
 
                 if (numerosAsignados()) {//solo si hay números asignados
-                    resultado = idAsociado(cedula);//obtengo el id del asociado
+                    ResultSet resultado = idAsociado(cedula);//obtengo el id del asociado
 
                     if (resultado.next()) {
                         int idAsociado = resultado.getInt(1);
@@ -390,13 +396,13 @@ public class AccesoBD {
     }
 
     public ResultSet idAsociado(long cedula) throws SQLException {
-        return resultado = resultadoConexion("SELECT a.idAsociado, p.nombre, p.apellido FROM `asociado` as a, persona as p "
+        return resultadoConexion("SELECT a.idAsociado, p.nombre, p.apellido FROM `asociado` as a, persona as p "
                 + "WHERE a.idPersona = p.idPersona and p.Cedula ='" + cedula + "'");
     }
 
     public boolean asociacionAnioActual(int idAsociado) {
         try {
-            resultado = resultadoConexion("SELECT na.idNumeroAsociado FROM `numeroasociado` as na "
+            ResultSet resultado = resultadoConexion("SELECT na.idNumeroAsociado FROM `numeroasociado` as na "
                     + "WHERE na.idAsociado = " + idAsociado + " and '" + fechaAnio.format(date) + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 )");
             if (resultado.next()) {
                 return true;
@@ -436,7 +442,7 @@ public class AccesoBD {
     public int estadoAsociado(long cedula) {
         try {
             //retorno si es asociado puro
-            resultado = resultadoConexion("SELECT p.Nombre, a.idAsociado FROM `asociado` as a, persona as p "
+            ResultSet resultado = resultadoConexion("SELECT p.Nombre, a.idAsociado FROM `asociado` as a, persona as p "
                     + "WHERE a.estado = 0 and a.idPersona = p.idPersona and p.Cedula = '" + cedula + "'");
             if (resultado.next()) {
                 desconectar();
@@ -492,7 +498,7 @@ public class AccesoBD {
             /*
             Verifico si el usuario no concuerda con otro ya utilizado.
              */
-            resultado = resultadoConexion("Select a.idAdministrador "
+            ResultSet resultado = resultadoConexion("Select a.idAdministrador "
                     + "from administrador as a "
                     + "where a.usuario = '" + admin.getUsuario() + "'");
 
@@ -605,7 +611,7 @@ public class AccesoBD {
     public boolean numerosAsignados() {
         String fecha2 = fechaAnio.format(date);
         try {
-            resultado = resultadoConexion("select na.fecha "
+            ResultSet resultado = resultadoConexion("select na.fecha "
                     + "from numeroasociado as na "
                     + "where '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15)");
             if (resultado.next()) {
@@ -620,7 +626,7 @@ public class AccesoBD {
     public boolean asociadosVacia() {
         try {
             //   conexion();
-            resultado = resultadoConexion("Select count(a.idAsociado) from asociado as a");
+            ResultSet resultado = resultadoConexion("Select count(a.idAsociado) from asociado as a");
             if (resultado.next()) {
                 if (resultado.getInt(1) == 0) {
                     desconectar();
@@ -639,7 +645,7 @@ public class AccesoBD {
     public ArrayList<Integer> idsAsociados() {
         ArrayList<Integer> array = new ArrayList<>();
         try {
-            resultado = resultadoConexion("SELECT a.idasociado FROM `asociado` as a WHERE a.estado=0 ORDER BY `a`.`idAsociado` ASC");
+            ResultSet resultado = resultadoConexion("SELECT a.idasociado FROM `asociado` as a WHERE a.estado=0 ORDER BY `a`.`idAsociado` ASC");
             while (resultado.next()) {
                 array.add(resultado.getInt(1));
             }
@@ -651,14 +657,17 @@ public class AccesoBD {
 
     public boolean prepararAsociacion() {
         try {
-            resultado = verificarsihayInhabilitados();
+
+            ResultSet resultado = verificarsihayInhabilitados();
             while (resultado.next()) {
+
+                conexion();
                 /*
                 Registro todos los asociados con estado 1 en la tabla Asociado, en la tabla inhabilitados para que representen 
                 ex-asociados sin participación.
                  */
                 prepar = conexion.prepareStatement("INSERT INTO `inhabilitacion`(`idInhabilitacion`, `Razon`, `Fecha`, `Estado`, `idAsociado`) VALUES(" + null + ",?,?,?,?)");
-                prepar.setString(1, "No pidió reingreso y se procedió a deshabilitarlo por completo.");
+                prepar.setString(1, "Asociado deshabilitado por cambio de año");
                 prepar.setString(2, fechaCompleta.format(date));
                 prepar.setInt(3, 1);
                 prepar.setInt(4, resultado.getInt(3));
@@ -686,14 +695,14 @@ public class AccesoBD {
             //todo esto, deja igual cantidad de números hábiles, como de asociados hábiles listos para relacionar entre sí
             desconectar();
         } catch (SQLException ex) {
-            Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("excepción: " + ex);
             return false;
         }
         return true;
     }
 
     public boolean asociarNumeros(int idAsociado, int idNumero) {
-        conexion();
+//        conexion();
         try {
             prepar = conexion.prepareStatement("INSERT INTO `numeroasociado`(`idNumeroAsociado`, `Fecha`, `idAsociado`, `idNumero`) VALUES(" + null + ",?,?,?)");
             prepar.setString(1, fechaCompleta.format(date));
@@ -701,9 +710,10 @@ public class AccesoBD {
             prepar.setDouble(3, idNumero);
             prepar.execute();
 
-            desconectar();
+//            desconectar();
             return true;
         } catch (java.sql.SQLException er) {
+            JOptionPane.showMessageDialog(null, "Ocurriò un problema en el proceso");
             return false;
         }
     }
@@ -711,6 +721,7 @@ public class AccesoBD {
     public int cantidadNumerosHabiles(boolean habiles) {
         try {
             conexion();
+            ResultSet resultado;
             if (habiles) {
                 resultado = resultadoConexion("Select count(n.idNumero) From numero as n where n.estado = 0");
             } else {
@@ -767,7 +778,7 @@ public class AccesoBD {
 
     public int cantidadNumAsociados() {
         try {
-            resultado = resultadoConexion("SELECT count(na.idNumeroAsociado) "
+            ResultSet resultado = resultadoConexion("SELECT count(na.idNumeroAsociado) "
                     + "FROM `numeroasociado` as na "
                     + "WHERE '" + fechaAnio.format(date) + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) ");
             if (resultado.next()) {
@@ -786,6 +797,8 @@ public class AccesoBD {
     public int numerodeAsociados(boolean habilitado) {
 
         try {
+            ResultSet resultado;
+
             if (!habilitado) {
                 /*
                 Cantidad de asociados que me permite generar el nùmero ganador
@@ -817,7 +830,7 @@ public class AccesoBD {
                 /*
         Aquí busco si el número ya ha sido ganador de un premio menor a lo largo del año
                  */
-                resultado = resultadoConexion("Select na2.idNumero from numeroasociado as na2 where na2.idNumero "
+                ResultSet resultado = resultadoConexion("Select na2.idNumero from numeroasociado as na2 where na2.idNumero "
                         + "= " + numero + " and na2.idNumero in ( SELECT na.idNumero FROM `sorteo` as s, numeroasociado as na"
                         + " WHERE s.TipoSorteo = 0 and '" + fechaAnio.format(date) + "' = substring( s.fecha, length(s.fecha)-12 ,"
                         + " length(s.fecha)-15 ) and s.idNumeroAsociado = na.idNumeroAsociado)");
@@ -829,7 +842,7 @@ public class AccesoBD {
             /*
             luego busco al ganador a partir del número que tiene asociado y que es igual al número que salió en el sorteo
              */
-            resultado = resultadoConexion("select p.nombre, p.apellido, p.cedula, na.idnumero, na.idnumeroasociado "
+            ResultSet resultado = resultadoConexion("select p.nombre, p.apellido, p.cedula, na.idnumero, na.idnumeroasociado "
                     + "from numeroasociado as na, numero as n, asociado as a, persona as p "
                     + "where n.estado = 0 and n.idnumero = na.idnumero and '" + fechaAnio.format(date) + "' = "
                     + "substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) and na.idasociado = a.idasociado "
@@ -852,7 +865,7 @@ public class AccesoBD {
 
         try {
             //conexion();
-            resultado = resultadoConexion("SELECT count(*) FROM numero as n where n.Estado=0");
+            ResultSet resultado = resultadoConexion("SELECT count(*) FROM numero as n where n.Estado=0");
             desconectar();
             if (resultado.next()) {
                 return resultado.getInt(1);
@@ -875,7 +888,7 @@ public class AccesoBD {
     }
 
     public boolean modificarEstadoNumero(long cedula, int estado) throws SQLException {
-        resultado = resultadoConexion("SELECT na.idNumeroAsociado, na.idAsociado, na.idNumero, na.fecha "
+        ResultSet resultado = resultadoConexion("SELECT na.idNumeroAsociado, na.idAsociado, na.idNumero, na.fecha "
                 + "FROM numeroasociado as na, asociado as a, persona as p "
                 + "where p.cedula = " + cedula + " and p.idPersona = a.idPersona and a.idAsociado = na.idAsociado and '" + fechaAnio.format(date) + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 )");
         if (resultado.next()) {
@@ -889,13 +902,13 @@ public class AccesoBD {
 
     public boolean modificarEstadoNumeroAnioPasado(long cedula, int estado) throws SQLException {
         int anioAnterior = Integer.parseInt(fechaAnio.format(date)) - 1;
-        resultado = resultadoConexion("SELECT na.idNumeroAsociado, na.idAsociado, na.idNumero, na.fecha "
+        ResultSet resultado2 = resultadoConexion("SELECT na.idNumeroAsociado, na.idAsociado, na.idNumero, na.fecha "
                 + "FROM numeroasociado as na, asociado as a, persona as p "
                 + "where p.cedula = " + cedula + " and p.idPersona = a.idPersona and a.idAsociado = na.idAsociado and '" + anioAnterior + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 )");
-        if (resultado.next()) {
+        if (resultado2.next()) {
             prepar = conexion.prepareStatement("UPDATE `numero` as n SET n.Estado = ? WHERE n.idNumero = ?");
             prepar.setInt(1, estado);
-            prepar.setInt(2, resultado.getInt(3));
+            prepar.setInt(2, resultado2.getInt(3));
             return prepar.executeUpdate() != 0;
         }
         return false;

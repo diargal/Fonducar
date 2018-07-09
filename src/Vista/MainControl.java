@@ -78,7 +78,7 @@ public class MainControl extends javax.swing.JFrame {
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         jLabel2Cargando.setVisible(false);
-        JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+//        JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
     }
 
     public void prepararAsociacion() {
@@ -86,6 +86,7 @@ public class MainControl extends javax.swing.JFrame {
             if (peticion.prepararAsociacion()) {
             }
         }
+                JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
     }
 
     public void cerrarVentana() {
@@ -549,7 +550,7 @@ public class MainControl extends javax.swing.JFrame {
 
     private void JMIModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIModificarActionPerformed
         CambiarEstado cambiar = new CambiarEstado(this, true);
-        cambiar.setVisible(rootPaneCheckingEnabled);
+        cambiar.setVisible(true);
         JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
     }//GEN-LAST:event_JMIModificarActionPerformed
 
@@ -633,7 +634,6 @@ public class MainControl extends javax.swing.JFrame {
     private void JMIHabilitadosActualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIHabilitadosActualActionPerformed
         try {
             controlHistorial.historialInhabilitadosActuales(peticion.historialHabilitadosActuales(A_HABILACTUALES), "CON");
-
         } catch (SQLException ex) {
             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
         }

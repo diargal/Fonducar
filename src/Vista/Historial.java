@@ -314,7 +314,6 @@ public class Historial extends javax.swing.JDialog {
             return control.generarArchivo(JTHistorial, numeroInforme, this.getTitle(), JCBFiltro.getSelectedItem().toString(), JTxFFiltro.getText(), jLabel2Cargando);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage().toString());
-            System.out.println("error: " + ex.getMessage().toString());
         }
         return false;
     }
