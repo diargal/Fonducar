@@ -19,7 +19,7 @@
 		<band height="123" splitType="Stretch">
 			<image>
 				<reportElement x="0" y="0" width="138" height="123"/>
-				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Win10\\Desktop\\Bono Solidario\\Bono Solidarip\\src\\Imagenes\\Logo.png"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA["Imagenes\\Logo.png"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="155" y="0" width="388" height="111"/>

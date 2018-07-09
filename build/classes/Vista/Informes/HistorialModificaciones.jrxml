@@ -18,7 +18,7 @@
 		<band height="121" splitType="Stretch">
 			<image>
 				<reportElement x="0" y="0" width="131" height="121"/>
-				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Win10\\Desktop\\Bono Solidario\\Bono Solidarip\\src\\Imagenes\\Logo.png"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA["Imagenes\\Logo.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="165" y="17" width="378" height="94"/>
@@ -92,7 +92,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{FECHA REALIZACION}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="146" y="0" width="126" height="20"/>
+				<reportElement x="146" y="0" width="126" height="48"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{NOMBRE ADMINISTRADOR}.concat(" ").concat( $F{APELLIDO ADMINISTRADOR} )]]></textFieldExpression>
 			</textField>

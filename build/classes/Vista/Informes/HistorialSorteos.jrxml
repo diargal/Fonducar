@@ -21,7 +21,7 @@
 		<band height="121" splitType="Stretch">
 			<image>
 				<reportElement x="0" y="0" width="159" height="121"/>
-				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Win10\\Desktop\\Bono Solidario\\Bono Solidarip\\src\\Imagenes\\Logo.png"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA["Imagenes\\Logo.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="171" y="16" width="373" height="89"/>
@@ -102,9 +102,9 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="31" splitType="Stretch">
+		<band height="52" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="11" width="106" height="20"/>
+				<reportElement x="0" y="11" width="106" height="41"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{NOMBRE}.concat(" ").concat( $F{APELLIDO} )]]></textFieldExpression>
 			</textField>
