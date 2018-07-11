@@ -28,6 +28,9 @@ import static Modelo.Mensajes.A_REPORTESORTEOS;
 import Modelo.Peticiones;
 import java.io.File;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
@@ -86,7 +89,10 @@ public class MainControl extends javax.swing.JFrame {
             if (peticion.prepararAsociacion()) {
             }
         }
+        DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy __ HH-mm-ss");
+        Date date = new Date();
         JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+        JLActualizacion.setText("Fecha de la base de datos (fecha y hora): " + fecha.format(date));
     }
 
     public void cerrarVentana() {
@@ -139,6 +145,7 @@ public class MainControl extends javax.swing.JFrame {
         JLCuanto = new javax.swing.JLabel();
         JLActivos = new javax.swing.JLabel();
         jLabel2Cargando = new javax.swing.JLabel();
+        JLActualizacion = new javax.swing.JLabel();
         JLFondo = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         JM1 = new javax.swing.JMenu();
@@ -267,6 +274,11 @@ public class MainControl extends javax.swing.JFrame {
         jLabel2Cargando.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cargando.gif"))); // NOI18N
         getContentPane().add(jLabel2Cargando);
         jLabel2Cargando.setBounds(610, 10, 287, 77);
+
+        JLActualizacion.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
+        JLActualizacion.setText("Fecha de la base de datos: ");
+        getContentPane().add(JLActualizacion);
+        JLActualizacion.setBounds(10, 460, 360, 14);
 
         JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondo.gif"))); // NOI18N
         JLFondo.setMaximumSize(new java.awt.Dimension(1400, 800));
@@ -725,17 +737,21 @@ public class MainControl extends javax.swing.JFrame {
     private void JMICrearBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICrearBackupActionPerformed
         if (cntrlArchivos.crearBackup()) {
 
+            DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy __ HH-mm-ss");
+            Date date = new Date();
             JOptionPane.showMessageDialog(null, "Backup realizado con éxito!", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
+            JLActualizacion.setText("Fecha de la base de datos (fecha y hora): " + fecha.format(date));
         } else {
             JOptionPane.showMessageDialog(null, "El Backup no se pudo generar!", "Operación fallida", JOptionPane.ERROR_MESSAGE);
-
         }
     }//GEN-LAST:event_JMICrearBackupActionPerformed
 
     private void JMIRestaurarBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIRestaurarBackupActionPerformed
-        if (cntrlArchivos.restaurarBackup()) {
-            JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+
+        if (cntrlArchivos.restaurarBackup(JLActualizacion)) {
             JOptionPane.showMessageDialog(null, "Restauración de backup realizada!", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
+            JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+            // JLActualizacion.setText("Fecha de la base de datos (fecha y hora): " + fecha);
         } else {
             JOptionPane.showMessageDialog(null, "No se pudo realizar la restauración!", "Operación fallida", JOptionPane.ERROR_MESSAGE);
         }
@@ -745,6 +761,7 @@ public class MainControl extends javax.swing.JFrame {
     public javax.swing.JButton JBSorteo;
     public javax.swing.JCheckBoxMenuItem JCBPruebaSorteos;
     public javax.swing.JLabel JLActivos;
+    private javax.swing.JLabel JLActualizacion;
     public javax.swing.JLabel JLBalota1;
     public javax.swing.JLabel JLBalota2;
     public javax.swing.JLabel JLBalota3;

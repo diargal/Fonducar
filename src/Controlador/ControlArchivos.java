@@ -9,7 +9,6 @@ import static Modelo.Mensajes.RESTAURACION;
 import Modelo.Peticiones;
 import Modelo.Sorteo;
 import Vista.Informes.Informe;
-import com.mysql.jdbc.PreparedStatement;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -172,7 +172,7 @@ public class ControlArchivos {
 
     public boolean crearBackup() {
         int resp;
-        DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy");
+        DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy __ HH-mm-ss");
         Date date = new Date();
         JFileChooser chooser = new JFileChooser();
         resp = chooser.showSaveDialog(ventanaInfo);
@@ -205,34 +205,61 @@ public class ControlArchivos {
         return true;
     }
 
-    public boolean restaurarBackup() {
+    public boolean restaurarBackup(JLabel label) {
+
         try {
             File archivo;
             JFileChooser selecArchivo = new JFileChooser();
             selecArchivo.setFileFilter(new FileNameExtensionFilter("SQL (*.sql)", "sql"));
             selecArchivo.showDialog(null, "Seleccionar archivo");
             archivo = selecArchivo.getSelectedFile();
+            if (archivo != null) {
+                String RutaFile = archivo.getAbsolutePath();
+                String clave = "Fonducar**BonoSolidario2018*";
+                String user = "root";
+                String db = "fonducarbs";
+                System.out.println(RutaFile);
 
-            String path = archivo.getAbsolutePath();
-            int c = JOptionPane.showConfirmDialog(null, "Desea Restaurar esta Base de datos", "mensaje de confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (c == JOptionPane.YES_OPTION) {
                 Peticiones pet = new Peticiones();
 
                 Statement con = (Statement) pet.getAcces().getConnect().createStatement();
-                con.execute("drop database if exists apafa;");
+                con.execute("drop database if exists fonducarbs;");
                 con.close();
                 con = (Statement) pet.getAcces().getConnect().createStatement();
-                con.execute("create database apafa");
+                con.execute("create database fonducarbs");
                 con.close();
-                String backup = "cmd /c mysql --user=root  --password=Fonducar**BonoSolidario2018* fonducarbs < " + path;
-                Process child = Runtime.getRuntime().exec(backup);
-                JOptionPane.showMessageDialog(null, "La Base de Datos ha sido Restaurada Correctamente");
-                return true;
-            }
 
-        } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println(e);
+                String Ruta = "C:\\wamp\\bin\\mysql\\mysql5.6.17\\bin\\mysql";
+
+                // String cad = "\"" + Ruta + "\" --password=" + clave + " --user=" + user + " " + db + " < \"" + RutaFile + "\"\n";
+                String cad = Ruta + " --password=" + clave + " --user=" + user + " " + db + " < " + RutaFile;
+                File fcopi = new File("copia_seguridad.bat");
+                FileWriter fw = new FileWriter(fcopi);
+                fw.write(cad, 0, cad.length());
+                fw.close();
+                Runtime.getRuntime().exec("copia_Seguridad.bat");
+
+                try {
+                    label.setText("Fecha de la base de datos (fecha y hora): " + archivo.getName().substring(archivo.getName().length() - 26, archivo.getName().length() - 4));
+                } catch (StringIndexOutOfBoundsException err) {
+                    JOptionPane.showMessageDialog(null, "El archivo no contiene en el nombre la fecha y la hora. Por tanto, no se puede saber la fecha de creación de backup.");
+                    label.setText("Fecha de la base de datos (fecha y hora):  Indefinida");
+                }
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                }
+
+                return true;
+//JOptionPane.showMessageDialog(this, "Creación De Copia De Seguridad Realizada Con Exito");
+            } else {
+                return false;
+//JOptionPane.showMessageDialog(this, "Creación De Copia De Seguridad Cancelada Por El Usuario");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
         }
         return false;
     }
