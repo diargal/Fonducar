@@ -44,7 +44,7 @@ public class ControlAnimacion {
         NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
 
         main.JM1.setEnabled(false);
-        main.JM2.setEnabled(false);
+        main.JMOperaciones.setEnabled(false);
         main.JM3.setEnabled(false);
         main.JCBPruebaSorteos.setEnabled(false);
         main.JMIHSorteos.setVisible(false);
@@ -108,7 +108,7 @@ public class ControlAnimacion {
             vistaGanador.setVisible(true);
 
             main.JM1.setEnabled(true);
-            main.JM2.setEnabled(true);
+            main.JMOperaciones.setEnabled(true);
             main.JM3.setEnabled(true);
             main.JMIHSorteos.setVisible(true);
             main.JCBPruebaSorteos.setEnabled(true);

@@ -159,7 +159,7 @@ public class AccesControl extends javax.swing.JDialog {
         JOptionPane.showMessageDialog(this, LOGIN_VER, ERROR_LOGIN, JOptionPane.ERROR_MESSAGE);
     }
     private void JTxfPassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxfPassKeyPressed
-        ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
+         ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
 
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             this.JBLoginActionPerformed(jd);

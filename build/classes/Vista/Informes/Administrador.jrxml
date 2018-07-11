@@ -10,6 +10,7 @@
 	<field name="CEDULA ADMINISTRADOR" class="java.lang.String"/>
 	<field name="ACTIVO" class="java.lang.String"/>
 	<field name="APELLIDO ADMINISTRADOR" class="java.lang.String"/>
+	<field name="USUARIO" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -54,44 +55,54 @@
 	<columnHeader>
 		<band height="40" splitType="Stretch">
 			<staticText>
-				<reportElement x="11" y="11" width="171" height="20"/>
+				<reportElement x="123" y="11" width="150" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre Administrador]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="195" y="11" width="218" height="20"/>
+				<reportElement x="300" y="11" width="127" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cédula Administrador]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="433" y="11" width="111" height="20"/>
+				<reportElement x="444" y="11" width="111" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Activo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="11" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Usuario]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="58" splitType="Stretch">
 			<textField>
-				<reportElement x="11" y="14" width="171" height="44"/>
+				<reportElement x="123" y="14" width="150" height="44"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{NOMBRE ADMINISTRADOR}.concat(" ").concat( $F{APELLIDO ADMINISTRADOR} )]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="195" y="14" width="218" height="20"/>
+				<reportElement x="300" y="14" width="127" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{CEDULA ADMINISTRADOR}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="433" y="14" width="111" height="20"/>
+				<reportElement x="444" y="14" width="111" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{ACTIVO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="14" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{USUARIO}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

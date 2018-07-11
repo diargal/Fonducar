@@ -90,6 +90,11 @@ public class DatosAsociado extends javax.swing.JDialog {
                 JTxFCedulaFocusGained(evt);
             }
         });
+        JTxFCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JTxFCedulaKeyPressed(evt);
+            }
+        });
         JPFondo.add(JTxFCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 190, -1));
 
         JBModificar.setBackground(new java.awt.Color(125, 202, 62));
@@ -103,13 +108,12 @@ public class DatosAsociado extends javax.swing.JDialog {
         JPFondo.add(JBModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 250, 130, 30));
 
         JBIr.setText("Ir");
-        JBIr.setEnabled(false);
         JBIr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBIrActionPerformed(evt);
             }
         });
-        JPFondo.add(JBIr, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 120, -1, -1));
+        JPFondo.add(JBIr, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 120, 50, -1));
 
         JLFondo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondos/datosAsociado.jpg"))); // NOI18N
@@ -166,8 +170,26 @@ public class DatosAsociado extends javax.swing.JDialog {
     }//GEN-LAST:event_JBModificarActionPerformed
 
     private void JBIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBIrActionPerformed
-        // TODO add your handling code here:
+        if (!JTxFCedula.getText().isEmpty()) {
+            JTxFNombre.setText(peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())).get(0));
+            JTxFApellido.setText(peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())).get(1));
+            JTxFApellido.setEnabled(true);
+            JTxFNombre.setEnabled(true);
+            JTxFPass.setEnabled(true);
+            JTxFUsuario.setEnabled(true);
+            JBModificar.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Ingresar la cédula del asociado.");
+        }
     }//GEN-LAST:event_JBIrActionPerformed
+
+    private void JTxFCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFCedulaKeyPressed
+        ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.JBIrActionPerformed(jd);
+        }
+    }//GEN-LAST:event_JTxFCedulaKeyPressed
 
     public boolean vacio() {
         for (int i = 0; i < JPFondo.getComponentCount(); i++) {

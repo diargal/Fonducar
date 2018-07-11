@@ -572,12 +572,14 @@ public class ControlHistorial {
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
 
+        tabla.addColumn("USUARIO");
         tabla.addColumn("NOMBRE ADMINISTRADOR");
         tabla.addColumn("APELLIDO ADMINISTRADOR");
         tabla.addColumn("CEDULA ADMINISTRADOR");
         tabla.addColumn("ACTIVO");
-        Object[] object = new Object[4];
+        Object[] object = new Object[5];
         array = new ArrayList<>();
+        array.add("USUARIO");
         array.add("NOMBRE ADMINISTRADOR");
         array.add("APELLIDO ADMINISTRADOR");
         array.add("CEDULA ADMINISTRADOR");
@@ -588,8 +590,9 @@ public class ControlHistorial {
             while (resul.next()) {
                 object[0] = resul.getString(1);
                 object[1] = resul.getString(2);
-                object[2] = resul.getLong(3);
-                object[3] = resul.getString(4);
+                object[2] = resul.getString(3);
+                object[3] = resul.getLong(4);
+                object[4] = resul.getString(5);
                 tabla.addRow(object);
             }
 

@@ -31,10 +31,13 @@ public class Mensajes {
     public static final String A_HASIN = "Generación del historial de los ex-asociados SIN participación.";
     public static final String A_INHABILACTUALES = "Generación del historial de los ex-asociados inhabilitados actualmente para participar.";
     public static final String A_HOPERACIONES = "Generación del historial de las operaciones realizadas por el administrador.";
+    public static final String INFORME = "Creación del informe de ";
     public static final String A_SETASOCIADO = "Modificación de datos de Asociado";
     public static final String ADD_ADMIN = "Creación de un nuevo administrador.";
     public static final String DELETE_ADMIN = "Eliminación de administrador.";
     public static final String REI_ADMIN = "Reingreso de un administrador.";
+    public static final String COPIA = "Creación de copia de la base de datos.";
+    public static final String RESTAURACION = "Restauración de la base de datos.";
 
     /*Información relevante*/
     public static final String MENSAJE = "Recuerde que el formato del archivo para cargar nuevos asociados es: NOMBRE, APELLIDOS y CEDULA respectivamente.";

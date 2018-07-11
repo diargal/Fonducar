@@ -44,7 +44,7 @@ public class AccesoBD {
     private final String url = "jdbc:mysql://localhost/fonducarbs";
     private final String login = "root";
     private final String password = "Fonducar**BonoSolidario2018*";
-    private static Connection conexion = null;
+    public static Connection conexion = null;
     private Date date;
     private DateFormat fechaCompleta;
     private DateFormat fechaAnio;
@@ -84,7 +84,7 @@ public class AccesoBD {
     }
 
     /* --------------------------------------------------------------------------------------------------------------------------- */
-    private ResultSet resultadoConexion(String comando) throws SQLException {
+    public ResultSet resultadoConexion(String comando) throws SQLException {
         conexion();
         Statement stmt = conexion.createStatement();
         return stmt.executeQuery(comando);
@@ -601,7 +601,7 @@ public class AccesoBD {
     }
 
     public ResultSet verAdministradores() throws SQLException {
-        return resultadoConexion("SELECT p.nombre, p.apellido, p.cedula, if(a.estado=0,\"SI\",\"NO\") as Activo FROM `administrador` as a, persona as p WHERE a.idPersona = p.idPersona and a.tipo = 0");
+        return resultadoConexion("SELECT a.usuario, p.nombre, p.apellido, p.cedula, if(a.estado=0,'SI','NO') as Activo FROM `administrador` as a, persona as p WHERE a.idPersona = p.idPersona and a.tipo = 0");
     }
 
     /* ------------------------------------------------------------------------------------------------------------------------ */

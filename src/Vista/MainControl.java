@@ -86,7 +86,7 @@ public class MainControl extends javax.swing.JFrame {
             if (peticion.prepararAsociacion()) {
             }
         }
-                JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+        JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
     }
 
     public void cerrarVentana() {
@@ -151,12 +151,15 @@ public class MainControl extends javax.swing.JFrame {
         JMIHSorteos = new javax.swing.JMenuItem();
         JMIHModificaciones = new javax.swing.JMenuItem();
         JMIActuales = new javax.swing.JMenuItem();
-        JM2 = new javax.swing.JMenu();
+        JMOperaciones = new javax.swing.JMenu();
         JMIAsignarAso = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         JMAAsociados = new javax.swing.JMenuItem();
         JMIModificar = new javax.swing.JMenuItem();
         JMIModificarDatos = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        JMICrearBackup = new javax.swing.JMenuItem();
+        JMIRestaurarBackup = new javax.swing.JMenuItem();
         JM3 = new javax.swing.JMenu();
         JMGestionAdmins = new javax.swing.JMenu();
         JMIAddAdmin = new javax.swing.JMenuItem();
@@ -360,7 +363,7 @@ public class MainControl extends javax.swing.JFrame {
 
         jMenuBar1.add(JM1);
 
-        JM2.setText("Operaciones");
+        JMOperaciones.setText("Operaciones");
 
         JMIAsignarAso.setText("Asignar números");
         JMIAsignarAso.addActionListener(new java.awt.event.ActionListener() {
@@ -368,7 +371,7 @@ public class MainControl extends javax.swing.JFrame {
                 JMIAsignarAsoActionPerformed(evt);
             }
         });
-        JM2.add(JMIAsignarAso);
+        JMOperaciones.add(JMIAsignarAso);
 
         jMenu1.setText("Operaciones sobre el Asociado");
 
@@ -396,9 +399,29 @@ public class MainControl extends javax.swing.JFrame {
         });
         jMenu1.add(JMIModificarDatos);
 
-        JM2.add(jMenu1);
+        JMOperaciones.add(jMenu1);
 
-        jMenuBar1.add(JM2);
+        jMenu2.setText("Backup");
+
+        JMICrearBackup.setText("Crear copia de la Base de Datos");
+        JMICrearBackup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JMICrearBackupActionPerformed(evt);
+            }
+        });
+        jMenu2.add(JMICrearBackup);
+
+        JMIRestaurarBackup.setText("Restaurar copia de la Base de Datos");
+        JMIRestaurarBackup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JMIRestaurarBackupActionPerformed(evt);
+            }
+        });
+        jMenu2.add(JMIRestaurarBackup);
+
+        JMOperaciones.add(jMenu2);
+
+        jMenuBar1.add(JMOperaciones);
 
         JM3.setText("Super Usuario");
 
@@ -699,6 +722,25 @@ public class MainControl extends javax.swing.JFrame {
         datos.setVisible(true);
     }//GEN-LAST:event_JMIModificarDatosActionPerformed
 
+    private void JMICrearBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICrearBackupActionPerformed
+        if (cntrlArchivos.crearBackup()) {
+
+            JOptionPane.showMessageDialog(null, "Backup realizado con éxito!", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "El Backup no se pudo generar!", "Operación fallida", JOptionPane.ERROR_MESSAGE);
+
+        }
+    }//GEN-LAST:event_JMICrearBackupActionPerformed
+
+    private void JMIRestaurarBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIRestaurarBackupActionPerformed
+        if (cntrlArchivos.restaurarBackup()) {
+            JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+            JOptionPane.showMessageDialog(null, "Restauración de backup realizada!", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo realizar la restauración!", "Operación fallida", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_JMIRestaurarBackupActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton JBSorteo;
     public javax.swing.JCheckBoxMenuItem JCBPruebaSorteos;
@@ -710,7 +752,6 @@ public class MainControl extends javax.swing.JFrame {
     public javax.swing.JLabel JLCuanto;
     public javax.swing.JLabel JLFondo;
     public javax.swing.JMenu JM1;
-    public javax.swing.JMenu JM2;
     public javax.swing.JMenu JM3;
     public javax.swing.JMenuItem JMAAsociados;
     public javax.swing.JMenu JMExAsociados;
@@ -718,6 +759,7 @@ public class MainControl extends javax.swing.JFrame {
     public javax.swing.JMenuItem JMIActuales;
     public javax.swing.JMenuItem JMIAddAdmin;
     public javax.swing.JMenuItem JMIAsignarAso;
+    private javax.swing.JMenuItem JMICrearBackup;
     public javax.swing.JMenuItem JMIDeleteAdmin;
     public javax.swing.JMenuItem JMIHAsociados;
     public javax.swing.JMenuItem JMIHModificaciones;
@@ -727,10 +769,13 @@ public class MainControl extends javax.swing.JFrame {
     public javax.swing.JMenuItem JMIModificar;
     public javax.swing.JMenuItem JMIModificarDatos;
     public javax.swing.JMenuItem JMIReingreso;
+    private javax.swing.JMenuItem JMIRestaurarBackup;
     public javax.swing.JMenuItem JMIVerAdmins;
+    public javax.swing.JMenu JMOperaciones;
     public javax.swing.JPanel JPanelBalotas;
     public javax.swing.JLabel jLabel2Cargando;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;

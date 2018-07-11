@@ -93,7 +93,7 @@ public class CambiarEstado extends javax.swing.JDialog {
         getContentPane().add(JCBAccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 140, 220, -1));
 
         JTxFNombre.setEnabled(false);
-        getContentPane().add(JTxFNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 270, -1));
+        getContentPane().add(JTxFNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 460, -1));
 
         JLFondo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondos/estadoAsociado.jpg"))); // NOI18N
@@ -133,7 +133,7 @@ public class CambiarEstado extends javax.swing.JDialog {
             int estado = peticion.estadoAsociado(Long.parseLong(JTxFCedula.getText()));
             JComboBox nuevo = new JComboBox();
             JCBAccion.setModel(nuevo.getModel());
-            JTxFNombre.setText(peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())));
+            JTxFNombre.setText(peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())).get(0) + " " + peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())).get(1));
             switch (estado) {
                 case 1:
                     JCBAccion.addItem("Ex-Asociado CON participación");

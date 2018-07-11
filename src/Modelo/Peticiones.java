@@ -19,6 +19,14 @@ public class Peticiones {
         acces = new AccesoBD();
     }
 
+    public AccesoBD getAcces() {
+        return acces;
+    }
+
+    public void setAcces(AccesoBD acces) {
+        this.acces = acces;
+    }
+
     public boolean login(String usuario, String pass, boolean tipo) {
         return acces.login(usuario, pass, tipo);
     }
@@ -150,16 +158,18 @@ public class Peticiones {
         return acces.estadoAsociado(cedula);
     }
 
-    public String nombreAsociado(long cedula) {
+    public ArrayList<String> nombreAsociado(long cedula) {
+        ArrayList<String> array = new ArrayList<>();
         try {
             ResultSet resultado = acces.idAsociado(cedula);
 //            acces.desconectar();
             if (resultado.next()) {
-                return resultado.getString(2) + " " + resultado.getString(3);
+                array.add(resultado.getString(2));
+                array.add(resultado.getString(3));
             }
         } catch (SQLException ex) {
         }
-        return "";
+        return array;
     }
 
     public ArrayList<String> nombreAdmin(long cedula) {

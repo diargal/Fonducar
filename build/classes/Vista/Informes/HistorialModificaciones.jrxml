@@ -23,7 +23,7 @@
 			<staticText>
 				<reportElement x="165" y="17" width="378" height="94"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Baskerville Old Face" size="24"/>
+					<font fontName="Arial" size="24"/>
 				</textElement>
 				<text><![CDATA[Informe del historial de operaciones y movimientos realizados por el administrador]]></text>
 			</staticText>

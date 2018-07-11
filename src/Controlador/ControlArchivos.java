@@ -1,10 +1,23 @@
 package Controlador;
 
+import DataAcces.AccesoBD;
+import static Modelo.Mensajes.COPIA;
 import static Modelo.Mensajes.ERRORBDC;
+import static Modelo.Mensajes.INFORME;
 import static Modelo.Mensajes.MENSAJE;
-import Vista.Historial;
+import static Modelo.Mensajes.RESTAURACION;
+import Modelo.Peticiones;
+import Modelo.Sorteo;
 import Vista.Informes.Informe;
+import com.mysql.jdbc.PreparedStatement;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,16 +29,14 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JRViewer;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 
@@ -37,10 +48,12 @@ public class ControlArchivos {
 
     public ControlHistorial control;
     public static Informe ventanaInfo;
+    public static Sorteo sorteo;
 
     public ControlArchivos() {
         control = new ControlHistorial();
         ventanaInfo = new Informe(null, true);
+        sorteo = new Sorteo();
     }
 
     /*
@@ -104,25 +117,32 @@ public class ControlArchivos {
         //Aquí obtengo la dirección del informe que se generará
         switch (numero) {
             case 1:
-                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/historialNumeros.jrxml"));
+//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/historialNumeros.jrxml"));
+                jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/historialNumeros.jasper"));
                 break;
             case 2:
-                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialSorteos.jrxml"));
+//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialSorteos.jrxml"));
+                jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialSorteos.jasper"));
                 break;
             case 3:
-                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialEXAS.jrxml"));
+                jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialEXAS.jasper"));
+//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialEXAS.jrxml"));
                 break;
             case 4:
-                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialModificaciones.jrxml"));
+                jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialModificaciones.jasper"));
+//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialModificaciones.jrxml"));
                 break;
             case 5:
-                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/NumerosActuales.jrxml"));
+                jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/NumerosActuales.jasper"));
+//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/NumerosActuales.jrxml"));
                 break;
             case 6:
-                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialEXAS.jrxml"));
+                jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialEXAS.jasper"));
+//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialEXAS.jrxml"));
                 break;
             case 7:
-                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/Administrador.jrxml"));
+                jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/Administrador.jasper"));
+//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/Administrador.jrxml"));
                 break;
 
         }
@@ -140,29 +160,80 @@ public class ControlArchivos {
             label.setVisible(false);
             ventanaInfo.setContentPane(jv);
             ventanaInfo.setVisible(true);
+            sorteo.actividad(INFORME + nombre);
 
         } catch (JRException ex) {
             Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("error: " + ex.getMessage().toString());
         }
         return true;
 
     }
 
-    public void cambiarApariencia(boolean tipo) {
-        try {
-            if (tipo) {
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            } else {
-                UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticLookAndFeel");
+    public boolean crearBackup() {
+        int resp;
+        DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = new Date();
+        JFileChooser chooser = new JFileChooser();
+        resp = chooser.showSaveDialog(ventanaInfo);
+        if (resp == JFileChooser.APPROVE_OPTION) {
+
+            Runtime runtime = Runtime.getRuntime();
+            File backupFile = new File(String.valueOf(chooser.getSelectedFile().toString())
+                    + "_" + fecha.format(date) + ".sql");
+            System.out.println("si pasa");
+            FileWriter fw;
+            try {
+                fw = new FileWriter(backupFile);
+
+                Process child = runtime.exec("C:\\wamp\\bin\\mysql\\mysql5.6.17\\bin\\mysqldump --opt --password=Fonducar**BonoSolidario2018* --user=root --databases fonducarbs  -R");
+                InputStreamReader irs = new InputStreamReader(child.getInputStream());
+                BufferedReader br = new BufferedReader(irs);
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    fw.write(line + "\n");
+                }
+                fw.close();
+                irs.close();
+                br.close();
+                sorteo.actividad(COPIA);
+            } catch (IOException e) {
+                return false;
             }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(ControlArchivos.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return true;
+    }
+
+    public boolean restaurarBackup() {
+        try {
+            File archivo;
+            JFileChooser selecArchivo = new JFileChooser();
+            selecArchivo.setFileFilter(new FileNameExtensionFilter("SQL (*.sql)", "sql"));
+            selecArchivo.showDialog(null, "Seleccionar archivo");
+            archivo = selecArchivo.getSelectedFile();
+
+            String path = archivo.getAbsolutePath();
+            int c = JOptionPane.showConfirmDialog(null, "Desea Restaurar esta Base de datos", "mensaje de confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (c == JOptionPane.YES_OPTION) {
+                Peticiones pet = new Peticiones();
+
+                Statement con = (Statement) pet.getAcces().getConnect().createStatement();
+                con.execute("drop database if exists apafa;");
+                con.close();
+                con = (Statement) pet.getAcces().getConnect().createStatement();
+                con.execute("create database apafa");
+                con.close();
+                String backup = "cmd /c mysql --user=root  --password=Fonducar**BonoSolidario2018* fonducarbs < " + path;
+                Process child = Runtime.getRuntime().exec(backup);
+                JOptionPane.showMessageDialog(null, "La Base de Datos ha sido Restaurada Correctamente");
+                return true;
+            }
+
+        } catch (Exception e) {
+//            e.printStackTrace();
+            System.out.println(e);
+        }
+        return false;
     }
 }

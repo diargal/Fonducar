@@ -14,7 +14,6 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-//import javax.swing.table.TableRowSorter;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
@@ -28,11 +27,11 @@ public class ValorSorteo extends javax.swing.JDialog {
      * Creates new form ValorSorteo
      */
     private double valor, tipo, valorSorteo, valorConfirmacion;
-    NumberFormat dispFormat = NumberFormat.getCurrencyInstance();
-    NumberFormat editFormat = NumberFormat.getNumberInstance(Locale.ENGLISH);
-    NumberFormatter dnFormat = new NumberFormatter(dispFormat);
-    NumberFormatter enFormat = new NumberFormatter(editFormat);
-    DefaultFormatterFactory currFactory = new DefaultFormatterFactory(dnFormat, dnFormat, enFormat);
+    private NumberFormat dispFormat = NumberFormat.getCurrencyInstance();
+    private NumberFormat editFormat = NumberFormat.getNumberInstance(Locale.ROOT);
+    private NumberFormatter dnFormat = new NumberFormatter(dispFormat);
+    private NumberFormatter enFormat = new NumberFormatter(editFormat);
+    private DefaultFormatterFactory currFactory = new DefaultFormatterFactory(dnFormat, dnFormat, enFormat);
 
     public ValorSorteo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
