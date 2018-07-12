@@ -89,7 +89,7 @@ public class MainControl extends javax.swing.JFrame {
             if (peticion.prepararAsociacion()) {
             }
         }
-        DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy __ HH-mm-ss");
+        DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy__HH-mm-ss");
         Date date = new Date();
         JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
         JLActualizacion.setText("Fecha de la base de datos (fecha y hora): " + fecha.format(date));
@@ -167,6 +167,7 @@ public class MainControl extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         JMICrearBackup = new javax.swing.JMenuItem();
         JMIRestaurarBackup = new javax.swing.JMenuItem();
+        JMICambiar = new javax.swing.JMenuItem();
         JM3 = new javax.swing.JMenu();
         JMGestionAdmins = new javax.swing.JMenu();
         JMIAddAdmin = new javax.swing.JMenuItem();
@@ -432,6 +433,15 @@ public class MainControl extends javax.swing.JFrame {
         jMenu2.add(JMIRestaurarBackup);
 
         JMOperaciones.add(jMenu2);
+
+        JMICambiar.setText("Cambiar usuario y/o contraseña del admin");
+        JMICambiar.setEnabled(false);
+        JMICambiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JMICambiarActionPerformed(evt);
+            }
+        });
+        JMOperaciones.add(JMICambiar);
 
         jMenuBar1.add(JMOperaciones);
 
@@ -737,7 +747,7 @@ public class MainControl extends javax.swing.JFrame {
     private void JMICrearBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICrearBackupActionPerformed
         if (cntrlArchivos.crearBackup()) {
 
-            DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy __ HH-mm-ss");
+            DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy__HH-mm-ss");
             Date date = new Date();
             JOptionPane.showMessageDialog(null, "Backup realizado con éxito!", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
             JLActualizacion.setText("Fecha de la base de datos (fecha y hora): " + fecha.format(date));
@@ -753,9 +763,19 @@ public class MainControl extends javax.swing.JFrame {
             JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
             // JLActualizacion.setText("Fecha de la base de datos (fecha y hora): " + fecha);
         } else {
-            JOptionPane.showMessageDialog(null, "No se pudo realizar la restauración!", "Operación fallida", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No se pudo realizar la restauración, por favor reinicia el programa!", "Operación fallida", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_JMIRestaurarBackupActionPerformed
+
+    private void JMICambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICambiarActionPerformed
+        agregarAdmin.setTipoOperacion(4);
+        agregarAdmin.enabled(false);
+        agregarAdmin.getJBIr().setVisible(true);
+        agregarAdmin.getJTxFSUPass().setEnabled(false);
+        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
+        agregarAdmin.setTitle("Formulario para cambiar usuario y/o contraseña del administrador");
+        agregarAdmin.setVisible(true);
+    }//GEN-LAST:event_JMICambiarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton JBSorteo;
@@ -776,6 +796,7 @@ public class MainControl extends javax.swing.JFrame {
     public javax.swing.JMenuItem JMIActuales;
     public javax.swing.JMenuItem JMIAddAdmin;
     public javax.swing.JMenuItem JMIAsignarAso;
+    private javax.swing.JMenuItem JMICambiar;
     private javax.swing.JMenuItem JMICrearBackup;
     public javax.swing.JMenuItem JMIDeleteAdmin;
     public javax.swing.JMenuItem JMIHAsociados;

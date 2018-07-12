@@ -490,9 +490,10 @@ public class AccesoBD {
         return true;
     }
 
-    public boolean guardarAdministrador(Administrador admin) {
+    public int guardarAdministrador(Administrador admin) {
         try {
             int idPersona = 0;
+            int retorno = 1;
             Long cedula = (long) admin.getCedula();
 
             /*
@@ -504,7 +505,7 @@ public class AccesoBD {
 
             if (resultado.next()) {
                 desconectar();
-                return false;
+                return 2;
             }
 
             /*
@@ -517,7 +518,8 @@ public class AccesoBD {
             try {
                 prepar.execute();
             } catch (SQLException ee) {
-                return false;
+                retorno = 3;
+                //  return false;
             }
 
             /*
@@ -543,14 +545,15 @@ public class AccesoBD {
             prepar.execute();
             desconectar();
             guardarOperacion(ADD_ADMIN);
-            return true;
+            return retorno;
         } catch (MySQLIntegrityConstraintViolationException er) {
-            return false;
+            System.out.println("esta es la excepción");
         } catch (SQLException ex) {
+            System.out.println("es esta");
             Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
         }
         desconectar();
-        return false;
+        return 0;
     }
 
     public boolean deleteAdmin(Administrador admin) {
@@ -594,6 +597,23 @@ public class AccesoBD {
             Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
         }
         return true;
+    }
+
+    public boolean modificarAdmin(Administrador admin) {
+        try {
+            conexion();
+            prepar = conexion.prepareStatement("UPDATE `administrador` as a, persona as p SET a.Usuario=?, a.Password=? WHERE a.idPersona = p.idPersona and p.cedula = ?");
+            prepar.setString(1, admin.getUsuario());
+            prepar.setString(2, admin.getPass());
+            prepar.setLong(3, admin.getCedula());
+            int resultado = prepar.executeUpdate();
+            if (resultado != 0) {
+                guardarOperacion("Modificación de usuario y/o contraseña del administrador.");
+                return true;
+            }
+        } catch (SQLException e) {
+        }
+        return false;
     }
 
     public ResultSet nombreAdmin(long cedula) throws SQLException {

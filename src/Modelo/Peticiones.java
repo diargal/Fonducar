@@ -189,7 +189,7 @@ public class Peticiones {
         return acces.modificarAsociado(n, m, k);
     }
 
-    public boolean guardarAdministrador(Administrador admin) {
+    public int guardarAdministrador(Administrador admin) {
         return acces.guardarAdministrador(admin);
     }
 
@@ -199,6 +199,10 @@ public class Peticiones {
 
     public boolean reingresarAdmin(Administrador admin) {
         return acces.reingresarAdmin(admin);
+    }
+
+    public boolean modificarAdmin(Administrador admin) {
+        return acces.modificarAdmin(admin);
     }
 
     public boolean prepararAsociacion() {

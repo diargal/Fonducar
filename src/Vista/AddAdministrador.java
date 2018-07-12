@@ -37,6 +37,7 @@ public class AddAdministrador extends javax.swing.JDialog {
         peticion = new Peticiones();
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         JPFondo.setOpaque(false);
+        JLIngresar.setVisible(false);
     }
 
     public int isTipoOperacion() {
@@ -92,6 +93,9 @@ public class AddAdministrador extends javax.swing.JDialog {
         JTxFConfiPass = new javax.swing.JPasswordField();
         JTxFApellidos = new javax.swing.JTextField();
         JBIr = new javax.swing.JButton();
+        JLIngresar = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        JLActuales = new javax.swing.JLabel();
         JLFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -157,8 +161,27 @@ public class AddAdministrador extends javax.swing.JDialog {
         });
         JPFondo.add(JBIr, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 110, 50, -1));
 
+        JLIngresar.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        JLIngresar.setText("Ingrese los nuevos datos para el administrador");
+        JPFondo.add(JLIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 134, 240, 20));
+
+        jTextField1.setEditable(false);
+        jTextField1.setBackground(new java.awt.Color(0, 153, 0));
+        jTextField1.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextField1.setText("Datos del administrador actual");
+        jTextField1.setBorder(null);
+        JPFondo.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 270, 270, -1));
+
+        JLActuales.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        JLActuales.setText("Debe ingresar los datos actuales");
+        JPFondo.add(JLActuales, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 170, -1));
+
+        JLFondo.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         JLFondo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondos/addAdmin.jpg"))); // NOI18N
+        JLFondo.setText("Ingrese nuevos datos para el administrador");
         JPFondo.add(JLFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 500, 370));
 
         getContentPane().add(JPFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 370));
@@ -185,12 +208,23 @@ public class AddAdministrador extends javax.swing.JDialog {
                             JOptionPane.showMessageDialog(this, "Debe diligenciar todo el formulario.", "Existen campos vacíos.", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             admin = new Administrador(JTxFNombre.getText(), JTxFApellidos.getText(), Long.parseLong(JTxFCedula.getText()), password, JTxFUsuario.getText(), 0);
-                            if (peticion.guardarAdministrador(admin)) {
-                                exito = true;
-                                mensaje = "Administrador creado con éxito.";
-                            } else {
-                                exito = false;
-                                mensaje = "Ya el nombre de usuario existe o la cédula ya ha sido registrada para otro admin.";
+                            int resultado = peticion.guardarAdministrador(admin);
+                            switch (resultado) {
+                                case 1:
+                                    exito = true;
+                                    mensaje = "Administrador creado con éxito.";
+                                    break;
+                                case 2:
+                                    exito = false;
+                                    mensaje = "Ya el nombre de usuario existe, por favor ingrese otro.";
+                                    break;
+                                case 3:
+                                    mensaje = "La cédula existe en la BD y el asociado ahora es administrador.";
+                                    exito = true;
+                                    break;
+                                default:
+                                    mensaje = "La operación no se pudo realizar.";
+                                    break;
                             }
                         }
                         break;
@@ -225,6 +259,22 @@ public class AddAdministrador extends javax.swing.JDialog {
                             }
                         }
                         break;
+
+                    case 4:
+                        if (JTxFUsuario.getText().isEmpty() || JTxFConfiPass.getPassword().toString().isEmpty() || JTxFPass.getPassword().toString().isEmpty() || JTxFSUUsuario.getText().isEmpty() || JTxFSUPass.getPassword().toString().isEmpty()) {
+                            mensaje = "Debe llenar todo el formulario.";
+                            exito = false;
+                        } else {
+                            if (!JTxFConfiPass.getPassword().equals(JTxFPass.getPassword())) {
+                                exito = false;
+                                mensaje = "Las contraseñas diligenciadas no concuerdan.";
+                            } else {
+                                admin = new Administrador("", "", Long.parseLong(JTxFCedula.getText()), password, mensaje, WIDTH);
+                                peticion.modificarAdmin(admin);
+                            }
+                        }
+                        break;
+
                 }
 
                 if (exito) {
@@ -247,6 +297,8 @@ public class AddAdministrador extends javax.swing.JDialog {
     }//GEN-LAST:event_JBAceptarActionPerformed
 
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
+        JLIngresar.setVisible(false);
+        JLActuales.setVisible(false);
         vaciar();
         dispose();
     }//GEN-LAST:event_JBCancelarActionPerformed
@@ -283,6 +335,12 @@ public class AddAdministrador extends javax.swing.JDialog {
             JTxFApellidos.setText(peticion.nombreAdmin(Long.parseLong(JTxFCedula.getText())).get(1));
             JTxFSUPass.setEnabled(true);
             JTxFSUUsuario.setEnabled(true);
+            JLIngresar.setVisible(tipoOperacion == 4);
+            JTxFUsuario.setEnabled(tipoOperacion == 4);
+            JTxFPass.setEnabled(tipoOperacion == 4);
+            JTxFConfiPass.setEnabled(tipoOperacion == 4);
+            JLActuales.setVisible(tipoOperacion == 4);
+
         } else {
             JOptionPane.showMessageDialog(this, "Ingrese la cédula del administrador");
         }
@@ -330,7 +388,9 @@ public class AddAdministrador extends javax.swing.JDialog {
     private javax.swing.JButton JBAceptar;
     private javax.swing.JButton JBCancelar;
     private javax.swing.JButton JBIr;
+    private javax.swing.JLabel JLActuales;
     private javax.swing.JLabel JLFondo;
+    private javax.swing.JLabel JLIngresar;
     private javax.swing.JPanel JPFondo;
     private javax.swing.JTextField JTxFApellidos;
     private javax.swing.JTextField JTxFCedula;
@@ -340,5 +400,6 @@ public class AddAdministrador extends javax.swing.JDialog {
     private javax.swing.JPasswordField JTxFSUPass;
     private javax.swing.JTextField JTxFSUUsuario;
     private javax.swing.JTextField JTxFUsuario;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
