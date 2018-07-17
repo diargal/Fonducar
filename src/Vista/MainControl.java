@@ -89,7 +89,7 @@ public class MainControl extends javax.swing.JFrame {
             if (peticion.prepararAsociacion()) {
             }
         }
-        DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy__HH-mm-ss");
+        DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         Date date = new Date();
         JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
         JLActualizacion.setText("Fecha de la base de datos (fecha y hora): " + fecha.format(date));
@@ -435,7 +435,6 @@ public class MainControl extends javax.swing.JFrame {
         JMOperaciones.add(jMenu2);
 
         JMICambiar.setText("Cambiar usuario y/o contraseña del admin");
-        JMICambiar.setEnabled(false);
         JMICambiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JMICambiarActionPerformed(evt);
@@ -747,7 +746,7 @@ public class MainControl extends javax.swing.JFrame {
     private void JMICrearBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICrearBackupActionPerformed
         if (cntrlArchivos.crearBackup()) {
 
-            DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy__HH-mm-ss");
+            DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             Date date = new Date();
             JOptionPane.showMessageDialog(null, "Backup realizado con éxito!", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
             JLActualizacion.setText("Fecha de la base de datos (fecha y hora): " + fecha.format(date));

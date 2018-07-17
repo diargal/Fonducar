@@ -11,6 +11,7 @@ import Modelo.Peticiones;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import static java.awt.image.ImageObserver.WIDTH;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -137,6 +138,9 @@ public class AddAdministrador extends javax.swing.JDialog {
         JPFondo.add(JTxFNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, 270, -1));
 
         JTxFCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JTxFCedulaKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 JTxFCedulaKeyTyped(evt);
             }
@@ -159,6 +163,11 @@ public class AddAdministrador extends javax.swing.JDialog {
                 JBIrActionPerformed(evt);
             }
         });
+        JBIr.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JBIrKeyPressed(evt);
+            }
+        });
         JPFondo.add(JBIr, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 110, 50, -1));
 
         JLIngresar.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -172,7 +181,7 @@ public class AddAdministrador extends javax.swing.JDialog {
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField1.setText("Datos del administrador actual");
         jTextField1.setBorder(null);
-        JPFondo.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 270, 270, -1));
+        JPFondo.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 260, 270, 20));
 
         JLActuales.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         JLActuales.setText("Debe ingresar los datos actuales");
@@ -331,8 +340,10 @@ public class AddAdministrador extends javax.swing.JDialog {
 
     private void JBIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBIrActionPerformed
         if (!JTxFCedula.getText().isEmpty()) {
-            JTxFNombre.setText(peticion.nombreAdmin(Long.parseLong(JTxFCedula.getText())).get(0));
-            JTxFApellidos.setText(peticion.nombreAdmin(Long.parseLong(JTxFCedula.getText())).get(1));
+            ArrayList<String> array = peticion.nombreAdmin(Long.parseLong(JTxFCedula.getText()));
+            JTxFNombre.setText(array.get(0));
+            JTxFApellidos.setText(array.get(1));
+            JTxFUsuario.setText(array.get(2));
             JTxFSUPass.setEnabled(true);
             JTxFSUUsuario.setEnabled(true);
             JLIngresar.setVisible(tipoOperacion == 4);
@@ -345,6 +356,18 @@ public class AddAdministrador extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Ingrese la cédula del administrador");
         }
     }//GEN-LAST:event_JBIrActionPerformed
+
+    private void JBIrKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JBIrKeyPressed
+
+    }//GEN-LAST:event_JBIrKeyPressed
+
+    private void JTxFCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFCedulaKeyPressed
+        ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.JBIrActionPerformed(jd);
+        }
+    }//GEN-LAST:event_JTxFCedulaKeyPressed
 
     public boolean vacio() {
         for (int i = 0; i < JPFondo.getComponentCount(); i++) {

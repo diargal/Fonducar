@@ -173,15 +173,20 @@ public class Peticiones {
     }
 
     public ArrayList<String> nombreAdmin(long cedula) {
+//        acces.conexion();
         ArrayList<String> datos = new ArrayList<>();
         try {
             ResultSet resultado = acces.nombreAdmin(cedula);
             if (resultado.next()) {
+                System.out.println("resultado: " + resultado.getString(1));
                 datos.add(resultado.getString(1));
                 datos.add(resultado.getString(2));
+                datos.add(resultado.getString(3));
             }
         } catch (SQLException ex) {
+            System.out.println(ex);
         }
+//        acces.desconectar();
         return datos;
     }
 

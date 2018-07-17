@@ -617,7 +617,9 @@ public class AccesoBD {
     }
 
     public ResultSet nombreAdmin(long cedula) throws SQLException {
-        return resultadoConexion("Select p.nombre, p.apellido from persona as p, administrador as a where a.idpersona = p.idpersona and p.cedula = " + cedula);
+        return resultadoConexion("Select p.nombre, p.apellido, a.usuario "
+                + "from persona as p, administrador as a "
+                + "where a.idpersona = p.idpersona and p.cedula =" + cedula);
     }
 
     public ResultSet verAdministradores() throws SQLException {
