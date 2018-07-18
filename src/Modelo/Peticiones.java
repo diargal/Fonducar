@@ -213,4 +213,8 @@ public class Peticiones {
     public boolean prepararAsociacion() {
         return acces.prepararAsociacion();
     }
+
+    public String fechaBackup() {
+        return acces.fechaBackup();
+    }
 }

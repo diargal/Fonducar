@@ -14,7 +14,9 @@ import static java.awt.image.ImageObserver.WIDTH;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -36,7 +38,7 @@ public class AddAdministrador extends javax.swing.JDialog {
         setLocationRelativeTo(this);
         tipoOperacion = 0;
         peticion = new Peticiones();
-        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+//        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         JPFondo.setOpaque(false);
         JLIngresar.setVisible(false);
     }
@@ -71,6 +73,118 @@ public class AddAdministrador extends javax.swing.JDialog {
 
     public void setJTxFSUUsuario(JTextField JTxFSUUsuario) {
         this.JTxFSUUsuario = JTxFSUUsuario;
+    }
+
+    public Peticiones getPeticion() {
+        return peticion;
+    }
+
+    public void setPeticion(Peticiones peticion) {
+        this.peticion = peticion;
+    }
+
+    public JButton getJBAceptar() {
+        return JBAceptar;
+    }
+
+    public void setJBAceptar(JButton JBAceptar) {
+        this.JBAceptar = JBAceptar;
+    }
+
+    public JButton getJBCancelar() {
+        return JBCancelar;
+    }
+
+    public void setJBCancelar(JButton JBCancelar) {
+        this.JBCancelar = JBCancelar;
+    }
+
+    public JLabel getJLActuales() {
+        return JLActuales;
+    }
+
+    public void setJLActuales(JLabel JLActuales) {
+        this.JLActuales = JLActuales;
+    }
+
+    public JLabel getJLFondo() {
+        return JLFondo;
+    }
+
+    public void setJLFondo(JLabel JLFondo) {
+        this.JLFondo = JLFondo;
+    }
+
+    public JLabel getJLIngresar() {
+        return JLIngresar;
+    }
+
+    public void setJLIngresar(JLabel JLIngresar) {
+        this.JLIngresar = JLIngresar;
+    }
+
+    public JPanel getJPFondo() {
+        return JPFondo;
+    }
+
+    public void setJPFondo(JPanel JPFondo) {
+        this.JPFondo = JPFondo;
+    }
+
+    public JTextField getJTxFApellidos() {
+        return JTxFApellidos;
+    }
+
+    public void setJTxFApellidos(JTextField JTxFApellidos) {
+        this.JTxFApellidos = JTxFApellidos;
+    }
+
+    public JTextField getJTxFCedula() {
+        return JTxFCedula;
+    }
+
+    public void setJTxFCedula(JTextField JTxFCedula) {
+        this.JTxFCedula = JTxFCedula;
+    }
+
+    public JPasswordField getJTxFConfiPass() {
+        return JTxFConfiPass;
+    }
+
+    public void setJTxFConfiPass(JPasswordField JTxFConfiPass) {
+        this.JTxFConfiPass = JTxFConfiPass;
+    }
+
+    public JTextField getJTxFNombre() {
+        return JTxFNombre;
+    }
+
+    public void setJTxFNombre(JTextField JTxFNombre) {
+        this.JTxFNombre = JTxFNombre;
+    }
+
+    public JPasswordField getJTxFPass() {
+        return JTxFPass;
+    }
+
+    public void setJTxFPass(JPasswordField JTxFPass) {
+        this.JTxFPass = JTxFPass;
+    }
+
+    public JTextField getJTxFUsuario() {
+        return JTxFUsuario;
+    }
+
+    public void setJTxFUsuario(JTextField JTxFUsuario) {
+        this.JTxFUsuario = JTxFUsuario;
+    }
+
+    public JTextField getjTextField1() {
+        return jTextField1;
+    }
+
+    public void setjTextField1(JTextField jTextField1) {
+        this.jTextField1 = jTextField1;
     }
 
     /**
@@ -181,7 +295,7 @@ public class AddAdministrador extends javax.swing.JDialog {
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField1.setText("Datos del administrador actual");
         jTextField1.setBorder(null);
-        JPFondo.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 260, 270, 20));
+        JPFondo.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 270, 270, 20));
 
         JLActuales.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         JLActuales.setText("Debe ingresar los datos actuales");
@@ -204,7 +318,7 @@ public class AddAdministrador extends javax.swing.JDialog {
 
             String password = DigestUtils.md5Hex(new String(JTxFSUPass.getPassword()));
 
-            if (administrador.getTipo() == 1 && administrador.getUsuario().equals(JTxFSUUsuario.getText()) && administrador.getPass().equals(password)) {
+            if (administrador.getUsuario().equals(JTxFSUUsuario.getText()) && administrador.getPass().equals(password)) {
 
                 password = DigestUtils.md5Hex(new String(JTxFPass.getPassword()));
                 Administrador admin;
@@ -264,23 +378,60 @@ public class AddAdministrador extends javax.swing.JDialog {
                                 mensaje = "Administrador reingresado con éxito.";
                             } else {
                                 exito = false;
-                                mensaje = "Los datos del administrador no son correctos.";
+                                mensaje = "Los datos del administrador no son correctos o el administrador no se encuentra inhactivo.";
                             }
                         }
                         break;
 
                     case 4:
-                        if (JTxFUsuario.getText().isEmpty() || JTxFConfiPass.getPassword().toString().isEmpty() || JTxFPass.getPassword().toString().isEmpty() || JTxFSUUsuario.getText().isEmpty() || JTxFSUPass.getPassword().toString().isEmpty()) {
-                            mensaje = "Debe llenar todo el formulario.";
-                            exito = false;
-                        } else {
-                            if (!JTxFConfiPass.getPassword().equals(JTxFPass.getPassword())) {
+                        Administrador admin2;
+                        String passwordd = DigestUtils.md5Hex(new String(JTxFPass.getPassword()));
+
+                        if (JTxFUsuario.isEditable()) {//con esto sé si están modificando el usuario
+                            if (JTxFUsuario.getText().isEmpty()) {
+
                                 exito = false;
-                                mensaje = "Las contraseñas diligenciadas no concuerdan.";
+                                mensaje = "Debe ingresar un valor para el usuario.";
+
                             } else {
-                                admin = new Administrador("", "", Long.parseLong(JTxFCedula.getText()), password, mensaje, WIDTH);
-                                peticion.modificarAdmin(admin);
+
+                                admin2 = new Administrador(JTxFNombre.getText(), JTxFApellidos.getText(), Long.parseLong(JTxFCedula.getText()), administrador.getPass(), JTxFUsuario.getText(), administrador.getTipo());
+
+                                if (peticion.modificarAdmin(admin2)) {
+
+                                    mensaje = "Administrador modificado con éxito!";
+                                    exito = true;
+
+                                } else {
+
+                                    exito = false;
+                                    mensaje = "No se pudieron modificar los datos del administrador.";
+
+                                }
                             }
+                        } else {//si están modificando la password
+                            if (new String(JTxFPass.getPassword()).isEmpty() || new String(JTxFConfiPass.getPassword()).isEmpty()) {
+
+                                exito = false;
+                                mensaje = "Debe diligenciar la contraseña y su confirmación.";
+
+                            } else {
+
+                                admin2 = new Administrador(JTxFNombre.getText(), JTxFApellidos.getText(), Long.parseLong(JTxFCedula.getText()), passwordd, JTxFUsuario.getText(), administrador.getTipo());
+
+                                if (peticion.modificarAdmin(admin2)) {
+
+                                    mensaje = "Administrador modificado con éxito!";
+                                    exito = true;
+
+                                } else {
+
+                                    exito = false;
+                                    mensaje = "No se pudieron modificar los datos del administrador.";
+
+                                }
+                            }
+
                         }
                         break;
 
@@ -298,10 +449,10 @@ public class AddAdministrador extends javax.swing.JDialog {
 
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Los datos del Super Usuario no son válidos. Verifique.", "Verificar.", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Los datos actuales del usuario no son válidos. Verifique.", "Verificar.", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Las contraseñas del nuevo administrador no coinciden.", "Verificar.", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden.", "Verificar.", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_JBAceptarActionPerformed
 
@@ -338,6 +489,18 @@ public class AddAdministrador extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_JTxFApellidosActionPerformed
 
+    private void JTxFCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFCedulaKeyPressed
+        ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.JBIrActionPerformed(jd);
+        }
+    }//GEN-LAST:event_JTxFCedulaKeyPressed
+
+    private void JBIrKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JBIrKeyPressed
+
+    }//GEN-LAST:event_JBIrKeyPressed
+
     private void JBIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBIrActionPerformed
         if (!JTxFCedula.getText().isEmpty()) {
             ArrayList<String> array = peticion.nombreAdmin(Long.parseLong(JTxFCedula.getText()));
@@ -346,28 +509,10 @@ public class AddAdministrador extends javax.swing.JDialog {
             JTxFUsuario.setText(array.get(2));
             JTxFSUPass.setEnabled(true);
             JTxFSUUsuario.setEnabled(true);
-            JLIngresar.setVisible(tipoOperacion == 4);
-            JTxFUsuario.setEnabled(tipoOperacion == 4);
-            JTxFPass.setEnabled(tipoOperacion == 4);
-            JTxFConfiPass.setEnabled(tipoOperacion == 4);
-            JLActuales.setVisible(tipoOperacion == 4);
-
         } else {
             JOptionPane.showMessageDialog(this, "Ingrese la cédula del administrador");
         }
     }//GEN-LAST:event_JBIrActionPerformed
-
-    private void JBIrKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JBIrKeyPressed
-
-    }//GEN-LAST:event_JBIrKeyPressed
-
-    private void JTxFCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFCedulaKeyPressed
-        ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
-
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            this.JBIrActionPerformed(jd);
-        }
-    }//GEN-LAST:event_JTxFCedulaKeyPressed
 
     public boolean vacio() {
         for (int i = 0; i < JPFondo.getComponentCount(); i++) {
@@ -405,6 +550,29 @@ public class AddAdministrador extends javax.swing.JDialog {
         JTxFSUPass.setText("");
         JTxFSUUsuario.setText("");
         JTxFUsuario.setText("");
+    }
+
+    public void crearToolTip() {
+        JTxFUsuario.setToolTipText("La información que deje diligenciada en este campo, será la perteneciente al nuevo usuario.");
+        JTxFPass.setToolTipText("Ingrese la nueva contraseña.");
+        JTxFConfiPass.setToolTipText("Confirme la nueva contraseña.");
+    }
+
+    public void formulario() {
+        ArrayList<String> array = peticion.nombreAdmin(administrador.getCedula());
+        JTxFCedula.setText(administrador.getCedula() + "");
+        JTxFCedula.setEditable(false);
+        JTxFNombre.setText(array.get(0));
+        JTxFApellidos.setText(array.get(1));
+        JTxFUsuario.setText(array.get(2));
+        JTxFSUPass.setEnabled(true);
+        JTxFSUUsuario.setEnabled(true);
+        JLIngresar.setVisible(tipoOperacion == 4);
+        JTxFUsuario.setEnabled(JTxFUsuario.isEditable());
+        JTxFPass.setEnabled(JTxFPass.isEditable());
+        JTxFConfiPass.setEnabled(JTxFConfiPass.isEditable());
+        JLActuales.setVisible(tipoOperacion == 4);
+        crearToolTip();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

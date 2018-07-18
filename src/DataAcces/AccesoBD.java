@@ -146,7 +146,7 @@ public class AccesoBD {
     }
 
     public boolean guardarOperacion(String tipo) {
-//        conexion();
+        conexion();
         try {
             Date date = new Date();
             fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -584,7 +584,7 @@ public class AccesoBD {
         try {
             conexion();
 
-            prepar = conexion.prepareStatement("UPDATE `administrador` as a, persona as p SET a.estado = 0 WHERE a.idPersona = p.idpersona and p.cedula = ?");
+            prepar = conexion.prepareStatement("UPDATE `administrador` as a, persona as p SET a.estado = 0 WHERE a.idPersona = p.idpersona and p.cedula = ? and p.estado = 1");
             prepar.setLong(1, admin.getCedula());
             int result = prepar.executeUpdate();
             if (result == 0) {
@@ -609,6 +609,7 @@ public class AccesoBD {
             int resultado = prepar.executeUpdate();
             if (resultado != 0) {
                 guardarOperacion("Modificación de usuario y/o contraseña del administrador.");
+                administrador = admin;
                 return true;
             }
         } catch (SQLException e) {
@@ -934,6 +935,20 @@ public class AccesoBD {
             return prepar.executeUpdate() != 0;
         }
         return false;
+    }
+
+    public String fechaBackup() {
+        conexion();
+        try {
+            ResultSet resultado = resultadoConexion("SELECT fecha FROM `movimiento` "
+                    + "WHERE detalle = 'Creación de backup de la base de datos.' order by idmovimiento desc limit 1");
+            if (resultado.next()) {
+                return resultado.getString(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
     }
 
 }

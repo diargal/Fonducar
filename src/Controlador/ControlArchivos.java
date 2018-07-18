@@ -1,6 +1,5 @@
 package Controlador;
 
-import DataAcces.AccesoBD;
 import static Modelo.Mensajes.COPIA;
 import static Modelo.Mensajes.ERRORBDC;
 import static Modelo.Mensajes.INFORME;
@@ -9,13 +8,10 @@ import static Modelo.Mensajes.RESTAURACION;
 import Modelo.Peticiones;
 import Modelo.Sorteo;
 import Vista.Informes.Informe;
-import java.io.BufferedReader;
+import java.awt.HeadlessException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
@@ -26,8 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -41,6 +35,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JRViewer;
+import net.sf.jasperreports.view.JasperViewer;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 
 /**
@@ -63,7 +58,6 @@ public class ControlArchivos {
     Permite cargar del PC, el archivo de excel con el cual ingresarán asociados
      */
     public void cargarArchivo(ControlHistorial cntrl) {
-//        cambiarApariencia(true);
         try {
             File archivo;
             JFileChooser selecArchivo = new JFileChooser();
@@ -120,44 +114,34 @@ public class ControlArchivos {
         //Aquí obtengo la dirección del informe que se generará
         switch (numero) {
             case 1:
-//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/historialNumeros.jrxml"));
                 jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/historialNumeros.jasper"));
                 break;
             case 2:
-//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialSorteos.jrxml"));
                 jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialSorteos.jasper"));
                 break;
             case 3:
                 jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialEXAS.jasper"));
-//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialEXAS.jrxml"));
                 break;
             case 4:
                 jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialModificaciones.jasper"));
-//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialModificaciones.jrxml"));
                 break;
             case 5:
                 jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/NumerosActuales.jasper"));
-//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/NumerosActuales.jrxml"));
                 break;
             case 6:
                 jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialEXAS.jasper"));
-//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/HistorialEXAS.jrxml"));
                 break;
             case 7:
                 jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/Administrador.jasper"));
-//                jasperReport = JasperCompileManager.compileReport(this.getClass().getClassLoader().getResourceAsStream("Vista/Informes/Administrador.jrxml"));
                 break;
 
         }
-
-//        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(this.getClass().getClassLoader().getResourceAsStream("Vistas/Informe/NumerosActuales.jrxml"));
         try {
             DefaultTableModel model = (DefaultTableModel) tablita.getModel();
             JasperPrint jPrint;
 
             jPrint = JasperFillManager.fillReport(jasperReport, map, new JRTableModelDataSource(tabla));
-//            jPrint = JasperFillManager.fillReport(jasperReport, map, new JRBeanCollectionDataSource(numero));
-//            JasperViewer.viewReport(jPrint, true);
+            JasperViewer.viewReport(jPrint, true);
 
             JRViewer jv = new JRViewer(jPrint);
             label.setVisible(false);
@@ -171,20 +155,20 @@ public class ControlArchivos {
 
     }
 
-    public boolean crearBackup() {
+    public boolean crearBackup(JLabel label) {
         try {
             int resp;
-            DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy__HH-mm-ss");
+            DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy__HH-mm-ss"),
+                    fecha2 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             Date date = new Date();
             JFileChooser chooser = new JFileChooser();
             resp = chooser.showSaveDialog(null);
 
             if (resp == JFileChooser.APPROVE_OPTION) {
-
+                sorteo.actividad(COPIA);
                 File backupFile = new File(String.valueOf(chooser.getSelectedFile().toString())
                         + "_" + fecha.format(date) + ".sql");
                 String RutaFile = backupFile.getAbsolutePath();
-                System.out.println(RutaFile);
 
                 String Ruta = "C:\\wamp\\bin\\mysql\\mysql5.6.17\\bin\\mysqldump.exe";
                 String clave = "Fonducar**BonoSolidario2018*";
@@ -197,13 +181,12 @@ public class ControlArchivos {
                 fw.write(cad, 0, cad.length());
                 fw.close();
                 Runtime.getRuntime().exec("copia_seguridad.bat");
-//                JOptionPane.showMessageDialog(this, "Creación De Copia De Seguridad Realizada Con Exito");
+                label.setText("Está trabajando con el backup de fecha y hora: " + fecha2.format(date));
                 return true;
             } else {
-//                JOptionPane.showMessageDialog(this, "Creación De Copia De Seguridad Cancelada Por El Usuario");
                 return false;
             }
-        } catch (Exception ex) {
+        } catch (HeadlessException | IOException ex) {
         }
         return false;
     }
@@ -249,14 +232,15 @@ public class ControlArchivos {
 
                 String formatted = simpleDateFormat.format(new Date(time.toMillis()));
 
-                label.setText("Fecha de la base de datos (fecha y hora): " + formatted);
+                label.setText("Está trabajando con el backup de fecha y hora: " + formatted);
 
                 Thread.sleep(5000);
+                sorteo.actividad(RESTAURACION);
                 return true;
             } else {
                 return false;
             }
-        } catch (Exception ex) {
+        } catch (HeadlessException | IOException | InterruptedException | SQLException ex) {
         }
         return false;
     }

@@ -205,7 +205,7 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="JMICrearBackup">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Crear copia de la Base de Datos"/>
+                    <Property name="text" type="java.lang.String" value="Crear backup de la base de datos"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMICrearBackupActionPerformed"/>
@@ -213,7 +213,7 @@
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="JMIRestaurarBackup">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Restaurar copia de la Base de Datos"/>
+                    <Property name="text" type="java.lang.String" value="Restaurar backup de la base de datos"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIRestaurarBackupActionPerformed"/>
@@ -221,14 +221,29 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
-            <MenuItem class="javax.swing.JMenuItem" name="JMICambiar">
+            <Menu class="javax.swing.JMenu" name="jMenu3">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cambiar usuario y/o contrase&#xf1;a del admin"/>
+                <Property name="text" type="java.lang.String" value="Operaciones sobre la cuenta"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMICambiarActionPerformed"/>
-              </Events>
-            </MenuItem>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="JMICambiarPass">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Cambiar contrase&#xf1;a"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMICambiarPassActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="JMICambiarUsuario">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Cambiar usuario"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMICambiarUsuarioActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="JM3">

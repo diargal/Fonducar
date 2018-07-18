@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Modelo;
 
 import DataAcces.AccesoBD;
@@ -30,16 +25,16 @@ public class BonoSolidario {
 
     public static void main(String[] args) {
 
-//        try {
-//            /* directorio/ejecutable es el path del ejecutable y un nombre */
-//            Runtime p = Runtime.getRuntime();
-//            p.exec("C:\\wamp\\wampmanager.exe");
-//
-//            try {
-//                Thread.sleep(8000);
-//            } catch (InterruptedException ex) {
-//                Logger.getLogger(BonoSolidario.class.getName()).log(Level.SEVERE, null, ex);
-//            }
+        try {
+            /* directorio/ejecutable es el path del ejecutable y un nombre */
+            Runtime p = Runtime.getRuntime();
+            p.exec("C:\\wamp\\wampmanager.exe");
+
+            try {
+                Thread.sleep(8000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(BonoSolidario.class.getName()).log(Level.SEVERE, null, ex);
+            }
             AccesoBD accesoBD = new AccesoBD();
 
             if (accesoBD.getConnect() == null) {
@@ -63,11 +58,11 @@ public class BonoSolidario {
                     System.exit(0);
                 }
             }
-//        } catch (IOException e) {
-//            /* Se lanza una excepción si no se encuentra en ejecutable o el fichero no es ejecutable. */
-//            JOptionPane.showMessageDialog(null, "Debe iniciar el programa como administrador");
-//            System.exit(0);
-//        }
+        } catch (IOException e) {
+            /* Se lanza una excepción si no se encuentra en ejecutable o el fichero no es ejecutable. */
+            JOptionPane.showMessageDialog(null, "Debe iniciar el programa como administrador");
+            System.exit(0);
+        }
 
     }
 
