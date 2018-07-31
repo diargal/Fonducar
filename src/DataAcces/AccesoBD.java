@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import javax.swing.JLabel;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
+import org.apache.xmlbeans.impl.piccolo.util.DuplicateKeyException;
 
 /**
  *
@@ -517,9 +518,8 @@ public class AccesoBD {
             prepar.setLong(3, cedula);
             try {
                 prepar.execute();
-            } catch (SQLException ee) {
+            } catch (SQLException ee) { //si me bota una excepción, quiere decir que ya existe la cédula.
                 retorno = 3;
-                //  return false;
             }
 
             /*
@@ -536,20 +536,25 @@ public class AccesoBD {
             /*
             Ingreso un nuevo administrador.
              */
-            prepar = conexion.prepareStatement("INSERT INTO `administrador`(`idAdministrador`, `Usuario`, `Password`, `idPersona`, `tipo`) VALUES (" + null + ",?,?,?,?)");
-            prepar.setString(1, admin.getUsuario());
-//            String password = DigestUtils.md5Hex(admin.getPass());
-            prepar.setString(2, admin.getPass());
-            prepar.setInt(3, idPersona);
-            prepar.setInt(4, 0);
-            prepar.execute();
-            desconectar();
-            guardarOperacion(ADD_ADMIN);
+            try {
+
+                prepar = conexion.prepareStatement("INSERT INTO `administrador`(`idAdministrador`, `Usuario`, `Password`, `idPersona`, `tipo`) VALUES (" + null + ",?,?,?,?)");
+                prepar.setString(1, admin.getUsuario());
+                prepar.setString(2, admin.getPass());
+                prepar.setInt(3, idPersona);
+                prepar.setInt(4, 0);
+                prepar.execute();
+
+                desconectar();
+                guardarOperacion(ADD_ADMIN);
+
+            } catch (SQLException e) {
+                retorno = 4;
+            }
+
             return retorno;
         } catch (MySQLIntegrityConstraintViolationException er) {
-            System.out.println("esta es la excepción");
         } catch (SQLException ex) {
-            System.out.println("es esta");
             Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
         }
         desconectar();
@@ -584,7 +589,7 @@ public class AccesoBD {
         try {
             conexion();
 
-            prepar = conexion.prepareStatement("UPDATE `administrador` as a, persona as p SET a.estado = 0 WHERE a.idPersona = p.idpersona and p.cedula = ? and p.estado = 1");
+            prepar = conexion.prepareStatement("UPDATE `administrador` as a, persona as p SET a.estado = 0 WHERE a.idPersona = p.idpersona and p.cedula = ? and a.estado = 1");
             prepar.setLong(1, admin.getCedula());
             int result = prepar.executeUpdate();
             if (result == 0) {
@@ -617,10 +622,15 @@ public class AccesoBD {
         return false;
     }
 
-    public ResultSet nombreAdmin(long cedula) throws SQLException {
+    public ResultSet nombreAdmin(long cedula, boolean reingreso) throws SQLException {
+        if (reingreso) {
+            return resultadoConexion("Select p.nombre, p.apellido, a.usuario "
+                    + "from persona as p, administrador as a "
+                    + "where a.estado = 1 and a.idpersona = p.idpersona and p.cedula =" + cedula);
+        }
         return resultadoConexion("Select p.nombre, p.apellido, a.usuario "
                 + "from persona as p, administrador as a "
-                + "where a.idpersona = p.idpersona and p.cedula =" + cedula);
+                + "where a.estado = 0 and a.idpersona = p.idpersona and p.cedula =" + cedula);
     }
 
     public ResultSet verAdministradores() throws SQLException {
@@ -884,21 +894,18 @@ public class AccesoBD {
     }
 
     /* ------------------------------------------------------------------------------------------------------------------------*/
-    public int numeroAsociadosActivos() {
+    public int numeroAsociadosActivos() throws Exception {
 
-        try {
-            //conexion();
-            ResultSet resultado = resultadoConexion("SELECT count(*) FROM numero as n where n.Estado=0");
-            desconectar();
-            if (resultado.next()) {
-                return resultado.getInt(1);
-            }
+        //conexion();
+        ResultSet resultado = resultadoConexion("SELECT count(*) FROM numero as n where n.Estado = 0");
+        desconectar();
 
-        } catch (java.sql.SQLException er) {
-            JOptionPane.showMessageDialog(null, er, "Failed!", JOptionPane.ERROR_MESSAGE);
+        if (resultado.next()) {
+            return resultado.getInt(1);
         }
 
         desconectar();
+
         return 0;
     }
 
@@ -946,7 +953,6 @@ public class AccesoBD {
                 return resultado.getString(1);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
     }

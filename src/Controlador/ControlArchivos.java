@@ -8,6 +8,8 @@ import static Modelo.Mensajes.RESTAURACION;
 import Modelo.Peticiones;
 import Modelo.Sorteo;
 import Vista.Informes.Informe;
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
+import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileWriter;
@@ -47,11 +49,13 @@ public class ControlArchivos {
     public ControlHistorial control;
     public static Informe ventanaInfo;
     public static Sorteo sorteo;
+    private Peticiones peticion;
 
     public ControlArchivos() {
         control = new ControlHistorial();
         ventanaInfo = new Informe(null, true);
         sorteo = new Sorteo();
+        peticion = new Peticiones();
     }
 
     /*
@@ -155,7 +159,7 @@ public class ControlArchivos {
 
     }
 
-    public boolean crearBackup(JLabel label) {
+    public int crearBackup(JLabel label) {
         try {
             int resp;
             DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy__HH-mm-ss"),
@@ -182,16 +186,16 @@ public class ControlArchivos {
                 fw.close();
                 Runtime.getRuntime().exec("copia_seguridad.bat");
                 label.setText("Está trabajando con el backup de fecha y hora: " + fecha2.format(date));
-                return true;
+                return 0;
             } else {
-                return false;
+                return 1;
             }
         } catch (HeadlessException | IOException ex) {
         }
-        return false;
+        return 2;
     }
 
-    public boolean restaurarBackup(JLabel label) {
+    public int restaurarBackup(JLabel label) {
 
         try {
             File archivo;
@@ -235,13 +239,18 @@ public class ControlArchivos {
                 label.setText("Está trabajando con el backup de fecha y hora: " + formatted);
 
                 Thread.sleep(5000);
+
                 sorteo.actividad(RESTAURACION);
-                return true;
+
+                return 0;
+
             } else {
-                return false;
+
+                return 1;
+
             }
         } catch (HeadlessException | IOException | InterruptedException | SQLException ex) {
+            return 2;
         }
-        return false;
     }
 }

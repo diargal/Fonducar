@@ -66,10 +66,14 @@ public class ControlAnimacion {
             int dec = ((numero % 1000) % 100) / 10;
             int uni = numero % 10;
 
-            if (peticion.numeroAsociadosActivos() > 1000) {
-                main.JLBalota1.setIcon(null);
-            } else {
-                main.JLBalota1.setIcon(seleccionNumero(0));
+            try {
+                if (peticion.numeroAsociadosActivos() > 1000) {
+                    main.JLBalota1.setIcon(null);
+                } else {
+                    main.JLBalota1.setIcon(seleccionNumero(0));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(ControlAnimacion.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             if (!main.JCBPruebaSorteos.isSelected()) {
@@ -88,8 +92,12 @@ public class ControlAnimacion {
             controlImagen(dec, main.JLBalota3);
             controlImagen(cent, main.JLBalota2);
 
-            if (peticion.numeroAsociadosActivos() > 1000) {
-                controlImagen(mil, main.JLBalota1);
+            try {
+                if (peticion.numeroAsociadosActivos() > 1000) {
+                    controlImagen(mil, main.JLBalota1);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(ControlAnimacion.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             vistaGanador.getJLGanador().setText(ganador);

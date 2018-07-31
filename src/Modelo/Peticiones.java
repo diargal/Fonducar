@@ -1,6 +1,7 @@
 package Modelo;
 
 import DataAcces.AccesoBD;
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -146,7 +147,7 @@ public class Peticiones {
         return acces.guardarAsociados(file, label);
     }
 
-    public int numeroAsociadosActivos() {
+    public int numeroAsociadosActivos() throws Exception {
         return acces.numeroAsociadosActivos();
     }
 
@@ -172,11 +173,11 @@ public class Peticiones {
         return array;
     }
 
-    public ArrayList<String> nombreAdmin(long cedula) {
+    public ArrayList<String> nombreAdmin(long cedula, boolean reingreso) {
 //        acces.conexion();
         ArrayList<String> datos = new ArrayList<>();
         try {
-            ResultSet resultado = acces.nombreAdmin(cedula);
+            ResultSet resultado = acces.nombreAdmin(cedula, reingreso);
             if (resultado.next()) {
                 System.out.println("resultado: " + resultado.getString(1));
                 datos.add(resultado.getString(1));

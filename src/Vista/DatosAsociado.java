@@ -171,13 +171,17 @@ public class DatosAsociado extends javax.swing.JDialog {
 
     private void JBIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBIrActionPerformed
         if (!JTxFCedula.getText().isEmpty()) {
-            JTxFNombre.setText(peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())).get(0));
-            JTxFApellido.setText(peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())).get(1));
-            JTxFApellido.setEnabled(true);
-            JTxFNombre.setEnabled(true);
-            JTxFPass.setEnabled(true);
-            JTxFUsuario.setEnabled(true);
-            JBModificar.setEnabled(true);
+            try {
+                JTxFNombre.setText(peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())).get(0));
+                JTxFApellido.setText(peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())).get(1));
+                JTxFApellido.setEnabled(true);
+                JTxFNombre.setEnabled(true);
+                JTxFPass.setEnabled(true);
+                JTxFUsuario.setEnabled(true);
+                JBModificar.setEnabled(true);
+            } catch (IndexOutOfBoundsException e) {
+                JOptionPane.showMessageDialog(this, "La cédula ingresada no coincide con algún asociado registrado.", "Verificar cédula.", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Ingresar la cédula del asociado.");
         }

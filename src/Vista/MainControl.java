@@ -26,6 +26,7 @@ import static Modelo.Mensajes.A_INHABILACTUALES;
 import static Modelo.Mensajes.A_RACTUALES;
 import static Modelo.Mensajes.A_REPORTESORTEOS;
 import Modelo.Peticiones;
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import java.io.File;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -91,8 +92,13 @@ public class MainControl extends javax.swing.JFrame {
         }
         DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         Date date = new Date();
-        JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
-        JLActualizacion.setText("Está trabajando con el backup de fecha y hora: " + peticion.fechaBackup());
+        try {
+            JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+            JLActualizacion.setText("Está trabajando con el backup de fecha y hora: " + peticion.fechaBackup());
+        } catch (MySQLIntegrityConstraintViolationException e) {
+        } catch (Exception ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void cerrarVentana() {
@@ -514,7 +520,11 @@ public class MainControl extends javax.swing.JFrame {
 
     private void JMAAsociadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMAAsociadosActionPerformed
         cntrlArchivos.cargarArchivo(controlHistorial);
-        JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+        try {
+            JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+        } catch (Exception ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_JMAAsociadosActionPerformed
 
     private void JMIAsignarAsoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIAsignarAsoActionPerformed
@@ -609,7 +619,11 @@ public class MainControl extends javax.swing.JFrame {
     private void JMIModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIModificarActionPerformed
         CambiarEstado cambiar = new CambiarEstado(this, true);
         cambiar.setVisible(true);
-        JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+        try {
+            JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+        } catch (Exception ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_JMIModificarActionPerformed
 
     private void JMIActualesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIActualesActionPerformed
@@ -700,10 +714,12 @@ public class MainControl extends javax.swing.JFrame {
     private void JMIDeleteAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIDeleteAdminActionPerformed
         agregarAdmin.setTipoOperacion(2);
         agregarAdmin.enabled(false);
+        agregarAdmin.getJTxFCedula().setEnabled(true);
         agregarAdmin.getJBIr().setVisible(true);
-        agregarAdmin.getJTxFSUPass().setEnabled(false);
-        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
+//        agregarAdmin.getJTxFSUPass().setEnabled(false);
+//        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
         agregarAdmin.setTitle("Formulario para eliminar un administrador");
+        agregarAdmin.getJTxFDatos().setVisible(false);
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMIDeleteAdminActionPerformed
 
@@ -711,9 +727,10 @@ public class MainControl extends javax.swing.JFrame {
         agregarAdmin.setTipoOperacion(1);
         agregarAdmin.enabled(true);
         agregarAdmin.getJBIr().setVisible(false);
-        agregarAdmin.getJTxFSUPass().setEnabled(true);
-        agregarAdmin.getJTxFSUUsuario().setEnabled(true);
+//        agregarAdmin.getJTxFSUPass().setEnabled(true);
+//        agregarAdmin.getJTxFSUUsuario().setEnabled(true);
         agregarAdmin.setTitle("Formulario para agregar un administrador");
+        agregarAdmin.getJTxFDatos().setVisible(false);
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMIAddAdminActionPerformed
 
@@ -745,10 +762,12 @@ public class MainControl extends javax.swing.JFrame {
     private void JMIReingresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIReingresoActionPerformed
         agregarAdmin.setTipoOperacion(3);
         agregarAdmin.enabled(false);
+        agregarAdmin.getJTxFCedula().setEnabled(true);
         agregarAdmin.getJBIr().setVisible(true);
-        agregarAdmin.getJTxFSUPass().setEnabled(false);
-        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
+//        agregarAdmin.getJTxFSUPass().setEnabled(false);
+//        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
         agregarAdmin.setTitle("Formulario para reingresar un administrador");
+        agregarAdmin.getJTxFDatos().setVisible(false);
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMIReingresoActionPerformed
 
@@ -758,20 +777,33 @@ public class MainControl extends javax.swing.JFrame {
     }//GEN-LAST:event_JMIModificarDatosActionPerformed
 
     private void JMICrearBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICrearBackupActionPerformed
-        if (cntrlArchivos.crearBackup(JLActualizacion)) {
+        int resultado = cntrlArchivos.crearBackup(JLActualizacion);
+        if (resultado == 0) {
             JOptionPane.showMessageDialog(null, "Backup realizado con éxito!", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "El Backup no se pudo generar!", "Operación fallida", JOptionPane.ERROR_MESSAGE);
+        } else if (resultado == 2) {
+            JOptionPane.showMessageDialog(null, "El Backup no se pudo generar. Inténtelo nuevamente.", "Operación fallida", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_JMICrearBackupActionPerformed
 
     private void JMIRestaurarBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIRestaurarBackupActionPerformed
+        int resultado = cntrlArchivos.restaurarBackup(JLActualizacion);
+        switch (resultado) {
+            case 0:
 
-        if (cntrlArchivos.restaurarBackup(JLActualizacion)) {
-            JOptionPane.showMessageDialog(null, "Restauración de backup realizada!", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
-            JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
-        } else {
-            JOptionPane.showMessageDialog(null, "No se pudo realizar la restauración, por favor reinicia el programa!", "Operación fallida", JOptionPane.ERROR_MESSAGE);
+                try {
+                    JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+                    JOptionPane.showMessageDialog(null, "Restauración de backup realizada!", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Verifique si el nombre del backup tiene espacios, por favor elimínelos y vuelva a intentarlo. !! No debe cerrar el software sin hacer esto !!", "!!Información importante!!", JOptionPane.ERROR_MESSAGE);
+                    JLActivos.setText("Vuelva hacer la restauración del backup.");
+                }
+
+                break;
+            case 2:
+                JOptionPane.showMessageDialog(null, "No se pudo realizar la restauración, por favor reinicia el programa e intenta nuevamente!", "Operación fallida", JOptionPane.ERROR_MESSAGE);
+                break;
+            default:
+                break;
         }
     }//GEN-LAST:event_JMIRestaurarBackupActionPerformed
 
@@ -779,13 +811,14 @@ public class MainControl extends javax.swing.JFrame {
         agregarAdmin.setTipoOperacion(4);
         agregarAdmin.enabled(false);
         agregarAdmin.getJBIr().setVisible(false);
-        agregarAdmin.getJTxFSUPass().setEnabled(false);
-        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
-        agregarAdmin.getJTxFPass().setEditable(false);
-        agregarAdmin.getJTxFConfiPass().setEditable(false);
-        agregarAdmin.getJTxFUsuario().setEditable(true);
+//        agregarAdmin.getJTxFSUPass().setEnabled(false);
+//        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
+//        agregarAdmin.getJTxFPass().setEditable(false);
+//        agregarAdmin.getJTxFConfiPass().setEditable(false);
+        agregarAdmin.getJTxFUsuario().setEnabled(true);
         agregarAdmin.setTitle("Formulario para cambiar el usuario.");
         agregarAdmin.formulario();
+        agregarAdmin.getJTxFDatos().setVisible(true);
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMICambiarUsuarioActionPerformed
 
@@ -793,13 +826,14 @@ public class MainControl extends javax.swing.JFrame {
         agregarAdmin.setTipoOperacion(4);
         agregarAdmin.enabled(false);
         agregarAdmin.getJBIr().setVisible(false);
-        agregarAdmin.getJTxFSUPass().setEnabled(false);
-        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
-        agregarAdmin.getJTxFUsuario().setEditable(false);
-        agregarAdmin.getJTxFPass().setEditable(true);
-        agregarAdmin.getJTxFConfiPass().setEditable(true);
+//        agregarAdmin.getJTxFSUPass().setEnabled(false);
+//        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
+//        agregarAdmin.getJTxFUsuario().setEditable(false);
+        agregarAdmin.getJTxFPass().setEnabled(true);
+        agregarAdmin.getJTxFConfiPass().setEnabled(true);
         agregarAdmin.setTitle("Formulario para cambiar la contraseña.");
         agregarAdmin.formulario();
+        agregarAdmin.getJTxFDatos().setVisible(true);
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMICambiarPassActionPerformed
 

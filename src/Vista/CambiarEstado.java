@@ -15,10 +15,10 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 public class CambiarEstado extends javax.swing.JDialog {
-    
+
     private final Sorteo sorteo;
     private Peticiones peticion;
-    
+
     public CambiarEstado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -28,7 +28,7 @@ public class CambiarEstado extends javax.swing.JDialog {
         sorteo = new Sorteo();
         peticion = new Peticiones();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -116,7 +116,7 @@ public class CambiarEstado extends javax.swing.JDialog {
                     }
                 }
             }
-            
+
             if (peticion.cambiarEstado(Long.parseLong(JTxFCedula.getText()), opcion, JTxAObservacion.getText())) {
                 JOptionPane.showMessageDialog(null, MSG, "Operación exitosa!", JOptionPane.INFORMATION_MESSAGE);
             } else {
@@ -133,33 +133,38 @@ public class CambiarEstado extends javax.swing.JDialog {
             int estado = peticion.estadoAsociado(Long.parseLong(JTxFCedula.getText()));
             JComboBox nuevo = new JComboBox();
             JCBAccion.setModel(nuevo.getModel());
-            JTxFNombre.setText(peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())).get(0) + " " + peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())).get(1));
-            switch (estado) {
-                case 1:
-                    JCBAccion.addItem("Ex-Asociado CON participación");
-                    JCBAccion.addItem("Ex-Asociado SIN participación");
-                    JCBAccion.setEnabled(true);
-                    JTxAObservacion.setEditable(true);
-                    JTxAObservacion.setEnabled(true);
-                    break;
-                case 2:
-                    JCBAccion.addItem("Asociado activo");
-                    JCBAccion.addItem("Ex-Asociado SIN participación");
-                    JCBAccion.setEnabled(true);
-                    JTxAObservacion.setEditable(true);
-                    JTxAObservacion.setEnabled(true);
-                    break;
-                case 3:
-                    JCBAccion.addItem("Asociado activo");
-                    JCBAccion.addItem("Ex-Asociado CON participación");
-                    JCBAccion.setEnabled(true);
-                    JTxAObservacion.setEditable(true);
-                    JTxAObservacion.setEnabled(true);
-                    break;
-                case 0:
-                    JOptionPane.showMessageDialog(null, "No existen datos asociados con la cédula.", "Operación fallida.", JOptionPane.ERROR_MESSAGE);
-                    JCBAccion.setModel(nuevo.getModel());
-                    break;
+            try {
+                JTxFNombre.setText(peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())).get(0) + " " + peticion.nombreAsociado(Long.parseLong(JTxFCedula.getText())).get(1));
+
+                switch (estado) {
+                    case 1:
+                        JCBAccion.addItem("Ex-Asociado CON participación");
+                        JCBAccion.addItem("Ex-Asociado SIN participación");
+                        JCBAccion.setEnabled(true);
+                        JTxAObservacion.setEditable(true);
+                        JTxAObservacion.setEnabled(true);
+                        break;
+                    case 2:
+                        JCBAccion.addItem("Asociado activo");
+                        JCBAccion.addItem("Ex-Asociado SIN participación");
+                        JCBAccion.setEnabled(true);
+                        JTxAObservacion.setEditable(true);
+                        JTxAObservacion.setEnabled(true);
+                        break;
+                    case 3:
+                        JCBAccion.addItem("Asociado activo");
+                        JCBAccion.addItem("Ex-Asociado CON participación");
+                        JCBAccion.setEnabled(true);
+                        JTxAObservacion.setEditable(true);
+                        JTxAObservacion.setEnabled(true);
+                        break;
+                    case 0:
+                        JOptionPane.showMessageDialog(null, "No existen datos asociados con la cédula.", "Operación fallida.", JOptionPane.ERROR_MESSAGE);
+                        JCBAccion.setModel(nuevo.getModel());
+                        break;
+                }
+            } catch (IndexOutOfBoundsException e) {
+                JOptionPane.showMessageDialog(this, "No existen registros relacionados con la cédula.", "Verificar cédula.", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_JBBuscarActionPerformed
@@ -173,7 +178,7 @@ public class CambiarEstado extends javax.swing.JDialog {
 
     private void JTxAObservacionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxAObservacionKeyPressed
         ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
-        
+
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             this.JBAceptarActionPerformed(jd);
         }
@@ -184,7 +189,7 @@ public class CambiarEstado extends javax.swing.JDialog {
 
     private void JCBAccionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JCBAccionKeyPressed
         ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
-        
+
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             this.JBAceptarActionPerformed(jd);
         }

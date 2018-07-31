@@ -7,6 +7,7 @@ package Vista;
 
 import Modelo.Administrador;
 import static Modelo.BonoSolidario.administrador;
+import static Modelo.BonoSolidario.numerodeSorteos;
 import Modelo.Peticiones;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -38,9 +39,10 @@ public class AddAdministrador extends javax.swing.JDialog {
         setLocationRelativeTo(this);
         tipoOperacion = 0;
         peticion = new Peticiones();
-//        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         JPFondo.setOpaque(false);
         JLIngresar.setVisible(false);
+        cerrarVentana();
     }
 
     public int isTipoOperacion() {
@@ -49,6 +51,14 @@ public class AddAdministrador extends javax.swing.JDialog {
 
     public void setTipoOperacion(int tipoOperacion) {
         this.tipoOperacion = tipoOperacion;
+    }
+
+    public JTextField getJTxFDatos() {
+        return JTxFDatos;
+    }
+
+    public void setJTxFDatos(JTextField JTxFDatos) {
+        this.JTxFDatos = JTxFDatos;
     }
 
     public JButton getJBIr() {
@@ -180,11 +190,21 @@ public class AddAdministrador extends javax.swing.JDialog {
     }
 
     public JTextField getjTextField1() {
-        return jTextField1;
+        return JTxFDatos;
     }
 
     public void setjTextField1(JTextField jTextField1) {
-        this.jTextField1 = jTextField1;
+        this.JTxFDatos = jTextField1;
+    }
+
+    public void cerrarVentana() {
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                vaciar();
+                dispose();
+            }
+        });
     }
 
     /**
@@ -209,7 +229,7 @@ public class AddAdministrador extends javax.swing.JDialog {
         JTxFApellidos = new javax.swing.JTextField();
         JBIr = new javax.swing.JButton();
         JLIngresar = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        JTxFDatos = new javax.swing.JTextField();
         JLActuales = new javax.swing.JLabel();
         JLFondo = new javax.swing.JLabel();
 
@@ -288,14 +308,14 @@ public class AddAdministrador extends javax.swing.JDialog {
         JLIngresar.setText("Ingrese los nuevos datos para el administrador");
         JPFondo.add(JLIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 134, 240, 20));
 
-        jTextField1.setEditable(false);
-        jTextField1.setBackground(new java.awt.Color(0, 153, 0));
-        jTextField1.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField1.setText("Datos del administrador actual");
-        jTextField1.setBorder(null);
-        JPFondo.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 270, 270, 20));
+        JTxFDatos.setEditable(false);
+        JTxFDatos.setBackground(new java.awt.Color(0, 153, 0));
+        JTxFDatos.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        JTxFDatos.setForeground(new java.awt.Color(255, 255, 255));
+        JTxFDatos.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        JTxFDatos.setText("Datos del administrador actual");
+        JTxFDatos.setBorder(null);
+        JPFondo.add(JTxFDatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 270, 270, 20));
 
         JLActuales.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         JLActuales.setText("Debe ingresar los datos actuales");
@@ -345,6 +365,10 @@ public class AddAdministrador extends javax.swing.JDialog {
                                     mensaje = "La cédula existe en la BD y el asociado ahora es administrador.";
                                     exito = true;
                                     break;
+                                case 4:
+                                    mensaje = "La cédula ya está asociada a otro administrador.";
+                                    exito = false;
+                                    break;
                                 default:
                                     mensaje = "La operación no se pudo realizar.";
                                     break;
@@ -357,7 +381,9 @@ public class AddAdministrador extends javax.swing.JDialog {
                         } else {
                             //aquí llamaré al método para eliminar al admin
                             admin = new Administrador(JTxFNombre.getText(), JTxFApellidos.getText(), Long.parseLong(JTxFCedula.getText()), password, JTxFUsuario.getText(), 0);
-                            if (peticion.deleteAdmin(admin)) {
+                            if (JTxFUsuario.getText().equals(administrador.getUsuario())) {
+                                JOptionPane.showMessageDialog(this, "El Super Usuario no puede ser eliminado.", "La operación no se puede realizar", JOptionPane.ERROR_MESSAGE);
+                            } else if (peticion.deleteAdmin(admin)) {
                                 exito = true;
                                 mensaje = "Administrador eliminado con éxito.";
 
@@ -457,8 +483,6 @@ public class AddAdministrador extends javax.swing.JDialog {
     }//GEN-LAST:event_JBAceptarActionPerformed
 
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
-        JLIngresar.setVisible(false);
-        JLActuales.setVisible(false);
         vaciar();
         dispose();
     }//GEN-LAST:event_JBCancelarActionPerformed
@@ -503,10 +527,20 @@ public class AddAdministrador extends javax.swing.JDialog {
 
     private void JBIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBIrActionPerformed
         if (!JTxFCedula.getText().isEmpty()) {
-            ArrayList<String> array = peticion.nombreAdmin(Long.parseLong(JTxFCedula.getText()));
-            JTxFNombre.setText(array.get(0));
-            JTxFApellidos.setText(array.get(1));
-            JTxFUsuario.setText(array.get(2));
+            ArrayList<String> array = peticion.nombreAdmin(Long.parseLong(JTxFCedula.getText()), tipoOperacion == 3);
+            try {
+                JTxFNombre.setText(array.get(0));
+                JTxFApellidos.setText(array.get(1));
+                JTxFUsuario.setText(array.get(2));
+            } catch (Exception e) {
+                vaciar();
+                JBIr.setVisible(true);
+                if (tipoOperacion == 2) {
+                    JOptionPane.showMessageDialog(this, "La cédula no está asociada a algún administrador activo.", "Verificar cédula", JOptionPane.ERROR_MESSAGE);
+                } else if (tipoOperacion == 3) {
+                    JOptionPane.showMessageDialog(this, "La cédula no está asociada a algún administrador que se pueda reingresar.", "Verificar cédula", JOptionPane.ERROR_MESSAGE);
+                }
+            }
             JTxFSUPass.setEnabled(true);
             JTxFSUUsuario.setEnabled(true);
         } else {
@@ -537,11 +571,16 @@ public class AddAdministrador extends javax.swing.JDialog {
         JTxFNombre.setEnabled(q);
         JTxFApellidos.setEnabled(q);
         JTxFUsuario.setEnabled(q);
+        JTxFCedula.setEnabled(q);
         JTxFPass.setEnabled(q);
         JTxFConfiPass.setEnabled(q);
+        JTxFSUPass.setEnabled(q);
+        JTxFSUUsuario.setEnabled(q);
     }
 
     public void vaciar() {
+        JLIngresar.setVisible(false);
+        JLActuales.setVisible(false);
         JTxFApellidos.setText("");
         JTxFCedula.setText("");
         JTxFConfiPass.setText("");
@@ -550,6 +589,7 @@ public class AddAdministrador extends javax.swing.JDialog {
         JTxFSUPass.setText("");
         JTxFSUUsuario.setText("");
         JTxFUsuario.setText("");
+        JBIr.setVisible(false);
     }
 
     public void crearToolTip() {
@@ -559,18 +599,18 @@ public class AddAdministrador extends javax.swing.JDialog {
     }
 
     public void formulario() {
-        ArrayList<String> array = peticion.nombreAdmin(administrador.getCedula());
+        ArrayList<String> array = peticion.nombreAdmin(administrador.getCedula(), tipoOperacion == 3);
         JTxFCedula.setText(administrador.getCedula() + "");
-        JTxFCedula.setEditable(false);
+//        JTxFCedula.setEditable(false);
         JTxFNombre.setText(array.get(0));
         JTxFApellidos.setText(array.get(1));
         JTxFUsuario.setText(array.get(2));
         JTxFSUPass.setEnabled(true);
         JTxFSUUsuario.setEnabled(true);
         JLIngresar.setVisible(tipoOperacion == 4);
-        JTxFUsuario.setEnabled(JTxFUsuario.isEditable());
-        JTxFPass.setEnabled(JTxFPass.isEditable());
-        JTxFConfiPass.setEnabled(JTxFConfiPass.isEditable());
+//        JTxFUsuario.setEnabled(JTxFUsuario.isEditable());
+//        JTxFPass.setEnabled(JTxFPass.isEditable());
+//        JTxFConfiPass.setEnabled(JTxFConfiPass.isEditable());
         JLActuales.setVisible(tipoOperacion == 4);
         crearToolTip();
     }
@@ -586,11 +626,11 @@ public class AddAdministrador extends javax.swing.JDialog {
     private javax.swing.JTextField JTxFApellidos;
     private javax.swing.JTextField JTxFCedula;
     private javax.swing.JPasswordField JTxFConfiPass;
+    private javax.swing.JTextField JTxFDatos;
     private javax.swing.JTextField JTxFNombre;
     private javax.swing.JPasswordField JTxFPass;
     private javax.swing.JPasswordField JTxFSUPass;
     private javax.swing.JTextField JTxFSUUsuario;
     private javax.swing.JTextField JTxFUsuario;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
