@@ -264,12 +264,12 @@ public class AccesoBD {
     public ResultSet historialSorteos() throws SQLException {
         return resultadoConexion("SELECT P.Nombre, P.Apellido, P.Cedula, S.Fecha, NA.idNumero, S.Premio, S.TipoSorteo "
                 + "FROM `sorteo` as S, asociado as A, persona as P, numeroasociado as NA "
-                + "WHERE S.idNumeroAsociado = NA.idNumeroAsociado and NA.idAsociado = A.idAsociado and A.idPersona = P.idPersona order by S.Fecha desc");
+                + "WHERE S.idNumeroAsociado = NA.idNumeroAsociado and NA.idAsociado = A.idAsociado and A.idPersona = P.idPersona order by S.idSorteo desc");
     }
 
     public ResultSet historialModificaciones() throws SQLException {
         return resultadoConexion("SELECT P.Nombre, P.Apellido, P.Cedula, M.Fecha, M.Detalle FROM movimiento as M, persona as P, administrador as A "
-                + "WHERE M.idAdministrador = A.idAdministrador and A.idPersona = P.idPersona order by M.Fecha desc");
+                + "WHERE M.idAdministrador = A.idAdministrador and A.idPersona = P.idPersona order by M.idMovimiento desc");
     }
 
     public ResultSet historialNumeros() throws SQLException {
@@ -291,7 +291,7 @@ public class AccesoBD {
                 + "FROM `inhabilitacion` as i, persona as p, asociado as a, numeroasociado as na "
                 + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 0 and i.razon != 'Asociado deshabilitado por cambio de año' and a.idasociado = na.idasociado "
                 + "and substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) = substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 ) "
-                + "order by i.fecha desc");
+                + "order by i.idinhabilitacion desc");
     }
 
     public ResultSet historialEASIN() throws SQLException {
@@ -299,7 +299,7 @@ public class AccesoBD {
                 + "FROM `inhabilitacion` as i, persona as p, asociado as a, numeroasociado as na "
                 + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 1 and i.razon != 'Asociado deshabilitado por cambio de año' and a.idasociado = na.idasociado "
                 + "and substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) = substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 ) "
-                + "order by i.fecha desc");
+                + "order by i.idinhabilitacion desc");
     }
 
     public ResultSet historialInhabilitadosActuales() throws SQLException {
@@ -308,7 +308,7 @@ public class AccesoBD {
                 + "FROM inhabilitacion as i, persona as p, asociado as a, numeroasociado as na "
                 + "WHERE p.idPersona = a.idPersona and a.estado =1 and a.idAsociado = i.idAsociado and i.estado = 1 and "
                 + "'" + fecha2 + "' = substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 ) and na.idasociado = a.idasociado "
-                + "and '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) ORDER BY `i`.`Fecha` DESC");
+                + "and '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) ORDER BY i.idinhabilitacion DESC");
     }
 
     public ResultSet historialHabilitadosActuales() throws SQLException {
@@ -317,7 +317,7 @@ public class AccesoBD {
                 + "FROM inhabilitacion as i, persona as p, asociado as a, numeroasociado as na "
                 + "WHERE p.idPersona = a.idPersona and a.estado =1 and a.idAsociado = i.idAsociado and i.estado = 0 and "
                 + "'" + fecha2 + "' = substring( i.fecha, length(i.fecha)-12 , length(i.fecha)-15 ) and na.idasociado = a.idasociado "
-                + "and '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) ORDER BY `i`.`Fecha` DESC");
+                + "and '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) ORDER BY i.idinhabilitacion DESC");
     }
 
     public boolean cambiarEstado(long cedula, int tipo, String razon) {

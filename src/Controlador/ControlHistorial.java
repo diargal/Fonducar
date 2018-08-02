@@ -351,7 +351,7 @@ public class ControlHistorial {
         array.add("NOMBRE ADMINISTRADOR");
         array.add("APELLIDO ADMINISTRADOR");
         array.add("CEDULA ADMINISTRADOR");
-        array.add("FECHA DE REALIZACION");
+        array.add("FECHA REALIZACION");
         array.add("DETALLE OPERACION");
         llenarComboBox();
 

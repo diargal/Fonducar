@@ -108,7 +108,11 @@ public class MainControl extends javax.swing.JFrame {
                 if (sorteosRealizados != numerodeSorteos) {
                     JOptionPane.showMessageDialog(MainControl.this, "Aún faltan sorteos por realizar!");
                 } else {
-                    System.exit(0);
+                    if (JLActivos.getText().equals("Vuelva hacer la restauración del backup.")) {
+                        JOptionPane.showMessageDialog(MainControl.this, "No puede salir del sistema sin restaurar un backup válido.", "No se puede proceder", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        System.exit(0);
+                    }
                 }
             }
         });
@@ -764,8 +768,6 @@ public class MainControl extends javax.swing.JFrame {
         agregarAdmin.enabled(false);
         agregarAdmin.getJTxFCedula().setEnabled(true);
         agregarAdmin.getJBIr().setVisible(true);
-//        agregarAdmin.getJTxFSUPass().setEnabled(false);
-//        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
         agregarAdmin.setTitle("Formulario para reingresar un administrador");
         agregarAdmin.getJTxFDatos().setVisible(false);
         agregarAdmin.setVisible(true);
@@ -794,7 +796,7 @@ public class MainControl extends javax.swing.JFrame {
                     JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
                     JOptionPane.showMessageDialog(null, "Restauración de backup realizada!", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Verifique si el nombre del backup tiene espacios, por favor elimínelos y vuelva a intentarlo. !! No debe cerrar el software sin hacer esto !!", "!!Información importante!!", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Verifique si el nombre del backup tiene espacios o si está tratando de restaurar un backup que no compete. !! No debe cerrar el software sin hacer esto !!", "!!Información importante!!", JOptionPane.ERROR_MESSAGE);
                     JLActivos.setText("Vuelva hacer la restauración del backup.");
                 }
 
@@ -811,10 +813,6 @@ public class MainControl extends javax.swing.JFrame {
         agregarAdmin.setTipoOperacion(4);
         agregarAdmin.enabled(false);
         agregarAdmin.getJBIr().setVisible(false);
-//        agregarAdmin.getJTxFSUPass().setEnabled(false);
-//        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
-//        agregarAdmin.getJTxFPass().setEditable(false);
-//        agregarAdmin.getJTxFConfiPass().setEditable(false);
         agregarAdmin.getJTxFUsuario().setEnabled(true);
         agregarAdmin.setTitle("Formulario para cambiar el usuario.");
         agregarAdmin.formulario();
@@ -826,9 +824,6 @@ public class MainControl extends javax.swing.JFrame {
         agregarAdmin.setTipoOperacion(4);
         agregarAdmin.enabled(false);
         agregarAdmin.getJBIr().setVisible(false);
-//        agregarAdmin.getJTxFSUPass().setEnabled(false);
-//        agregarAdmin.getJTxFSUUsuario().setEnabled(false);
-//        agregarAdmin.getJTxFUsuario().setEditable(false);
         agregarAdmin.getJTxFPass().setEnabled(true);
         agregarAdmin.getJTxFConfiPass().setEnabled(true);
         agregarAdmin.setTitle("Formulario para cambiar la contraseña.");
