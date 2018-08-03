@@ -180,13 +180,13 @@ public class MainControl extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         JMICambiarPass = new javax.swing.JMenuItem();
         JMICambiarUsuario = new javax.swing.JMenuItem();
+        JCBPruebaSorteos = new javax.swing.JCheckBoxMenuItem();
         JM3 = new javax.swing.JMenu();
         JMGestionAdmins = new javax.swing.JMenu();
         JMIAddAdmin = new javax.swing.JMenuItem();
         JMIDeleteAdmin = new javax.swing.JMenuItem();
         JMIReingreso = new javax.swing.JMenuItem();
         JMIVerAdmins = new javax.swing.JMenuItem();
-        JCBPruebaSorteos = new javax.swing.JCheckBoxMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -466,6 +466,15 @@ public class MainControl extends javax.swing.JFrame {
 
         JMOperaciones.add(jMenu3);
 
+        JCBPruebaSorteos.setSelected(true);
+        JCBPruebaSorteos.setText("Pruebas de sorteos");
+        JCBPruebaSorteos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JCBPruebaSorteosActionPerformed(evt);
+            }
+        });
+        JMOperaciones.add(JCBPruebaSorteos);
+
         jMenuBar1.add(JMOperaciones);
 
         JM3.setText("Super Usuario");
@@ -505,15 +514,6 @@ public class MainControl extends javax.swing.JFrame {
         JMGestionAdmins.add(JMIVerAdmins);
 
         JM3.add(JMGestionAdmins);
-
-        JCBPruebaSorteos.setSelected(true);
-        JCBPruebaSorteos.setText("Pruebas de sorteos");
-        JCBPruebaSorteos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JCBPruebaSorteosActionPerformed(evt);
-            }
-        });
-        JM3.add(JCBPruebaSorteos);
 
         jMenuBar1.add(JM3);
 
