@@ -76,6 +76,9 @@ public class CambiarEstado extends javax.swing.JDialog {
         getContentPane().add(JBBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 100, 110, 30));
 
         JTxFCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JTxFCedulaKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 JTxFCedulaKeyTyped(evt);
             }
@@ -197,6 +200,14 @@ public class CambiarEstado extends javax.swing.JDialog {
             System.exit(0);
         }
     }//GEN-LAST:event_JCBAccionKeyPressed
+
+    private void JTxFCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFCedulaKeyPressed
+        ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.JBBuscarActionPerformed(jd);
+        }
+    }//GEN-LAST:event_JTxFCedulaKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -36,7 +36,7 @@ public class ControlHistorial {
     private File archivo;
     private Locale locale;
     private NumberFormat nf;
-    ArrayList<String> array;
+    private ArrayList<String> array;
 
     public ControlHistorial() {
         historial = new Historial(null, true);

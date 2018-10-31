@@ -1,7 +1,6 @@
 package Modelo;
 
 import DataAcces.AccesoBD;
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;

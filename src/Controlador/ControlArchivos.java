@@ -1,5 +1,6 @@
 package Controlador;
 
+import DataAcces.AccesoBD;
 import static Modelo.Mensajes.COPIA;
 import static Modelo.Mensajes.ERRORBDC;
 import static Modelo.Mensajes.INFORME;
@@ -8,12 +9,14 @@ import static Modelo.Mensajes.RESTAURACION;
 import Modelo.Peticiones;
 import Modelo.Sorteo;
 import Vista.Informes.Informe;
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
-import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 import java.awt.HeadlessException;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
@@ -46,16 +49,12 @@ import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
  */
 public class ControlArchivos {
 
-    public ControlHistorial control;
-    public static Informe ventanaInfo;
-    public static Sorteo sorteo;
-    private Peticiones peticion;
+    private Informe ventanaInfo;
+    private Sorteo sorteo;
 
     public ControlArchivos() {
-        control = new ControlHistorial();
         ventanaInfo = new Informe(null, true);
         sorteo = new Sorteo();
-        peticion = new Peticiones();
     }
 
     /*
@@ -162,7 +161,7 @@ public class ControlArchivos {
     public int crearBackup(JLabel label) {
         try {
             int resp;
-            DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy__HH-mm-ss"),
+            DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss"),
                     fecha2 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             Date date = new Date();
             JFileChooser chooser = new JFileChooser();
@@ -170,8 +169,7 @@ public class ControlArchivos {
 
             if (resp == JFileChooser.APPROVE_OPTION) {
                 sorteo.actividad(COPIA);
-                File backupFile = new File(String.valueOf(chooser.getSelectedFile().toString())
-                        + "_" + fecha.format(date) + ".sql");
+                File backupFile = new File(String.valueOf(chooser.getSelectedFile().toString() + " " + fecha.format(date) + ".sql"));
                 String RutaFile = backupFile.getAbsolutePath();
 
                 String Ruta = "C:\\wamp\\bin\\mysql\\mysql5.6.17\\bin\\mysqldump.exe";
@@ -179,18 +177,36 @@ public class ControlArchivos {
                 String user = "root";
                 String db = "fonducarbs";
 
+                Process p = Runtime.getRuntime().exec(Ruta + " -u root -p" + clave + " fonducarbs");
+                InputStream is = p.getInputStream();
+                FileOutputStream fos = new FileOutputStream(RutaFile);
+
+                byte[] buffer = new byte[1000];
+
+                int leido = is.read(buffer);
+
+                while (leido > 0) {
+                    fos.write(buffer, 0, leido);
+                    leido = is.read(buffer);
+                }
+                
+                fos.close();
+
+                /*
                 String cad = "\"" + Ruta + "\" --opt --password=" + clave + " --user=" + user + " " + db + " > \"" + RutaFile + "\"\n";
                 File fcopi = new File("copia_seguridad.bat");
                 FileWriter fw = new FileWriter(fcopi);
                 fw.write(cad, 0, cad.length());
                 fw.close();
                 Runtime.getRuntime().exec("copia_seguridad.bat");
+                 */
                 label.setText("Está trabajando con el backup de fecha y hora: " + fecha2.format(date));
                 return 0;
             } else {
                 return 1;
             }
         } catch (HeadlessException | IOException ex) {
+            System.out.println(ex);
         }
         return 2;
     }
@@ -210,7 +226,7 @@ public class ControlArchivos {
                 String db = "fonducarbs";
                 System.out.println(RutaFile);
 
-                Peticiones pet = new Peticiones();
+                /* Peticiones pet = new Peticiones();
 
                 Statement con = (Statement) pet.getAcces().getConnect().createStatement();
                 con.execute("drop database if exists fonducarbs;");
@@ -219,27 +235,52 @@ public class ControlArchivos {
                 con.execute("create database fonducarbs");
                 con.close();
                 pet.getAcces().desconectar();
-
+                 */
                 String Ruta = "C:\\wamp\\bin\\mysql\\mysql5.6.17\\bin\\mysql";
 
-                String cad = Ruta + " --password=" + clave + " --user=" + user + " " + db + " < " + RutaFile;
-                File fcopi = new File("restaurar_copia_seguridad.bat");
-                FileWriter fw = new FileWriter(fcopi);
-                fw.write(cad, 0, cad.length());
-                fw.close();
-                Runtime.getRuntime().exec("restaurar_copia_seguridad.bat");
+                Process p = Runtime.getRuntime().exec(Ruta + " -u root -p" + clave + " fonducarbs");
 
-                BasicFileAttributes atribute = Files.readAttributes(archivo.toPath(), BasicFileAttributes.class);
-                FileTime time = atribute.creationTime();
-                String pattern = "dd-MM-yyyy HH:mm:ss";
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                OutputStream os = p.getOutputStream();
+                FileInputStream fis = new FileInputStream(RutaFile);
 
-                String formatted = simpleDateFormat.format(new Date(time.toMillis()));
+                byte[] buffer = new byte[1000];
 
-                label.setText("Está trabajando con el backup de fecha y hora: " + formatted);
+                int leido = fis.read(buffer);
 
-                Thread.sleep(5000);
+                while (leido > 0) {
+                    os.write(buffer, 0, leido);
+                    leido = fis.read(buffer);
+                }
 
+                os.flush();
+                os.close();
+                fis.close();
+
+                AccesoBD acc = new AccesoBD();
+                String fechaBackup;
+
+                if (acc.fechaBackup().isEmpty()) {
+                    String cad = Ruta + " --password=" + clave + " --user=" + user + " " + db + " < " + RutaFile;
+                    File fcopi = new File("restaurar_copia_seguridad.bat");
+                    FileWriter fw = new FileWriter(fcopi);
+                    fw.write(cad, 0, cad.length());
+                    fw.close();
+                    Runtime.getRuntime().exec("restaurar_copia_seguridad.bat");
+
+                    BasicFileAttributes atribute = Files.readAttributes(archivo.toPath(), BasicFileAttributes.class);
+                    FileTime time = atribute.lastModifiedTime();
+                    System.out.println(time);
+                    String pattern = "dd-MM-yyyy HH:mm:ss";
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+                    fechaBackup = simpleDateFormat.format(new Date(time.toMillis()));
+                } else {
+                    fechaBackup = acc.fechaBackup();
+                }
+
+                label.setText("Está trabajando con el backup de fecha y hora: " + fechaBackup);
+
+                // Thread.sleep(5000);
                 sorteo.actividad(RESTAURACION);
 
                 return 0;
@@ -249,7 +290,7 @@ public class ControlArchivos {
                 return 1;
 
             }
-        } catch (HeadlessException | IOException | InterruptedException | SQLException ex) {
+        } catch (HeadlessException | IOException ex) {
             return 2;
         }
     }

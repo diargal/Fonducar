@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 import javax.swing.JLabel;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
-import org.apache.xmlbeans.impl.piccolo.util.DuplicateKeyException;
 
 /**
  *
@@ -350,7 +349,6 @@ public class AccesoBD {
                             case 2:
                                 prepar.setInt(3, 0);
                                 prepar.execute();
-                                desconectar();
                                 if (numerosAsignados()) //hago todo el proceso sólo si hay números asignados
                                 { //modifico el estado del número, lo coloco en 0 que indica que el número está habilitado para sorteos
 
@@ -360,12 +358,19 @@ public class AccesoBD {
                                         return reingresarAsociado(idAsociado);
                                     }
                                 }
+                                desconectar();
+
                             case 3:
                                 prepar.setInt(3, 1);
                                 prepar.execute();
-                                desconectar();
                                 //modifico el estado del número, lo coloco en 0 que indica que el número está inhabilitado para sorteos
-                                return modificarEstadoNumero(cedula, 1);
+                                if (modificarEstadoNumero(cedula, 1) == true) {
+                                    desconectar();
+                                    return true;
+                                } else {
+                                    desconectar();
+                                    return false;
+                                }
                         }
                     }
                 }
@@ -391,6 +396,7 @@ public class AccesoBD {
                 desconectar();
             }
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
             return false;
         }
         return false;

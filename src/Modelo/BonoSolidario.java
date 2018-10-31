@@ -21,13 +21,13 @@ public class BonoSolidario {
 
     public static Administrador administrador = new Administrador();
     public static int numerodeSorteos = 0;
-    private static ServerSocket SERVER_SOCKET;
 
     public static void main(String[] args) {
-//
+
         try {
             /* directorio/ejecutable es el path del ejecutable y un nombre */
             Runtime p = Runtime.getRuntime();
+            ServerSocket SERVER_SOCKET;
             p.exec("C:\\wamp\\wampmanager.exe");
 
             try {
@@ -35,6 +35,7 @@ public class BonoSolidario {
             } catch (InterruptedException ex) {
                 Logger.getLogger(BonoSolidario.class.getName()).log(Level.SEVERE, null, ex);
             }
+
             AccesoBD accesoBD = new AccesoBD();
 
             if (accesoBD.getConnect() == null) {
