@@ -413,7 +413,7 @@ public class AddAdministrador extends javax.swing.JDialog {
                         Administrador admin2;
                         String passwordd = DigestUtils.md5Hex(new String(JTxFPass.getPassword()));
 
-                        if (JTxFUsuario.isEditable()) {//con esto sé si están modificando el usuario
+                        if (JTxFUsuario.isEnabled()) {//con esto sé si están modificando el usuario
                             if (JTxFUsuario.getText().isEmpty()) {
 
                                 exito = false;
@@ -425,13 +425,13 @@ public class AddAdministrador extends javax.swing.JDialog {
 
                                 if (peticion.modificarAdmin(admin2)) {
 
-                                    mensaje = "Administrador modificado con éxito!";
+                                    mensaje = "Usuario modificado con éxito!";
                                     exito = true;
 
                                 } else {
 
                                     exito = false;
-                                    mensaje = "No se pudieron modificar los datos del administrador.";
+                                    mensaje = "No se pudo modificar el usuario.";
 
                                 }
                             }
@@ -442,18 +442,18 @@ public class AddAdministrador extends javax.swing.JDialog {
                                 mensaje = "Debe diligenciar la contraseña y su confirmación.";
 
                             } else {
-
+                                System.out.println("Cambio de pass");
                                 admin2 = new Administrador(JTxFNombre.getText(), JTxFApellidos.getText(), Long.parseLong(JTxFCedula.getText()), passwordd, JTxFUsuario.getText(), administrador.getTipo());
 
                                 if (peticion.modificarAdmin(admin2)) {
 
-                                    mensaje = "Administrador modificado con éxito!";
+                                    mensaje = "Contraseña modificada con éxito!";
                                     exito = true;
 
                                 } else {
 
                                     exito = false;
-                                    mensaje = "No se pudieron modificar los datos del administrador.";
+                                    mensaje = "No se pudieron modificar la contraseña.";
 
                                 }
                             }

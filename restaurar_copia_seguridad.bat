@@ -1,1 +1,1 @@
-C:\wamp\bin\mysql\mysql5.6.17\bin\mysql --password=Fonducar**BonoSolidario2018* --user=root fonducarbs < C:\Users\Win10\Desktop\mi backup_30-10-2018__16-36-27.sql
+C:\wamp\bin\mysql\mysql5.6.17\bin\mysql --password=Fonducar**BonoSolidario2018* --user=root fonducarbs < C:\Users\Win10\Documents\ssss_11-07-2018 03-54-32.sql

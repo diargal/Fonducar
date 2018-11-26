@@ -130,7 +130,7 @@ public class AccesControl extends javax.swing.JDialog {
     }//GEN-LAST:event_JTxFUsuarioActionPerformed
 
     private void JBLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBLoginActionPerformed
- 
+  
         if (new String(JTxfPass.getPassword()).isEmpty() || JTxFUsuario.getText().isEmpty()) { //Si dejan los campos en blanco.
             ManagerError(); //método para mostrar errores.
         } else {

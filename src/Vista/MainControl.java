@@ -788,24 +788,29 @@ public class MainControl extends javax.swing.JFrame {
     }//GEN-LAST:event_JMICrearBackupActionPerformed
 
     private void JMIRestaurarBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIRestaurarBackupActionPerformed
-        int resultado = cntrlArchivos.restaurarBackup(JLActualizacion);
-        switch (resultado) {
-            case 0:
+        try {
+            int resultado = cntrlArchivos.restaurarBackup(JLActualizacion);
+            switch (resultado) {
+                case 0:
 
-                try {
                     JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
                     JOptionPane.showMessageDialog(null, "Restauración de backup realizada!", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Verifique si el nombre del backup tiene espacios o si está tratando de restaurar un backup que no compete. !! No debe cerrar el software sin hacer esto !!", "!!Información importante!!", JOptionPane.ERROR_MESSAGE);
-                    JLActivos.setText("Vuelva hacer la restauración del backup.");
-                }
-
-                break;
-            case 2:
-                JOptionPane.showMessageDialog(null, "No se pudo realizar la restauración, por favor reinicia el programa e intenta nuevamente!", "Operación fallida", JOptionPane.ERROR_MESSAGE);
-                break;
-            default:
-                break;
+                    JLCuanto.setText("");
+                    sorteosRealizados = 0;
+                    numerodeSorteos = 0;
+                    JLBalota1.setIcon(null);
+                    JLBalota2.setIcon(null);
+                    JLBalota3.setIcon(null);
+                    JLBalota4.setIcon(null);
+                    break;
+                case 2:
+                    JOptionPane.showMessageDialog(null, "No se pudo realizar la restauración, por favor reinicia el programa e intenta nuevamente!", "Operación fallida", JOptionPane.ERROR_MESSAGE);
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_JMIRestaurarBackupActionPerformed
 
