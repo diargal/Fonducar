@@ -6,8 +6,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.Format;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -31,13 +36,13 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
  * @author Diego García
  */
 public class ControlHistorial {
-
+    
     private Historial historial;
     private File archivo;
     private Locale locale;
     private NumberFormat nf;
     private ArrayList<String> array;
-
+    
     public ControlHistorial() {
         historial = new Historial(null, true);
         array = new ArrayList<>();
@@ -53,9 +58,9 @@ public class ControlHistorial {
         historial.setArchivo(file);
         archivo = file;
         Workbook wb;
-
+        
         aspectosGenerales("Anexo de asociados", true);
-
+        
         DefaultTableModel modeloT = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -64,7 +69,7 @@ public class ControlHistorial {
         };
         historial.getJTHistorial().setModel(modeloT);
         historial.getJTHistorial().setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
+        
         try {
             wb = WorkbookFactory.create(new FileInputStream(archivo));
             Sheet hoja = wb.getSheetAt(0);
@@ -104,13 +109,13 @@ public class ControlHistorial {
                     modeloT.addRow(listaColumna);
                 }
             }
-
+            
             historial.setVisible(true);
-
+            
             return true;
         } catch (IOException | InvalidFormatException | EncryptedDocumentException e) {
         }
-
+        
         return false;
     }
 
@@ -121,23 +126,25 @@ public class ControlHistorial {
 
         historial = new Historial(null, true);
         aspectosGenerales("Información del historial de los números asignados a cada asociado", false);
-
+        
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-
+        
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
-
+        
         tabla.addColumn("NOMBRE");
         tabla.addColumn("APELLIDO");
         tabla.addColumn("CEDULA");
         tabla.addColumn("NUMERO");
         tabla.addColumn("FECHA");
-        Object[] object = new Object[5];
+        tabla.addColumn("Otra fecha");
+        tabla.addColumn("Otra fecha2");
+        Object[] object = new Object[7];
         array = new ArrayList<>();
         array.add("NOMBRE");
         array.add("APELLIDO");
@@ -145,7 +152,7 @@ public class ControlHistorial {
         array.add("NUMERO");
         array.add("FECHA");
         llenarComboBox();
-
+        
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
@@ -159,10 +166,14 @@ public class ControlHistorial {
                 } else if (resul.getInt(4) < 10) {
                     object[3] = "000" + resul.getInt(4);
                 }
-                object[4] = resul.getString(5);
+                
+                object[4] = dividirFecha(resul.getString(5));
+                object[5] = 2222;
+                object[6] = resul.getString(5);
+                
                 tabla.addRow(object);
             }
-
+            
             RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
             historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(1);
@@ -171,7 +182,7 @@ public class ControlHistorial {
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         historial.setVisible(true);
     }
 
@@ -180,20 +191,20 @@ public class ControlHistorial {
     a lo largo del tiempo.
      */
     public void historialSorteos(ResultSet resul) {
-
+        
         historial = new Historial(null, true);
         aspectosGenerales("Historial de los sorteos", false);
-
+        
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-
+        
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
-
+        
         tabla.addColumn("NOMBRE");
         tabla.addColumn("APELLIDO");
         tabla.addColumn("CEDULA");
@@ -211,14 +222,14 @@ public class ControlHistorial {
         array.add("PREMIO (PESOS)");
         array.add("TIPO");
         llenarComboBox();
-
+        
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
                 object[1] = resul.getString(2);
                 object[2] = resul.getLong(3);
-                object[3] = resul.getString(4);
-
+                object[3] = dividirFecha(resul.getString(4));
+                
                 if (resul.getInt(5) >= 1000) {
                     object[4] = resul.getInt(5);
                 } else {
@@ -234,14 +245,14 @@ public class ControlHistorial {
                         }
                     }
                 }
-
+                
                 object[5] = nf.format(resul.getLong(6));
                 if (resul.getInt(7) == 0) {
                     object[6] = "Premio menor";
                 } else if (resul.getInt(7) == 1) {
                     object[6] = "Premio mayor";
                 }
-
+                
                 tabla.addRow(object);
             }
             RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
@@ -250,29 +261,29 @@ public class ControlHistorial {
             historial.setNumeroInforme(2);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setEnabled(true);
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         historial.setVisible(true);
     }
-
+    
     public void historialExA(ResultSet resul, String titulo) {
-
+        
         historial = new Historial(null, true);
         aspectosGenerales("Historial de los ex-asociados " + titulo + " participación", false);
-
+        
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-
+        
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
-
+        
         tabla.addColumn("NOMBRE ASOCIADO");
         tabla.addColumn("APELLIDO ASOCIADO");
         tabla.addColumn("CEDULA ASOCIADO");
@@ -288,13 +299,13 @@ public class ControlHistorial {
         array.add("FECHA INHABILITACION");
         array.add("RAZON");
         llenarComboBox();
-
+        
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
                 object[1] = resul.getString(2);
                 object[2] = resul.getLong(3);
-
+                
                 int numero = resul.getInt(4);
                 if (numero >= 1000) {
                     object[3] = numero;
@@ -305,12 +316,12 @@ public class ControlHistorial {
                 } else {
                     object[3] = "000" + numero;
                 }
-
-                object[4] = resul.getString(5);
+                
+                object[4] = dividirFecha(resul.getString(5));
                 object[5] = resul.getString(6);
                 tabla.addRow(object);
             }
-
+            
             RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
             historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(3);
@@ -319,7 +330,7 @@ public class ControlHistorial {
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         historial.setVisible(true);
     }
 
@@ -327,20 +338,20 @@ public class ControlHistorial {
     Carga el historial de todas las operaciones realizadas por el administrador
      */
     public void historialModificaciones(ResultSet resul) {
-
+        
         historial = new Historial(null, true);
         aspectosGenerales("Historial de operaciones y movimientos", false);
-
+        
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-
+        
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
-
+        
         tabla.addColumn("NOMBRE ADMINISTRADOR");
         tabla.addColumn("APELLIDO ADMINISTRADOR");
         tabla.addColumn("CEDULA ADMINISTRADOR");
@@ -354,18 +365,18 @@ public class ControlHistorial {
         array.add("FECHA REALIZACION");
         array.add("DETALLE OPERACION");
         llenarComboBox();
-
+        
         try {
             while (resul.next()) {
-
+                
                 object[0] = resul.getString(1);
                 object[1] = resul.getString(2);
-                object[2] = resul.getLong(3);
-                object[3] = resul.getString(4);
+                object[2] = resul.getLong(3);                
+                object[3] = dividirFecha(resul.getString(4));
                 object[4] = resul.getString(5);
                 tabla.addRow(object);
             }
-
+            
             RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
             historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(4);
@@ -377,7 +388,7 @@ public class ControlHistorial {
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         historial.setVisible(true);
     }
 
@@ -387,18 +398,18 @@ public class ControlHistorial {
     public void numerosActuales(ResultSet resul) {
         historial = new Historial(null, true);
         aspectosGenerales("Informe de los números actuales de cada asociado y ex-asociado con participación", false);
-
+        
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-
+        
         DefaultTableModel modelo2 = new DefaultTableModel();
-
+        
         historial.getJTHistorial().setModel(modelo2);
-
+        
         tabla.addColumn("NOMBRE");
         tabla.addColumn("APELLIDO");
         tabla.addColumn("CEDULA");
@@ -412,7 +423,7 @@ public class ControlHistorial {
         array.add("NUMERO");
         array.add("ESTADO");
         llenarComboBox();
-
+        
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
@@ -424,39 +435,39 @@ public class ControlHistorial {
                     object[3] = "00" + resul.getInt(4);
                 } else if (resul.getInt(4) < 10) {
                     object[3] = "000" + resul.getInt(4);
-
+                    
                 }
                 object[4] = resul.getString(5);
                 tabla.addRow(object);
             }
-
+            
             RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
             historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(5);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setEnabled(true);
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         historial.setVisible(true);
     }
-
+    
     public void historialInhabilitadosActuales(ResultSet resul, String titulo) {
         historial = new Historial(null, true);
         aspectosGenerales("Ex-asociados " + titulo + " participación en los sorteos de este año", false);
-
+        
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-
+        
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
-
+        
         tabla.addColumn("NOMBRE ASOCIADO");
         tabla.addColumn("APELLIDO ASOCIADO");
         tabla.addColumn("CEDULA ASOCIADO");
@@ -472,13 +483,13 @@ public class ControlHistorial {
         array.add("FECHA INHABILITACION");
         array.add("RAZON");
         llenarComboBox();
-
+        
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
                 object[1] = resul.getString(2);
                 object[2] = resul.getLong(3);
-
+                
                 int numero = resul.getInt(4);
                 if (numero >= 1000) {
                     object[3] = numero;
@@ -489,11 +500,12 @@ public class ControlHistorial {
                 } else {
                     object[3] = "000" + numero;
                 }
-                object[4] = resul.getString(5);
+                
+                object[4] = dividirFecha(resul.getString(5));
                 object[5] = resul.getString(6);
                 tabla.addRow(object);
             }
-
+            
             RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
             historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(6);
@@ -506,24 +518,24 @@ public class ControlHistorial {
             Logger.getLogger(Historial.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         historial.setVisible(true);
     }
-
+    
     public void inhabilitadosAnioPasado(ResultSet resul) {
         historial = new Historial(null, true);
         aspectosGenerales("Ex-asociados del año pasado", false);
-
+        
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-
+        
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
-
+        
         tabla.addColumn("Nombre ex-asociado");
         tabla.addColumn("Apellido ex-asociado");
         tabla.addColumn("Cédula ex-asociado");
@@ -533,7 +545,7 @@ public class ControlHistorial {
         array.add("Apellido ex-asociado");
         array.add("Cédula ex-asociado");
         llenarComboBox();
-
+        
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
@@ -541,7 +553,7 @@ public class ControlHistorial {
                 object[2] = resul.getLong(3);
                 tabla.addRow(object);
             }
-
+            
             RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
             historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(0);
@@ -554,24 +566,24 @@ public class ControlHistorial {
             Logger.getLogger(Historial.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         historial.setVisible(true);
     }
-
+    
     public void verAdministradores(ResultSet resul) {
         historial = new Historial(null, true);
         aspectosGenerales("Administradores registrados", false);
-
+        
         DefaultTableModel tabla = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-
+        
         DefaultTableModel modelo2 = new DefaultTableModel();
         historial.getJTHistorial().setModel(modelo2);
-
+        
         tabla.addColumn("USUARIO");
         tabla.addColumn("NOMBRE ADMINISTRADOR");
         tabla.addColumn("APELLIDO ADMINISTRADOR");
@@ -585,7 +597,7 @@ public class ControlHistorial {
         array.add("CEDULA ADMINISTRADOR");
         array.add("ACTIVO");
         llenarComboBox();
-
+        
         try {
             while (resul.next()) {
                 object[0] = resul.getString(1);
@@ -595,7 +607,7 @@ public class ControlHistorial {
                 object[4] = resul.getString(5);
                 tabla.addRow(object);
             }
-
+            
             RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla);
             historial.getJTHistorial().setRowSorter(sorter);
             historial.setNumeroInforme(7);
@@ -607,7 +619,7 @@ public class ControlHistorial {
             Logger.getLogger(Historial.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         historial.setVisible(true);
     }
 
@@ -638,5 +650,13 @@ public class ControlHistorial {
         }
         historial.getJCBFiltro().setModel(jc.getModel());
     }
-
+    
+    public String dividirFecha(String fecha) {
+        String dia = fecha.substring(0, 2);
+        String mes = fecha.substring(3, 5);
+        String anio = fecha.substring(6, 10);
+        String hora = fecha.substring(11);
+        return anio + "." + mes + "." + dia + " " + hora;
+    }
+    
 }
