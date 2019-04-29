@@ -101,7 +101,6 @@ public class Peticiones {
                     acces.setEstadoNumero(i);
                 }
             }
-        } else if (cantidadHabilitados < cantidadNumerosHabiles) {
         }
 
         //Descargo todos los ids de los asociados activos
@@ -117,7 +116,7 @@ public class Peticiones {
 
         for (int i = 0; i < tamanio; i++) {
             /*
-        Con el siguiente do-while, ordeno aleatoriamente los ids de las personas, en el array auxiliar 
+        Con el siguiente do-while, ordeno aleatoriamente los ids de las personas, en el array aux
              */
             do {
                 random = (int) Math.floor(Math.random() * tamanio);
@@ -125,7 +124,7 @@ public class Peticiones {
             aux.set(random, array.get(i));
 
             /*
-        En este otro do-while, guardo aleatoriamente los números del 1 hasta la cantidad de asociados, en otro array auxiliar
+        En este otro do-while, guardo aleatoriamente los números del 1 hasta la cantidad de asociados, en aux2
              */
             do {
                 random = (int) Math.floor(Math.random() * tamanio);
@@ -144,6 +143,10 @@ public class Peticiones {
 
     public boolean guardarAsociados(File file, JLabel label) {
         return acces.guardarAsociados(file, label);
+    }
+
+    public boolean insertarAsociacion(File file, JLabel label) {
+        return acces.insertarAsociacion(file, label);
     }
 
     public int numeroAsociadosActivos() throws Exception {

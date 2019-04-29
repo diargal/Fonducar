@@ -43,7 +43,8 @@ public class AccesoBD {
     private final String driver = "com.mysql.jdbc.Driver";
     private final String url = "jdbc:mysql://localhost/fonducarbs";
     private final String login = "root";
-    private final String password = "Fonducar**BonoSolidario2018*";
+    private final String password = "";
+    //private final String password = "Fonducar**BonoSolidario2018*";
     public static Connection conexion = null;
     private Date date;
     private DateFormat fechaCompleta;
@@ -170,7 +171,7 @@ public class AccesoBD {
         conexion();
         int id = 0;
         long cedula = 0;
-        String nombre = "", apellido = "";
+        String nombre, apellido;
 
         try {
 
@@ -183,40 +184,42 @@ public class AccesoBD {
                 int numeroGuardar = 0;
                 Row fila = sheet.getRow(f);
 
-                //Leo del archivo, y obtengo los valores de cada fila para crear una persona
-                prepar = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, apellido, cedula) VALUES(" + null + ",?,?,?)");
-                nombre = fila.getCell(0).getStringCellValue();
+                //Leo el archivo y obtengo los valores de cada fila para crear una persona
+                prepar = conexion.prepareStatement("INSERT INTO persona (nombre, apellido, cedula) VALUES(?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+                nombre = fila.getCell(0).getStringCellValue().toUpperCase();
                 prepar.setString(1, nombre);
-                apellido = fila.getCell(1).getStringCellValue();
+                apellido = fila.getCell(1).getStringCellValue().toUpperCase();
                 prepar.setString(2, apellido);
                 cedula = (long) fila.getCell(2).getNumericCellValue();
                 prepar.setLong(3, cedula);
-                prepar.execute();
 
-                // Selecciono el id de la persona recien creada, para poder crear un asociado
-                ResultSet resultado = resultadoConexion("SELECT P.idPersona FROM persona as P WHERE P.Cedula = '" + cedula + "'");
-                if (resultado.next()) {
-                    id = resultado.getInt(1);
+                prepar.executeUpdate();
+
+                ResultSet rs = prepar.getGeneratedKeys();
+
+                //Obtengo el id de la persona creada
+                while (rs.next()) {
+                    id = rs.getInt(1);
                 }
 
                 //Creo el asociado
-                prepar = conexion.prepareStatement("Insert into asociado (idAsociado, Estado, idPersona) values (" + null + ",0,?)");
+                prepar = conexion.prepareStatement("Insert into asociado (Estado, idPersona) values (0,?)", PreparedStatement.RETURN_GENERATED_KEYS);
                 prepar.setDouble(1, id);
-                prepar.execute();
+                prepar.executeUpdate();
+
+                rs = prepar.getGeneratedKeys();
 
                 //obtengo el id del nuevo asociado y lo guardo
-                resultado = resultadoConexion("select A.idAsociado from asociado as A where A.idPersona = '" + id + "'");
-                if (resultado.next()) {
-                    id = resultado.getInt(1);
+                if (rs.next()) {
+                    id = rs.getInt(1);
                 }
 
                 /*
-                Ahora verifico si aún no se han asignado los números a cada asociado.
+                Ahora verifico si aún no se han asignado los números a todos los asociados.
                  */
                 if (numerosAsignados()) {//si hay números asignados
 
-                    int cantidad = cantidadNumAsociados();
-                    numeroGuardar = cantidad + 1;
+                    numeroGuardar = cantidadNumAsociados() + 1;
 
                     if (!nuevoNumero(numeroGuardar)) {//si ya el número existía en la tabla numero, debo cambiar su estado a 0
                         prepar = conexion.prepareStatement("UPDATE `numero` as n SET n.Estado = 0 "
@@ -226,17 +229,17 @@ public class AccesoBD {
                     }
 
                 } else if (asociadosVacia()) {//no han sido asignados y está completamente vacía la tabla asociados
-
                     numeroGuardar = f;
                     nuevoNumero(numeroGuardar);
                 }
 
-                if (numeroGuardar != 0) {
+                //asocio el nuevo número con el asociado
+                if (numeroGuardar > 0) {
                     prepar = conexion.prepareStatement("Insert into numeroasociado (idNumeroAsociado, Fecha, idAsociado, idNumero) values (" + null + ",?,?,?)");
                     prepar.setString(1, fechaCompleta.format(date) + "");
                     prepar.setDouble(2, id);
                     prepar.setDouble(3, numeroGuardar);
-                    prepar.execute();
+                    prepar.executeUpdate();
                 }
             }
 
@@ -248,12 +251,61 @@ public class AccesoBD {
 
         } catch (IOException | InvalidFormatException ex) {
         } catch (SQLException es) {
+            file = null;
             JOptionPane.showMessageDialog(null, EXISTE + cedula, "Coincidencia en registro.", JOptionPane.ERROR_MESSAGE);
         } catch (IllegalStateException | InvalidOperationException de) {
             JOptionPane.showMessageDialog(null, ERRORBDC, "Error de lectura", JOptionPane.ERROR_MESSAGE);
         }
         label.setVisible(false);
         return false;
+    }
+
+    public boolean insertarAsociacion(File file, JLabel label) {
+        try {
+            conexion();
+
+            XSSFWorkbook wb = new XSSFWorkbook(file);
+            XSSFSheet sheet = wb.getSheetAt(0);
+
+            int numFilas = sheet.getLastRowNum();
+
+            for (int f = 1; f <= numFilas; f++) {
+                Row fila = sheet.getRow(f);
+
+                long cedula = (long) fila.getCell(2).getNumericCellValue();
+                int numero = (int) fila.getCell(3).getNumericCellValue();
+
+                ResultSet resultado = idAsociado(cedula);
+
+                while (resultado.next()) {
+
+                    prepar = conexion.prepareStatement("INSERT INTO numeroasociado (fecha, idAsociado, idNumero) VALUES(?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+                    prepar.setString(1, fechaCompleta.format(date));
+                    prepar.setInt(2, resultado.getInt(1));
+                    prepar.setInt(3, numero);
+
+                    prepar.executeUpdate();
+                    ResultSet rs = prepar.getGeneratedKeys();
+
+                    while (rs.next()) {
+
+                    }
+                }
+
+            }
+
+            desconectar();
+        } catch (IOException ex) {
+            Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } catch (InvalidFormatException ex) {
+            Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return true;
     }
 
     /* -------------------------------------------------------------------------------------------------------------------------- */
@@ -650,11 +702,10 @@ public class AccesoBD {
     public boolean numerosAsignados() {
         String fecha2 = fechaAnio.format(date);
         try {
-            ResultSet resultado = resultadoConexion("select na.fecha "
-                    + "from numeroasociado as na "
-                    + "where '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15)");
+            ResultSet resultado = resultadoConexion("SELECT count(na.fecha)  FROM numeroasociado as na WHERE Fecha LIKE '%" + fecha2 + "%'");
             if (resultado.next()) {
-                return true;
+
+                return resultado.getInt(1) > 0 ? true : false;
             }
         } catch (SQLException ex) {
             Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
@@ -669,13 +720,13 @@ public class AccesoBD {
             if (resultado.next()) {
                 if (resultado.getInt(1) == 0) {
                     desconectar();
-                    return false;
+                    return true;
                 }
             }
         } catch (SQLException ex) {
         }
         // desconectar();
-        return true;
+        return false;
     }
 
     /*
@@ -752,7 +803,7 @@ public class AccesoBD {
 //            desconectar();
             return true;
         } catch (java.sql.SQLException er) {
-            JOptionPane.showMessageDialog(null, "Ocurriò un problema en el proceso");
+            JOptionPane.showMessageDialog(null, "Ocurrió un problema en el proceso");
             return false;
         }
     }
@@ -817,9 +868,7 @@ public class AccesoBD {
 
     public int cantidadNumAsociados() {
         try {
-            ResultSet resultado = resultadoConexion("SELECT count(na.idNumeroAsociado) "
-                    + "FROM `numeroasociado` as na "
-                    + "WHERE '" + fechaAnio.format(date) + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) ");
+            ResultSet resultado = resultadoConexion("SELECT count(na.idNumeroAsociado) FROM `numeroasociado` as na WHERE na.fecha like '%" + fechaAnio.format(date) + "%'");
             if (resultado.next()) {
                 return resultado.getInt(1);
             }

@@ -27,14 +27,9 @@ import static Modelo.Mensajes.A_RACTUALES;
 import static Modelo.Mensajes.A_REPORTESORTEOS;
 import Modelo.Peticiones;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
-import java.io.File;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -51,14 +46,10 @@ public class MainControl extends javax.swing.JFrame {
     private Sorteo sorteo;
     public float premio;
     public int tipoPremio;
-    private File archivo;
-    private static Historial historial;
     private NumSorteos numeroSorteos;
     private ControlHistorial controlHistorial;
     private ControlArchivos cntrlArchivos;
     private AddAdministrador agregarAdmin;
-    private ImageIcon imagen;
-    private Icon icono;
     private Peticiones peticion;
 
     public MainControl() {
@@ -82,16 +73,17 @@ public class MainControl extends javax.swing.JFrame {
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         jLabel2Cargando.setVisible(false);
-//        JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+        mostrarParticipantes();
     }
 
     public void prepararAsociacion() {
         if (!peticion.numerosAsignados()) {//si no hay números asignados en el año actual, se prepara para una nueva asociación
-            if (peticion.prepararAsociacion()) {
-            }
+            peticion.prepararAsociacion();
         }
-        DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        Date date = new Date();
+        mostrarParticipantes();
+    }
+
+    public final void mostrarParticipantes() {
         try {
             JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
             JLActualizacion.setText("Está trabajando con el backup de fecha y hora: " + peticion.fechaBackup());
@@ -174,6 +166,8 @@ public class MainControl extends javax.swing.JFrame {
         JMAAsociados = new javax.swing.JMenuItem();
         JMIModificar = new javax.swing.JMenuItem();
         JMIModificarDatos = new javax.swing.JMenuItem();
+        jMenu6 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         JMICrearBackup = new javax.swing.JMenuItem();
         JMIRestaurarBackup = new javax.swing.JMenuItem();
@@ -424,6 +418,18 @@ public class MainControl extends javax.swing.JFrame {
         });
         jMenu1.add(JMIModificarDatos);
 
+        jMenu6.setText("Operaciones especiales");
+
+        jMenuItem2.setText("Cargar números y asociados relacionados previamente");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMenuItem2);
+
+        jMenu1.add(jMenu6);
+
         JMOperaciones.add(jMenu1);
 
         jMenu2.setText("Backup");
@@ -523,17 +529,15 @@ public class MainControl extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JMAAsociadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMAAsociadosActionPerformed
-        cntrlArchivos.cargarArchivo(controlHistorial);
-        try {
-            JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
-        } catch (Exception ex) {
-            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        cntrlArchivos.cargarArchivo(controlHistorial, true);
+        mostrarParticipantes();
+
     }//GEN-LAST:event_JMAAsociadosActionPerformed
 
     private void JMIAsignarAsoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIAsignarAsoActionPerformed
 
-        if (peticion.numerosAsignados() && !JCBPruebaSorteos.isSelected()) {
+        if (peticion.numerosAsignados()) {
 
             JOptionPane.showMessageDialog(null, YGENERADOS, "Información importante", JOptionPane.INFORMATION_MESSAGE);
 
@@ -542,11 +546,9 @@ public class MainControl extends javax.swing.JFrame {
                 @Override
                 public void run() {
 
-                    boolean asociar = true;
-
                     jLabel2Cargando.setVisible(true);
 
-                    asociar = peticion.asociarNumeros();
+                    boolean asociar = peticion.asociarNumeros();
 
                     jLabel2Cargando.setVisible(false);
 
@@ -555,6 +557,7 @@ public class MainControl extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(MainControl.this, REXITOSO, "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
                         try {
                             controlHistorial.numerosActuales(peticion.numerosActuales(A_NUMEROS));
+                            mostrarParticipantes();
                         } catch (SQLException ex) {
                             Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -623,11 +626,7 @@ public class MainControl extends javax.swing.JFrame {
     private void JMIModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIModificarActionPerformed
         CambiarEstado cambiar = new CambiarEstado(this, true);
         cambiar.setVisible(true);
-        try {
-            JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
-        } catch (Exception ex) {
-            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        mostrarParticipantes();
     }//GEN-LAST:event_JMIModificarActionPerformed
 
     private void JMIActualesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIActualesActionPerformed
@@ -793,7 +792,7 @@ public class MainControl extends javax.swing.JFrame {
             switch (resultado) {
                 case 0:
 
-                    JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
+                    mostrarParticipantes();
                     JOptionPane.showMessageDialog(null, "Restauración de backup realizada!", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
                     JLCuanto.setText("");
                     sorteosRealizados = 0;
@@ -837,6 +836,16 @@ public class MainControl extends javax.swing.JFrame {
         agregarAdmin.setVisible(true);
     }//GEN-LAST:event_JMICambiarPassActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+
+        if (!peticion.numerosAsignados()) {
+            cntrlArchivos.cargarArchivo(controlHistorial, false);
+            mostrarParticipantes();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se puede hacer el proceso, porque este año ya hay números generados", "No se puede continuar con la solicitud", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton JBSorteo;
     public javax.swing.JCheckBoxMenuItem JCBPruebaSorteos;
@@ -878,9 +887,11 @@ public class MainControl extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     public javax.swing.JMenuItem jMenuItem4;
     public javax.swing.JMenuItem jMenuItem5;
     // End of variables declaration//GEN-END:variables

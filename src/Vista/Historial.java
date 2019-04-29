@@ -12,8 +12,6 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.NumberFormat;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,7 +23,6 @@ import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import net.sf.jasperreports.engine.JRException;
 
 /**
  *
@@ -39,6 +36,7 @@ public class Historial extends javax.swing.JDialog {
     private NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
     private TableRowSorter trsFiltro;
     public int numeroInforme;
+    private boolean opcionImportar = true;
     private Peticiones peticion;
 
     public Historial(java.awt.Frame parent, boolean modal) {
@@ -114,6 +112,14 @@ public class Historial extends javax.swing.JDialog {
 
     public JPanel getJPFiltro() {
         return JPFiltro;
+    }
+
+    public boolean isOpcionImportar() {
+        return opcionImportar;
+    }
+
+    public void setOpcionImportar(boolean opcionImportar) {
+        this.opcionImportar = opcionImportar;
     }
 
     public void setJPFiltro(JPanel JPFiltro) {
@@ -263,11 +269,15 @@ public class Historial extends javax.swing.JDialog {
 
                 if (tipoAccion) {
                     jLabel2Cargando.setVisible(true);
-                    if (peticion.guardarAsociados(archivo, jLabel2Cargando)) {
+
+                    boolean operacionRealizada = opcionImportar ? peticion.guardarAsociados(archivo, jLabel2Cargando) : peticion.insertarAsociacion(archivo, jLabel2Cargando);
+
+                    if (operacionRealizada) {
 
                         jLabel2Cargando.setVisible(false);
                         JOptionPane.showMessageDialog(Historial.this, "Se cargaron todos los datos a la BD", "Proceso exitoso", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
+
                     }
                 } else {
 

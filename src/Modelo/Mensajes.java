@@ -41,6 +41,7 @@ public class Mensajes {
 
     /*Información relevante*/
     public static final String MENSAJE = "Recuerde que el formato del archivo para cargar nuevos asociados es: NOMBRE, APELLIDOS y CEDULA respectivamente.";
+    public static final String MENSAJE2 = "Recuerde que se necesita que el formato del archivo, sea: NOMBRE, APELLIDOS, CEDULA y NÚMERO respectivamente";
     public static final String ERRORBDC = "El formato requerido no es correcto. Recuerde que es: NOMBRE, CEDULA, NUMERO respectivamente y con su tipo de dato correspondiente.";
     public static final String ERROR_LOGIN = "Error de inicio de sesión.";
     public static final String PREMIO = "Ingrese valor del premio.";

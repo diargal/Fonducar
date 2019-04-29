@@ -70,7 +70,6 @@ public class AccesControl extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Inicio de Sesión");
         setMinimumSize(new java.awt.Dimension(755, 413));
-        setPreferredSize(new java.awt.Dimension(780, 440));
         setResizable(false);
         getContentPane().setLayout(null);
 

@@ -1,12 +1,13 @@
 package Controlador;
 
 import DataAcces.AccesoBD;
+import Modelo.Mensajes;
 import static Modelo.Mensajes.COPIA;
 import static Modelo.Mensajes.ERRORBDC;
 import static Modelo.Mensajes.INFORME;
 import static Modelo.Mensajes.MENSAJE;
+import static Modelo.Mensajes.MENSAJE2;
 import static Modelo.Mensajes.RESTAURACION;
-import Modelo.Peticiones;
 import Modelo.Sorteo;
 import Vista.Informes.Informe;
 import java.awt.HeadlessException;
@@ -20,8 +21,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -60,12 +59,13 @@ public class ControlArchivos {
     /*
     Permite cargar del PC, el archivo de excel con el cual ingresarán asociados
      */
-    public void cargarArchivo(ControlHistorial cntrl) {
+    public void cargarArchivo(ControlHistorial cntrl, boolean op) {
         try {
             File archivo;
             JFileChooser selecArchivo = new JFileChooser();
 
-            JOptionPane.showMessageDialog(null, MENSAJE, "Información importante", JOptionPane.INFORMATION_MESSAGE);
+            String mensaje = op ? MENSAJE : MENSAJE2;
+            JOptionPane.showMessageDialog(null, mensaje, "Información importante", JOptionPane.INFORMATION_MESSAGE);
 
             selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xls)", "xls"));
             selecArchivo.setFileFilter(new FileNameExtensionFilter("Excel (*.xlsx)", "xlsx"));
@@ -75,7 +75,7 @@ public class ControlArchivos {
 
             if (archivo.getName().endsWith("xls") || archivo.getName().endsWith("xlsx")) {
                 JOptionPane.showMessageDialog(null, "Importación exitosa");
-                cntrl.Importar(archivo);
+                cntrl.Importar(archivo, op);
             } else {
                 JOptionPane.showMessageDialog(null, "Elija un formato válido");
             }
@@ -189,7 +189,7 @@ public class ControlArchivos {
                     fos.write(buffer, 0, leido);
                     leido = is.read(buffer);
                 }
-                
+
                 fos.close();
 
                 /*
