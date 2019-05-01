@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 public class Peticiones {
 
     private AccesoBD acces;
+    private boolean rs;
+    private ResultSet rst;
 
     public Peticiones() {
         acces = new AccesoBD();
@@ -28,86 +30,102 @@ public class Peticiones {
     }
 
     public boolean login(String usuario, String pass, boolean tipo) {
-        return acces.login(usuario, pass, tipo);
+        acces.conexion();
+        rs = acces.login(usuario, pass, tipo);
+        acces.desconectar();
+        return rs;
     }
 
     public boolean numerosAsignados() {
-        return acces.numerosAsignados();
+        acces.conexion();
+        rs = acces.numerosAsignados();
+        acces.desconectar();
+        return rs;
     }
 
     public ResultSet numerosActuales(String info) throws SQLException {
+        acces.conexion();
         acces.guardarOperacion(info);
-        return acces.numerosActuales();
+        rst = acces.numerosActuales();
+        acces.desconectar();
+        return rst;
     }
 
     public ResultSet historialModificaciones(String info) throws SQLException {
+        acces.conexion();
         acces.guardarOperacion(info);
-        return acces.historialModificaciones();
+        rst = acces.historialModificaciones();
+        acces.desconectar();
+        return rst;
     }
 
     public ResultSet historialSorteos(String info) throws SQLException {
+        acces.conexion();
         acces.guardarOperacion(info);
-        return acces.historialSorteos();
+        rst = acces.historialSorteos();
+        acces.desconectar();
+        return rst;
     }
 
     public ResultSet historialNumeros(String info) throws SQLException {
+        acces.conexion();
         acces.guardarOperacion(info);
-        return acces.historialNumeros();
+        rst = acces.historialNumeros();
+        acces.desconectar();
+        return rst;
     }
 
     public ResultSet historialEASIN(String info) throws SQLException {
+        acces.conexion();
         acces.guardarOperacion(info);
-        return acces.historialEASIN();
+        rst = acces.historialEASIN();
+        acces.desconectar();
+        return rst;
     }
 
     public ResultSet historialEACON(String info) throws SQLException {
+        acces.conexion();
         acces.guardarOperacion(info);
-        return acces.historialEACON();
+        rst = acces.historialEACON();
+        acces.desconectar();
+        return rst;
     }
 
     public ResultSet historialHabilitadosActuales(String info) throws SQLException {
+        acces.conexion();
         acces.guardarOperacion(info);
-        return acces.historialHabilitadosActuales();
+        rst = acces.historialHabilitadosActuales();
+        acces.desconectar();
+        return rst;
     }
 
     public ResultSet historialInhabilitadosActuales(String info) throws SQLException {
+        acces.conexion();
         acces.guardarOperacion(info);
-        return acces.historialInhabilitadosActuales();
+        rst = acces.historialInhabilitadosActuales();
+        acces.desconectar();
+        return rst;
     }
 
     public ResultSet verAdministradores() throws SQLException {
-        return acces.verAdministradores();
+        acces.conexion();
+        rst = acces.verAdministradores();
+        acces.desconectar();
+        return rst;
     }
 
     public boolean asociarNumeros() {
 
-        /*
-        Primero verificaré y haré que haya el mismo número de personas habilitadas y de números habilitados
-         */
         acces.conexion();
-        int cantidadHabilitados = acces.numerodeAsociados(true);
-        int cantidadNumerosHabiles = acces.cantidadNumerosHabiles(true);
-        int cantidadTotal = acces.cantidadNumerosHabiles(false);
-        int random = 0;
 
-        if (cantidadHabilitados > cantidadNumerosHabiles) {
-            if (cantidadHabilitados >= cantidadTotal) {
-                acces.todoNumeroHabilitado();//habilito todos los números
-                for (int i = cantidadTotal + 1; i <= cantidadHabilitados; i++) {
-                    acces.nuevoNumero(i);//creo más numeros
-                }
-            } else { //si la cantidad de números habilitados (na) es menor que los que ya existen, sólo habilito hasta el número igual a na.
-                for (int i = cantidadNumerosHabiles + 1; i <= cantidadHabilitados; i++) {
-                    acces.setEstadoNumero(i);
-                }
-            }
-        }
+        acces.prepararAsociacion();
 
         //Descargo todos los ids de los asociados activos
         ArrayList<Integer> array = new ArrayList<>(acces.idsAsociados());
         ArrayList<Integer> aux = new ArrayList<>(array);
         ArrayList<Integer> aux2 = new ArrayList<>(array);
         int tamanio = array.size();
+        int random = 0;
 
         for (int i = 0; i < tamanio; i++) {
             aux.set(i, 0);
@@ -142,26 +160,44 @@ public class Peticiones {
     }
 
     public boolean guardarAsociados(File file, JLabel label) {
-        return acces.guardarAsociados(file, label);
+        acces.conexion();
+        rs = acces.guardarAsociados(file, label);
+        acces.desconectar();
+        return rs;
     }
 
     public boolean insertarAsociacion(File file, JLabel label) {
-        return acces.insertarAsociacion(file, label);
+        acces.conexion();
+        rs = acces.insertarAsociacion(file, label);
+        acces.desconectar();
+        return rs;
     }
 
     public int numeroAsociadosActivos() throws Exception {
-        return acces.numeroAsociadosActivos();
+        acces.conexion();
+        int rs = acces.cantidadNumerosHabiles(true);
+        acces.desconectar();
+        return rs;
     }
 
     public boolean cambiarEstado(long cedula, int tipo, String texto) {
-        return acces.cambiarEstado(cedula, tipo, texto);
+        acces.conexion();
+        rs = acces.cambiarEstado(cedula, tipo, texto);
+        acces.desconectar();
+        return rs;
     }
 
     public int estadoAsociado(long cedula) {
-        return acces.estadoAsociado(cedula);
+        acces.conexion();
+        int rs = acces.estadoAsociado(cedula);
+        acces.desconectar();
+        return rs;
     }
 
     public ArrayList<String> nombreAsociado(long cedula) {
+
+        acces.conexion();
+
         ArrayList<String> array = new ArrayList<>();
         try {
             ResultSet resultado = acces.idAsociado(cedula);
@@ -172,11 +208,15 @@ public class Peticiones {
             }
         } catch (SQLException ex) {
         }
+
+        acces.desconectar();
+
         return array;
     }
 
     public ArrayList<String> nombreAdmin(long cedula, boolean reingreso) {
-//        acces.conexion();
+        acces.conexion();
+
         ArrayList<String> datos = new ArrayList<>();
         try {
             ResultSet resultado = acces.nombreAdmin(cedula, reingreso);
@@ -189,35 +229,58 @@ public class Peticiones {
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-//        acces.desconectar();
+
+        acces.desconectar();
+
         return datos;
     }
 
     public boolean modificarAsociado(String n, String m, Long k) {
-        return acces.modificarAsociado(n, m, k);
+        acces.conexion();
+        rs = acces.modificarAsociado(n, m, k);
+        acces.desconectar();
+        return rs;
     }
 
     public int guardarAdministrador(Administrador admin) {
-        return acces.guardarAdministrador(admin);
+        acces.conexion();
+        int i = acces.guardarAdministrador(admin);
+        acces.desconectar();
+        return i;
     }
 
     public boolean deleteAdmin(Administrador admin) {
-        return acces.deleteAdmin(admin);
+        acces.conexion();
+        rs = acces.deleteAdmin(admin);
+        acces.desconectar();
+        return rs;
     }
 
     public boolean reingresarAdmin(Administrador admin) {
-        return acces.reingresarAdmin(admin);
+        acces.conexion();
+        rs = acces.reingresarAdmin(admin);
+        acces.desconectar();
+        return rs;
     }
 
     public boolean modificarAdmin(Administrador admin) {
-        return acces.modificarAdmin(admin);
+        acces.conexion();
+        rs = acces.modificarAdmin(admin);
+        acces.desconectar();
+        return rs;
     }
 
     public boolean prepararAsociacion() {
-        return acces.prepararAsociacion();
+        acces.conexion();
+        rs = acces.prepararAsociacion();
+        acces.desconectar();
+        return rs;
     }
 
     public String fechaBackup() {
-        return acces.fechaBackup();
+        acces.conexion();
+        String s = acces.fechaBackup();
+        acces.desconectar();
+        return s;
     }
 }

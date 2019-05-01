@@ -27,9 +27,11 @@ import static Modelo.Mensajes.A_RACTUALES;
 import static Modelo.Mensajes.A_REPORTESORTEOS;
 import Modelo.Peticiones;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -46,6 +48,7 @@ public class MainControl extends javax.swing.JFrame {
     private Sorteo sorteo;
     public float premio;
     public int tipoPremio;
+    private static Historial historial;
     private NumSorteos numeroSorteos;
     private ControlHistorial controlHistorial;
     private ControlArchivos cntrlArchivos;
@@ -73,17 +76,19 @@ public class MainControl extends javax.swing.JFrame {
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         jLabel2Cargando.setVisible(false);
-        mostrarParticipantes();
+        prepararAsociacion();
     }
 
-    public void prepararAsociacion() {
+    public final void prepararAsociacion() {
+        peticion.getAcces().conexion();
         if (!peticion.numerosAsignados()) {//si no hay números asignados en el año actual, se prepara para una nueva asociación
             peticion.prepararAsociacion();
         }
         mostrarParticipantes();
+        peticion.getAcces().desconectar();
     }
 
-    public final void mostrarParticipantes() {
+    public void mostrarParticipantes() {
         try {
             JLActivos.setText("Número de participantes para los sorteos: " + peticion.numeroAsociadosActivos());
             JLActualizacion.setText("Está trabajando con el backup de fecha y hora: " + peticion.fechaBackup());
@@ -289,6 +294,11 @@ public class MainControl extends javax.swing.JFrame {
 
         JLFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Fondo.gif"))); // NOI18N
         JLFondo.setMaximumSize(new java.awt.Dimension(1400, 800));
+        JLFondo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLFondoMouseClicked(evt);
+            }
+        });
         getContentPane().add(JLFondo);
         JLFondo.setBounds(0, -26, 1370, 760);
 
@@ -531,7 +541,7 @@ public class MainControl extends javax.swing.JFrame {
     private void JMAAsociadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMAAsociadosActionPerformed
 
         cntrlArchivos.cargarArchivo(controlHistorial, true);
-        mostrarParticipantes();
+        prepararAsociacion();
 
     }//GEN-LAST:event_JMAAsociadosActionPerformed
 
@@ -792,8 +802,9 @@ public class MainControl extends javax.swing.JFrame {
             switch (resultado) {
                 case 0:
 
-                    mostrarParticipantes();
+                    //mostrarParticipantes();
                     JOptionPane.showMessageDialog(null, "Restauración de backup realizada!", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
+
                     JLCuanto.setText("");
                     sorteosRealizados = 0;
                     numerodeSorteos = 0;
@@ -801,6 +812,9 @@ public class MainControl extends javax.swing.JFrame {
                     JLBalota2.setIcon(null);
                     JLBalota3.setIcon(null);
                     JLBalota4.setIcon(null);
+
+                    prepararAsociacion();
+
                     break;
                 case 2:
                     JOptionPane.showMessageDialog(null, "No se pudo realizar la restauración, por favor reinicia el programa e intenta nuevamente!", "Operación fallida", JOptionPane.ERROR_MESSAGE);
@@ -845,6 +859,10 @@ public class MainControl extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No se puede hacer el proceso, porque este año ya hay números generados", "No se puede continuar con la solicitud", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void JLFondoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLFondoMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JLFondoMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton JBSorteo;

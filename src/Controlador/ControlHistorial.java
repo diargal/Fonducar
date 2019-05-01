@@ -175,6 +175,7 @@ public class ControlHistorial {
             historial.setNumeroInforme(1);
             historial.getJTHistorial().setModel(tabla);
             historial.getJBSubir().setEnabled(true);
+
         } catch (SQLException ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
