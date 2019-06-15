@@ -5,12 +5,9 @@
  */
 package Logica;
 
-import DataAcces.AccesoBD;
 import static Logica.BonoSolidario.accesoBD;
-import Vistas.Controlador.hiloCarga;
 import java.util.ArrayList;
 import java.util.Random;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -128,6 +125,7 @@ public class Sorteo {
                 return false;
             }
         }
+        accesoBD.desconectar();
         return true;
     }
 

@@ -54,7 +54,7 @@ public class NumSorteos extends javax.swing.JDialog {
         JLInfo.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         JLInfo.setText("Número de sorteos:");
 
-        JTxFNumero.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        JTxFNumero.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         JTxFNumero.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         JTxFNumero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -81,7 +81,7 @@ public class NumSorteos extends javax.swing.JDialog {
         JLConfirmacion.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         JLConfirmacion.setText("Confirmar sorteos:");
 
-        JTxFConfirmacion.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        JTxFConfirmacion.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         JTxFConfirmacion.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         JTxFConfirmacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -173,7 +173,7 @@ public class NumSorteos extends javax.swing.JDialog {
             if (num1 == num2) {
                 if (JOptionPane.showConfirmDialog(null, "Número de sorteos a realizar: " + num1 + ". \nDesea continuar?", "Confirmación de sorteos", JOptionPane.YES_NO_OPTION) == 0) {
                     numerodeSorteos = num1;
-                    this.setVisible(false);
+                    dispose();
                 }
                 JTxFNumero.setText("");
                 JTxFConfirmacion.setText("");

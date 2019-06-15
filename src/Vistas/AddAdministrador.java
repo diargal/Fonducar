@@ -8,6 +8,9 @@ package Vistas;
 import Logica.Administrador;
 import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.administrador;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import static java.awt.image.ImageObserver.WIDTH;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,7 +29,7 @@ public class AddAdministrador extends javax.swing.JDialog {
     public AddAdministrador(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setIconImage (new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
+        setIconImage(new ImageIcon(getClass().getResource("/Imagenes/Logo.png")).getImage());
         setResizable(false);
         setLocationRelativeTo(this);
         tipoOperacion = 0;
@@ -148,6 +151,12 @@ public class AddAdministrador extends javax.swing.JDialog {
         JLSUUsuario.setText("Usuario:");
 
         JLSUPass.setText("Password:");
+
+        JTxFSUPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JTxFSUPassKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout JPSULayout = new javax.swing.GroupLayout(JPSU);
         JPSU.setLayout(JPSULayout);
@@ -326,6 +335,14 @@ public class AddAdministrador extends javax.swing.JDialog {
             evt.consume();
         }
     }//GEN-LAST:event_JTxFNombreKeyTyped
+
+    private void JTxFSUPassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFSUPassKeyPressed
+        ActionEvent jd = new ActionEvent(evt, WIDTH, "Hola mundo");
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.JBAceptarActionPerformed(jd);
+        }
+    }//GEN-LAST:event_JTxFSUPassKeyPressed
 
     public boolean vacio(JPanel jpa) {
         for (int i = 0; i < jpa.getComponentCount(); i++) {

@@ -28,41 +28,41 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="JLValores" min="-2" pref="255" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="451" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="JBCancelar" min="-2" pref="160" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="JBAceptar" min="-2" pref="163" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Component id="JBCancelar" min="-2" pref="127" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="JBAceptar" min="-2" pref="113" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
+                      <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="JLValores" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="451" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="JLValores" pref="49" max="32767" attributes="0"/>
+      <Group type="103" groupAlignment="1" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+              <Component id="JLValores" min="-2" pref="32" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                  <Component id="JBCancelar" max="32767" attributes="0"/>
-                  <Component id="JBAceptar" min="-2" pref="41" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="JBCancelar" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
+                  <Component id="JBAceptar" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+              <EmptySpace pref="70" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -81,33 +81,25 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
+                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="JTxFValor" alignment="1" min="-2" pref="422" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="JLValor" min="-2" pref="236" max="-2" attributes="0"/>
-                                          <Component id="JLConfirmacion" min="-2" pref="216" max="-2" attributes="0"/>
-                                          <Component id="JRBMenor" min="-2" pref="338" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="175" max="-2" attributes="0"/>
-                                      <Component id="JTxFConfirmacion1" min="-2" pref="422" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <EmptySpace min="0" pref="117" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="JLValor" min="-2" pref="236" max="-2" attributes="0"/>
+                      <Component id="JLConfirmacion" min="-2" pref="216" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="JRBMenor" min="-2" pref="338" max="-2" attributes="0"/>
+                          <EmptySpace pref="32" max="32767" attributes="0"/>
                           <Component id="JRBMayor" min="-2" pref="304" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="JTxFValor" alignment="1" min="-2" pref="482" max="-2" attributes="0"/>
+                      <Component id="JTxFConfirmacion1" alignment="1" min="-2" pref="480" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="117" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -116,18 +108,18 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="JLValor" min="-2" pref="35" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="JTxFValor" max="32767" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   <Component id="JLConfirmacion" min="-2" pref="35" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="JTxFConfirmacion1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="JRBMenor" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="JRBMayor" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -180,8 +172,9 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="JTxFValor">
           <Properties>
+            <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="36" style="1"/>
+              <Font name="Tahoma" size="48" style="1"/>
             </Property>
           </Properties>
           <Events>
@@ -192,8 +185,9 @@
         </Component>
         <Component class="javax.swing.JFormattedTextField" name="JTxFConfirmacion1">
           <Properties>
+            <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="36" style="1"/>
+              <Font name="Tahoma" size="48" style="1"/>
             </Property>
           </Properties>
           <Events>

@@ -33,7 +33,7 @@ public class ValorSorteo extends javax.swing.JDialog {
     NumberFormatter dnFormat = new NumberFormatter(dispFormat);
     NumberFormatter enFormat = new NumberFormatter(editFormat);
     DefaultFormatterFactory currFactory = new DefaultFormatterFactory(dnFormat, dnFormat, enFormat);
-
+    
     public ValorSorteo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -103,7 +103,8 @@ public class ValorSorteo extends javax.swing.JDialog {
         JLConfirmacion.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         JLConfirmacion.setText("Confirmación del valor");
 
-        JTxFValor.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        JTxFValor.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        JTxFValor.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         JTxFValor.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 JTxFValorFocusLost(evt);
@@ -118,7 +119,8 @@ public class ValorSorteo extends javax.swing.JDialog {
             }
         });
 
-        JTxFConfirmacion1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        JTxFConfirmacion1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        JTxFConfirmacion1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         JTxFConfirmacion1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 JTxFConfirmacion1KeyPressed(evt);
@@ -133,42 +135,38 @@ public class ValorSorteo extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JLValor, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLConfirmacion, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(JTxFValor, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(28, 28, 28)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(JLValor, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(JLConfirmacion, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(JRBMenor, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(175, 175, 175)
-                                    .addComponent(JTxFConfirmacion1, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 117, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(JRBMenor, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                         .addComponent(JRBMayor, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGap(14, 14, 14))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JTxFValor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JTxFConfirmacion1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(117, 117, 117))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(JLValor, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(JTxFValor)
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addComponent(JLConfirmacion, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(18, 18, 18)
                 .addComponent(JTxFConfirmacion1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JRBMenor)
                     .addComponent(JRBMayor))
-                .addGap(42, 42, 42))
+                .addContainerGap())
         );
 
         JBAceptar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -195,31 +193,32 @@ public class ValorSorteo extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(JBCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(JBAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(JLValores, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(451, 451, 451))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(JBCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(JBAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(JLValores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(451, 451, 451))))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(JLValores, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(JLValores, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(JBCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(JBCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JBAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
 
         pack();
@@ -231,7 +230,7 @@ public class ValorSorteo extends javax.swing.JDialog {
 
     private void JBAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAceptarActionPerformed
         boolean error = true;
-
+        
         try {
             if (valorSorteo <= 0 || JTxFValor.getText().isEmpty() || JTxFConfirmacion1.getText().isEmpty() || valorConfirmacion <= 0) {
                 JOptionPane.showMessageDialog(this, C_VALIDA, "Monto de premio no válido", JOptionPane.ERROR_MESSAGE);
@@ -292,7 +291,7 @@ public class ValorSorteo extends javax.swing.JDialog {
         if ((c < '0' || c > '9')) {
             evt.consume();
         } else {
-
+            
             JTxFValor.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyReleased(KeyEvent e) {
@@ -331,16 +330,20 @@ public class ValorSorteo extends javax.swing.JDialog {
     private void JTxFConfirmacion1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTxFConfirmacion1KeyPressed
 
     }//GEN-LAST:event_JTxFConfirmacion1KeyPressed
-
-    public void visible(int numero) {
-        JLValores.setText("Valores para el sorteo número " + numero);
+    
+    public void visible(int numero, boolean prueba) {
+        if (prueba) {
+            JLValores.setText("Datos para el sorteo de prueba");
+        } else {
+            JLValores.setText("Valores para el sorteo número " + numero);
+        }
         this.setVisible(true);
         JTxFValor.setText("");
         JTxFConfirmacion1.setText("");
         JRBMayor.setSelected(false);
         JRBMenor.setSelected(false);
     }
-
+    
     public double[] valoresSorteo() {
         double[] valores = new double[2];
         valores[0] = valor;

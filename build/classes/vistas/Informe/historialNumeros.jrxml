@@ -32,7 +32,7 @@
 		<band height="63" splitType="Stretch">
 			<textField>
 				<reportElement x="14" y="10" width="379" height="42"/>
-				<textElement textAlignment="Justified">
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Bahnschrift" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{Subtitulo}]]></textFieldExpression>

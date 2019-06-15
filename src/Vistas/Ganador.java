@@ -5,13 +5,9 @@
  */
 package Vistas;
 
-import static Imagenes.ControlImagenes.BOMBA;
 import static Imagenes.ControlImagenes.DERECHA;
 import static Imagenes.ControlImagenes.IZQUIERDA;
-import java.awt.Color;
 import javax.swing.JLabel;
-import org.jvnet.substance.SubstanceLookAndFeel;
-import org.jvnet.substance.watermark.SubstanceImageWatermark;
 
 /**
  *
@@ -44,27 +40,28 @@ public class Ganador extends javax.swing.JDialog {
 
         JLNombreGanador = new javax.swing.JLabel();
         JLPremio = new javax.swing.JLabel();
-        JL1 = new javax.swing.JLabel();
         JL2 = new javax.swing.JLabel();
-        JLBomba = new javax.swing.JLabel();
+        JL1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         JLNombreGanador.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 48)); // NOI18N
         JLNombreGanador.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        JLNombreGanador.setText("dddd");
         getContentPane().add(JLNombreGanador, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 840, 60));
 
         JLPremio.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 48)); // NOI18N
         JLPremio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        JLPremio.setText("qqqqq");
         getContentPane().add(JLPremio, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 840, 70));
 
-        JL1.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 48)); // NOI18N
-        getContentPane().add(JL1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 420, 280));
-        getContentPane().add(JL2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 20, 420, 280));
+        JL2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Ganador/CCde.gif"))); // NOI18N
+        getContentPane().add(JL2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, -80, 423, 430));
 
-        JLBomba.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(JLBomba, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 580, 310));
+        JL1.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 1, 48)); // NOI18N
+        JL1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Ganador/CCiz.gif"))); // NOI18N
+        getContentPane().add(JL1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 320, 340));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -94,7 +91,6 @@ public class Ganador extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel JL1;
     private javax.swing.JLabel JL2;
-    private javax.swing.JLabel JLBomba;
     private javax.swing.JLabel JLNombreGanador;
     private javax.swing.JLabel JLPremio;
     // End of variables declaration//GEN-END:variables

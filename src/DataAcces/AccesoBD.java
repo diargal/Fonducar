@@ -150,12 +150,13 @@ public class AccesoBD {
     public boolean guardarOperacion(String tipo) {
         conexion();
         try {
-
+            Date date = new Date();
             fechaCompleta = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            String fecha2 = fechaCompleta.format(date);
 
             comandoSQL = "Insert into movimiento (idMovimiento, Fecha, Detalle, idAdministrador) values (" + null + ",?,?,?)";
             prepar = conexion.prepareStatement(comandoSQL);
-            prepar.setString(1, fechaCompleta.format(date));
+            prepar.setString(1, fecha2);
             prepar.setString(2, tipo);
             prepar.setLong(3, administrador.getIdAdmin());
             prepar.execute();
@@ -180,9 +181,9 @@ public class AccesoBD {
 
             int numFilas = sheet.getLastRowNum();
 
-            for (int a = 1; a <= numFilas; a++) {
+            for (int f = 1; f <= numFilas; f++) {
                 int numeroGuardar = 0;
-                Row fila = sheet.getRow(a);
+                Row fila = sheet.getRow(f);
 
                 //Leo del archivo, y obtengo los valores de cada fila para crear una persona
                 prepar = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, cedula) VALUES(" + null + ",?,?)");
@@ -223,15 +224,16 @@ public class AccesoBD {
                         prepar.setDouble(1, numeroGuardar);
                         prepar.executeUpdate();
                     }
-
+                    
                 } else if (asociadosVacia()) {//no han sido asignados y está completamente vacía la tabla asociados
 
-                    numeroGuardar = a;
+                    numeroGuardar = f;
                     nuevoNumero(numeroGuardar);
                 }
 
+                int cont = 0;
                 if (numeroGuardar != 0) {
-                    conexion();
+                    System.out.println("Veces que pasa: " + (cont++));
                     prepar = conexion.prepareStatement("Insert into numeroasociado (idNumeroAsociado, Fecha, idAsociado, idNumero) values (" + null + ",?,?,?)");
                     prepar.setString(1, fechaCompleta.format(date) + "");
                     prepar.setDouble(2, id);
@@ -625,7 +627,7 @@ public class AccesoBD {
 
     public boolean asociadosVacia() {
         try {
-            conexion();
+            //   conexion();
             resultado = resultadoConexion("Select count(a.idAsociado) from asociado as a");
             if (resultado.next()) {
                 if (resultado.getInt(1) == 0) {
@@ -635,7 +637,7 @@ public class AccesoBD {
             }
         } catch (SQLException ex) {
         }
-        desconectar();
+        // desconectar();
         return true;
     }
 
@@ -744,11 +746,11 @@ public class AccesoBD {
 
     public boolean nuevoNumero(int num) {
         try {
-            conexion();
+            // conexion();
             prepar = conexion.prepareStatement("Insert into numero (idNumero, Estado) values (?," + 0 + ")");
             prepar.setInt(1, num);
             prepar.execute();
-            desconectar();
+            // desconectar();
         } catch (SQLException ex) {
             return false;
         }
