@@ -167,7 +167,7 @@ public class AccesoBD {
     public boolean guardarAsociados(File file) {
         conexion();
         int id = 0;
-        long cedula = 0, numero = 0;
+        long cedula = 0;
         String nombre = "";
 
         try {
@@ -178,7 +178,9 @@ public class AccesoBD {
             int numFilas = sheet.getLastRowNum();
 
             for (int a = 1; a <= numFilas; a++) {
+                int numeroGuardar = 0;
                 Row fila = sheet.getRow(a);
+
                 //Leo del archivo, y obtengo los valores de cada fila para crear una persona
                 prepar = conexion.prepareStatement("INSERT INTO persona (idPersona, nombre, cedula) VALUES(" + null + ",?,?)");
                 nombre = fila.getCell(0).getStringCellValue();
@@ -192,30 +194,54 @@ public class AccesoBD {
                 if (resultado.next()) {
                     id = resultado.getInt(1);
                 }
+
                 //Creo el asociado
                 prepar = conexion.prepareStatement("Insert into asociado (idAsociado, Estado, idPersona) values (" + null + ",0,?)");
                 prepar.setDouble(1, id);
                 prepar.execute();
 
+                //obtengo el id del nuevo asociado y lo guardo
+                resultado = resultadoConexion("select A.idAsociado from asociado as A where A.idPersona = '" + id + "'");
+                if (resultado.next()) {
+                    id = resultado.getInt(1);
+                }
+
                 /*
                 Ahora verifico si aún no se han asignado los números a cada asociado.
                  */
                 if (numerosAsignados()) {//si hay números asignados
-                } else if (asociadosVacia()) {//está completamente vacía la tabla asociados
-                    resultado = resultadoConexion("select A.idAsociado from asociado as A where A.idPersona = '" + id + "'");
-                    if (resultado.next()) {
-                        id = resultado.getInt(1);
+
+                    int cantidad = cantidadNumAsociados();
+                    numeroGuardar = cantidad + 1;
+
+                    if (!nuevoNumero(numeroGuardar)) {//si ya el número existía en la tabla numero, debo cambiar su estado a 0
+                        prepar = conexion.prepareStatement("UPDATE `numero` as n SET n.Estado = 0 "
+                                + "WHERE n.idnumero = ? and n.estado = 1");
+                        prepar.setDouble(1, numeroGuardar);
+                        prepar.executeUpdate();
                     }
 
-                    prepar = conexion.prepareStatement("Insert into numero (idNumero, Estado) values (?," + 0 + ")");
-                    // numero = (long) fila.getCell(2).getNumericCellValue();
-                    prepar.setInt(1, a);
-                    prepar.execute();
+//                    prepar = conexion.prepareStatement("Insert into numeroasociado (idNumeroAsociado, Fecha, idAsociado, idNumero) values (" + null + ",?,?,?)");
+//                    prepar.setString(1, fechaCompleta.format(date) + "");
+//                    prepar.setDouble(2, id);
+//                    prepar.setDouble(3, numeroGuardar);
+//                    prepar.execute();
+                } else if (asociadosVacia()) {//no han sido asignados y está completamente vacía la tabla asociados
 
+//                    prepar = conexion.prepareStatement("Insert into numero (idNumero, Estado) values (?," + 0 + ")");
+//                    // numero = (long) fila.getCell(2).getNumericCellValue();
+//                    prepar.setInt(1, a);
+//                    prepar.execute();
+                    numeroGuardar = a;
+                    nuevoNumero(numeroGuardar);
+                }
+
+                if (numeroGuardar != 0) {
+                    conexion();
                     prepar = conexion.prepareStatement("Insert into numeroasociado (idNumeroAsociado, Fecha, idAsociado, idNumero) values (" + null + ",?,?,?)");
                     prepar.setString(1, fechaCompleta.format(date) + "");
                     prepar.setDouble(2, id);
-                    prepar.setDouble(3, numero);
+                    prepar.setDouble(3, numeroGuardar);
                     prepar.execute();
                 }
             }
@@ -673,7 +699,19 @@ public class AccesoBD {
         return false;
     }
 
-//SELECT count(na.idNumeroAsociado) FROM `numeroasociado` as na WHERE '2025' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) 
+    public int cantidadNumAsociados() {
+        try {
+            resultado = resultadoConexion("SELECT count(na.idNumeroAsociado) "
+                    + "FROM `numeroasociado` as na "
+                    + "WHERE '" + fechaAnio.format(date) + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) ");
+            if (resultado.next()) {
+                return resultado.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccesoBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
 
     /* ------------------------------------------------------------------------------------------------------------------------- */
  /*
@@ -740,7 +778,8 @@ public class AccesoBD {
     public int numeroAsociadosActivos() {
 
         try {
-            resultado = resultadoConexion("SELECT count(*) FROM asociado as A where A.Estado=0");
+//            conexion();
+            resultado = resultadoConexion("SELECT count(*) FROM numero as n where n.Estado=0");
 
             if (resultado.next()) {
                 desconectar();

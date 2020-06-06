@@ -8,6 +8,7 @@ package Logica;
 import DataAcces.AccesoBD;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -50,7 +51,7 @@ public class Sorteo {
         Random r1 = new Random(System.currentTimeMillis());
         cantidadAsociados = acceso.numerodeAsociados(false);
         random = r1.nextInt(cantidadAsociados);
-//        random = Integer.parseInt(JOptionPane.showInputDialog(this, "Ingrese nùmero: "));
+        random = Integer.parseInt(JOptionPane.showInputDialog(this, "Ingrese nùmero: "));
         // System.out.println("Número ganador generado: " + random);
         return random;
     }

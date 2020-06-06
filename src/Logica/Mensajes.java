@@ -37,7 +37,7 @@ public class Mensajes {
     public static final String I_SORTEO = "Para realizar los sorteos, se hace necesario ingresar el número total a realizar";
     public static final String C_VALIDA = "Favor ingresar una cantidad válida.";
     public static final String COINCIDENCIA = "Los valores no coinciden, verifiquelos.";
-    public static final String MENSAJE = "Recuerde que el formato del archivo para cargar nuevos asociados es: NOMBRE, CEDULA y NUMERO respectivamente.";
+    public static final String MENSAJE = "Recuerde que el formato del archivo para cargar nuevos asociados es: NOMBRE y CEDULA respectivamente.";
     public static final String REXITOSO = "Todos los números fueron asignados a todos los empleados habilitados.";
     public static final String RERROR = "Ocurrió un error durante el proceso. Inténtelo nuevamente.";
     public static final String NOHAY = "No hay números asignados a los asociados para este año. Vaya a operaciones > asignar números.";

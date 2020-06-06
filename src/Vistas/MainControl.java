@@ -15,7 +15,6 @@ import static Imagenes.ControlImagenes.SEIS;
 import static Imagenes.ControlImagenes.SIETE;
 import static Imagenes.ControlImagenes.TRES;
 import static Imagenes.ControlImagenes.UNO;
-import Logica.BonoSolidario;
 import static Logica.BonoSolidario.accesoBD;
 import static Logica.BonoSolidario.numerodeSorteos;
 import static Logica.Mensajes.A_NUMEROS;
@@ -29,16 +28,13 @@ import static Logica.Mensajes.YGENERADOS;
 import Logica.Sorteo;
 import Vistas.Controlador.ControlArchivos;
 import Vistas.Controlador.ControlHistorial;
-import Vistas.Controlador.hiloCarga;
 import java.awt.Image;
 import java.io.File;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -75,7 +71,7 @@ public class MainControl extends javax.swing.JFrame {
 //        icono = new ImageIcon(imagen.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_DEFAULT));
 //        jLabel1.setIcon(icono);
         this.repaint();
-//         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         JCBPruebaSorteos.setSelected(false);
         agregarAdmin = new AddAdministrador(this, true);
         sorteosRealizados = 0;
@@ -90,8 +86,8 @@ public class MainControl extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         prepararAsociacion();
         cerrarVentana();
-        //verActivos();
-        JLActivos.setText("Número de participantes para los sorteos: " + accesoBD.numeroAsociadosActivos());
+        verActivos();
+       // JLActivos.setText("Número de participantes para los sorteos: " + accesoBD.numeroAsociadosActivos());
 //        verificarInhabilitados();
     }
 
@@ -99,7 +95,7 @@ public class MainControl extends javax.swing.JFrame {
         if (!accesoBD.numerosAsignados()) {
             if (accesoBD.prepararAsociacion()) {
 //             //   sorteo.asociarNumeros();
-                JOptionPane.showMessageDialog(jMenu1, "Se cambió el estado de los ex-asociados con participación");
+//                JOptionPane.showMessageDialog(jMenu1, "Se cambió el estado de los ex-asociados con participación");
             }
         }
     }
