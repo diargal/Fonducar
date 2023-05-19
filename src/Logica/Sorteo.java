@@ -116,4 +116,8 @@ public class Sorteo {
         return acceso.cambiarEstado(cedula, tipo, texto);
     }
 
+    public boolean verificarFecha() {
+        return acceso.verificarFecha();
+    }
+
 }

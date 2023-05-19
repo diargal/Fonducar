@@ -199,20 +199,33 @@ public class AccesoBD {
     public ResultSet historialNumeros() throws SQLException {
         return resultadoConexion("SELECT P.Nombre, P.Cedula, NA.idNumero, NA.Fecha "
                 + "FROM `numeroasociado` as NA, asociado as A, persona as P "
-                + "WHERE NA.idAsociado = A.idAsociado and A.idPersona = P.idPersona order by P.Nombre, NA.idNumero, NA.Fecha");
+                + "WHERE NA.idAsociado = A.idAsociado and A.idPersona = P.idPersona order by P.Nombre, NA.Fecha");
     }
 
     public ResultSet numerosActuales() throws SQLException {
-        return resultadoConexion("SELECT P.Nombre, P.Cedula, ("
-                + "select NA.idNumero "
-                + "from numeroasociado as NA, asociado as A2 "
-                + "where NA.idAsociado = A2.idAsociado and A.idAsociado = A2.idAsociado order by NA.Fecha desc limit 1) as Numero "
-                + "FROM `asociado` as A, persona as P "
-                + "WHERE P.idPersona = A.idPersona and A.Estado = 0 order by P.Nombre asc");
+        Date date = new Date();
+        DateFormat fecha = new SimpleDateFormat("yyyy");
+        String fecha2 = fecha.format(date);
+        return resultadoConexion("SELECT p.nombre, p.cedula, na.idnumero FROM `numeroasociado` as na, numero as n, persona as p, "
+                + "asociado as a WHERE n.estado = 0 and n.idNumero = na.idNumero and "
+                + "'" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 ) "
+                + "and na.idAsociado = a.idAsociado and a.idPersona = p.idPersona");
+    }
+
+    public ResultSet historialEACON() throws SQLException {
+        return resultadoConexion("SELECT p.nombre, p.cedula, i.fecha, i.razon "
+                + "FROM `inhabilitacion` as i, persona as p, asociado as a "
+                + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 0 order by i.fecha desc");
+    }
+
+    public ResultSet historialEASIN() throws SQLException {
+        return resultadoConexion("SELECT p.nombre, p.cedula, i.fecha, i.razon "
+                + "FROM `inhabilitacion` as i, persona as p, asociado as a "
+                + "WHERE p.idPersona = a.idPersona and a.idAsociado = i.idAsociado and i.estado = 1 order by i.fecha desc");
     }
 
     private ResultSet resultadoConexion(String comando) throws SQLException {
-        accesoBD.conexion();
+        conexion();
         Statement stmt = conexion.createStatement();
         return stmt.executeQuery(comando);
 
@@ -223,17 +236,22 @@ public class AccesoBD {
         DateFormat fecha = new SimpleDateFormat("yyyy");
 
         try {
-            resultado = resultadoConexion("select aso.idnumero "
-                    + "from numeroasociado as aso "
-                    + "where aso.idnumeroasociado in "
-                    + "( select idnumeroasociado from sorteo as st where '" + fecha.format(date)
-                    + "'= substring( st.fecha, length(st.fecha)-12 , length(st.fecha)-15 ) )");
-            while (resultado.next()) {
-                if (resultado.getInt(1) == numero) {
-                    return "anterior";
+            if (tipo == 0) {// si el premio es menor, busco que el número no haya ganado otro en el mismo año.
+                /*
+        Aquí busco si el número ya sido ganador de un premio menor a lo largo del año
+                 */
+                resultado = resultadoConexion("Select na2.idNumero from numeroasociado as na2 where na2.idNumero "
+                        + "= " + numero + " and na2.idNumero in ( SELECT na.idNumero FROM `sorteo` as s, numeroasociado as na"
+                        + " WHERE s.TipoSorteo = 0 and '" + fecha.format(date) + "' = substring( s.fecha, length(s.fecha)-12 ,"
+                        + " length(s.fecha)-15 ) and s.idNumeroAsociado = na.idNumeroAsociado)");
+                if (resultado.next()) {
+                    return "anterior"; //si ha sido ganador, retorno un identificador.
                 }
             }
 
+            /*
+            luego busco si el ganador es asociado
+             */
             resultado = resultadoConexion("SELECT p.nombre, nm.idnumeroasociado, a.idAsociado "
                     + "FROM `numeroasociado` as nm, asociado as a, persona as p, numero as n "
                     + "WHERE nm.idAsociado = a.idAsociado and nm.idNumero ='" + numero + "'and p.idPersona = a.idPersona "
@@ -242,7 +260,9 @@ public class AccesoBD {
                 guardarGanador(resultado.getInt(2), premio, tipo);
                 return resultado.getString(1);
             } else {
-
+                /*
+                en caso tal de que no sea asociado, busco si es un ex-asociado con participación
+                 */
                 resultado = resultadoConexion("SELECT p.nombre, nm.idnumeroasociado, a.idAsociado "
                         + "FROM `numeroasociado` as nm, asociado as a, persona as p, numero as n, inhabilitacion as i "
                         + "WHERE nm.idAsociado = a.idAsociado and nm.idNumero = '" + numero + "' and p.idPersona = a.idPersona and n.Estado = 0 "
@@ -251,6 +271,9 @@ public class AccesoBD {
                     guardarGanador(resultado.getInt(2), premio, tipo);
                     return resultado.getString(1);
                 } else {
+                    /*
+                    Aquí identifico si es un ex-asociado sin participación
+                     */
                     return "false";
                 }
             }
@@ -456,4 +479,21 @@ public class AccesoBD {
         }
         return false;
     }
+
+    public boolean verificarFecha() {
+        Date date = new Date();
+        DateFormat fecha = new SimpleDateFormat("yyyy");
+        String fecha2 = fecha.format(date);
+        try {
+            resultado = resultadoConexion("SELECT na.fecha FROM `numeroasociado` as na WHERE '" + fecha2 + "' = substring( na.fecha, length(na.fecha)-12 , length(na.fecha)-15 )");
+            if (resultado.next()) {
+                desconectar();
+                return false;
+            }
+        } catch (SQLException es) {
+        }
+        desconectar();
+        return true;
+    }
+
 }

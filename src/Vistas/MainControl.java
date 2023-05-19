@@ -27,6 +27,7 @@ import static Logica.Mensajes.RERROR;
 import static Logica.Mensajes.REXITOSO;
 import static Logica.Mensajes.SORTEO;
 import static Logica.Mensajes.SORTEOS_FINAL;
+import static Logica.Mensajes.YGENERADOS;
 import Logica.Sorteo;
 import java.io.File;
 import java.sql.SQLException;
@@ -190,10 +191,20 @@ public class MainControl extends javax.swing.JFrame {
         jMenuItem3.setText("Habilitados para los sorteos de este año");
         jMenu3.add(jMenuItem3);
 
-        jMenuItem4.setText("Historial ex-asociados que participaron en sorteos");
+        jMenuItem4.setText("Historial ex-asociados CON participación en sorteos");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem4);
 
-        jMenuItem5.setText("Historial de los ex-asociados que NO participaron en sorteos");
+        jMenuItem5.setText("Historial de los ex-asociados SIN participaron en sorteos");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem5);
 
         jMenu1.add(jMenu3);
@@ -363,20 +374,25 @@ public class MainControl extends javax.swing.JFrame {
     }//GEN-LAST:event_JMAAsociadosActionPerformed
 
     private void JMIAsignarAsoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIAsignarAsoActionPerformed
-        if (sorteo.asociarNumeros()) {
-            JOptionPane.showMessageDialog(this, REXITOSO, "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
-            try {
-                historial.setTitle("Lista de los números actuales de cada asociado");
-                historial.getJBSubir().setEnabled(false);
-                historial.setTipoAccion(false);
-                historial.numerosActuales(accesoBD.numerosActuales());
-                historial.setVisible(true);
-                accesoBD.guardarOperacion(A_NUMEROS);
-            } catch (SQLException ex) {
-                Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+        if (!sorteo.verificarFecha()) {
+            JOptionPane.showMessageDialog(null, YGENERADOS, "Información importante", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(this, RERROR, "Operacion fallida", JOptionPane.ERROR_MESSAGE);
+            if (sorteo.asociarNumeros()) {
+                JOptionPane.showMessageDialog(this, REXITOSO, "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
+                try {
+                    historial.setTitle("Lista de los números actuales de cada asociado");
+                    historial.getJBSubir().setEnabled(false);
+                    historial.setTipoAccion(false);
+                    historial.numerosActuales(accesoBD.numerosActuales());
+                    historial.setVisible(true);
+                    accesoBD.guardarOperacion(A_NUMEROS);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, RERROR, "Operacion fallida", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_JMIAsignarAsoActionPerformed
 
@@ -479,6 +495,30 @@ public class MainControl extends javax.swing.JFrame {
     private void JMIHAsociadosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMIHAsociadosMousePressed
         // TODO add your handling code here:
     }//GEN-LAST:event_JMIHAsociadosMousePressed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        try {
+            historial.setTitle("Historial de los ex-asociados SIN participación");
+            historial.getJBSubir().setEnabled(false);
+            historial.setTipoAccion(false);
+            historial.historialExA(accesoBD.historialEASIN(), false);
+            historial.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        try {
+            historial.setTitle("Historial de los ex-asociados CON participación");
+            historial.getJBSubir().setEnabled(false);
+            historial.setTipoAccion(false);
+            historial.historialExA(accesoBD.historialEACON(), true);
+            historial.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
     public void animacion(int numero) {
 
         String ganador = sorteo.ganador(numero, premio, tipoPremio);

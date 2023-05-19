@@ -6,6 +6,8 @@
 package Vistas;
 
 import static Logica.BonoSolidario.accesoBD;
+import static Logica.Mensajes.A_HACON;
+import static Logica.Mensajes.A_HASIN;
 import static Logica.Mensajes.A_HNS;
 import static Logica.Mensajes.A_HOPERACIONES;
 import static Logica.Mensajes.A_RACTUALES;
@@ -205,6 +207,42 @@ public class Historial extends javax.swing.JDialog {
                 tabla.addRow(object);
             }
             accesoBD.guardarOperacion(A_HNS);
+            JBSubir.setText("Descargar archivo");
+            JBSubir.setEnabled(true);
+            accesoBD.desconectar();
+        } catch (SQLException ex) {
+            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void historialExA(ResultSet resul, boolean tipo) {
+        DefaultTableModel tabla = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        System.out.println("Si entra");
+        JTHistorial.setModel(tabla);
+        tabla.addColumn("Nombre Asociado");
+        tabla.addColumn("Cédula Asociado");
+        tabla.addColumn("Fecha inhabilitación");
+        tabla.addColumn("Razón");
+        Object[] object = new Object[4];
+
+        try {
+            while (resul.next()) {
+                object[0] = resul.getString(1);
+                object[1] = resul.getLong(2);
+                object[2] = resul.getString(3);
+                object[3] = resul.getString(4);
+                tabla.addRow(object);
+            }
+            if (tipo) {
+                accesoBD.guardarOperacion(A_HACON);
+            } else {
+                accesoBD.guardarOperacion(A_HASIN);
+            }
             JBSubir.setText("Descargar archivo");
             JBSubir.setEnabled(true);
             accesoBD.desconectar();
